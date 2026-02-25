@@ -12,62 +12,36 @@ const links = [
 ];
 const socialLinks = [
   {
-    href: "https://www.facebook.com/mashbean",
+    href: "https://www.facebook.com/jacob.mei",
     label: "Facebook",
     note: "長文與廢文",
     iconPath:
       "M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.88 3.78-3.88 1.1 0 2.25.2 2.25.2v2.46H15.2c-1.25 0-1.64.78-1.64 1.57V12h2.8l-.45 2.89h-2.35v6.99A10 10 0 0 0 22 12z"
   },
   {
-    href: "mailto:mashbean@gmail.com",
+    href: "mailto:jacobmei@gmail.com",
     label: "Email",
-    note: "工作會回信",
+    note: "可能會回信",
     iconPath: "M2 5h20v14H2zm10 7L4 7v10h16V7z"
   },
   {
-    href: "https://x.com/mashbean",
+    href: "https://x.com/macdog",
     label: "Twitter/X",
     note: "web3 回覆",
     iconPath:
       "M18.9 2H22l-6.78 7.75L23 22h-6.1l-4.77-6.22L6.68 22H3.56l7.25-8.29L2 2h6.25l4.3 5.68L18.9 2zm-1.07 18h1.69L7.33 3.9H5.51z"
   },
   {
-    href: "https://www.linkedin.com/in/mashbean/",
+    href: "https://www.linkedin.com/in/jacobmei/",
     label: "LinkedIn",
-    note: "穿西裝",
+    note: "這裡少用 XD",
     iconPath:
       "M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.95v5.67H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77A1.77 1.77 0 0 0 0 1.77v20.46C0 23.2.8 24 1.77 24h20.46A1.77 1.77 0 0 0 24 22.23V1.77A1.77 1.77 0 0 0 22.23 0z"
   },
-  {
-    href: "https://matters.town/@mashbean",
-    label: "Matters",
-    note: "認真收長文",
-    iconPath: "M3 5h3.2l3.8 6.7L13.8 5H17v14h-3V11l-3.2 5.6h-1.6L6 11v8H3z"
-  }
-];
-const identityLinks = [
-  {
-    href: "https://web3.bio/mashbean.eth",
-    label: "ENS",
-    value: "mashbean.eth",
-    iconSrc: "https://api.iconify.design/simple-icons:ens.svg?color=%23ffffff"
-  },
-  {
-    href: "https://hey.xyz/u/mashbean",
-    label: "Lens",
-    value: "@mashbean",
-    iconSrc: "https://api.iconify.design/simple-icons:lens.svg?color=%23ffffff"
-  },
-  {
-    href: "https://bsky.app/profile/mashbean.bsky.social",
-    label: "Bluesky",
-    value: "@mashbean.bsky.social",
-    iconSrc: "https://api.iconify.design/simple-icons:bluesky.svg?color=%23ffffff"
-  },
-  {
-    href: "https://www.threads.net/@mashbean",
+    {
+    href: "https://www.threads.net/@macdog",
     label: "Threads",
-    value: "@mashbean",
+    value: "@macdog",
     iconSrc: "https://api.iconify.design/simple-icons:threads.svg?color=%23ffffff"
   }
 ];
@@ -75,11 +49,9 @@ const subscribeLinks = [
   { href: withBase("subscribe/"), label: "RSS 訂閱" }
 ];
 const web3Card = {
-  name: "mashbean 黃豆泥",
+  name: "jacobmei 小梅子",
   avatarSrc: withBase("images/favicon-512.png"),
-  ens: "mashbean.eth",
-  graphHref: "https://web3.bio/mashbean.eth",
-  socialHubHref: "https://firefly.social/"
+  ens: "jacobmei.eth"
 };
 
 const isActive = (href: string): boolean => {
@@ -163,26 +135,6 @@ const isActive = (href: string): boolean => {
             }
           </ul>
         </section>
-        <section class="nav-social-section" aria-label="WEB3 聯邦宇宙">
-          <h3 class="nav-social-title">WEB3 聯邦宇宙</h3>
-          <ul class="nav-social-list">
-            {
-              identityLinks.map((item) => (
-                <li>
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" class="nav-social-link">
-                    <span class="nav-social-link-icon" aria-hidden="true">
-                      <img src={item.iconSrc} alt="" loading="lazy" decoding="async" />
-                    </span>
-                    <span class="nav-social-link-copy">
-                      <strong>{item.label}</strong>
-                      <small>{item.value}</small>
-                    </span>
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
         <section class="nav-social-section" aria-label="訂閱">
           <h3 class="nav-social-title">訂閱</h3>
           <ul class="nav-social-list nav-social-list-compact">
@@ -197,25 +149,6 @@ const isActive = (href: string): boolean => {
                 </li>
               ))
             }
-          </ul>
-        </section>
-        <section class="nav-social-section" aria-label="聯邦入口">
-          <h3 class="nav-social-title">聯邦入口</h3>
-          <ul class="nav-social-list nav-social-list-compact">
-            <li>
-              <a href={web3Card.graphHref} target="_blank" rel="noopener noreferrer" class="nav-social-link nav-social-link-compact">
-                <span class="nav-social-link-copy">
-                  <strong>web3.bio · 鏈上社群圖譜</strong>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href={web3Card.socialHubHref} target="_blank" rel="noopener noreferrer" class="nav-social-link nav-social-link-compact">
-                <span class="nav-social-link-copy">
-                  <strong>Firefly · 跨平台入口</strong>
-                </span>
-              </a>
-            </li>
           </ul>
         </section>
         </div>

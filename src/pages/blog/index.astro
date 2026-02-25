@@ -27,12 +27,9 @@ const yearSections = Array.from(yearMap.entries())
   .sort((a, b) => b.year - a.year);
 
 const yearNotes: Record<number, string> = {
-  2026: "試圖融合密碼龐克、曲線救國、以及政策設計等不同路線",
-  2025: "離開數位發展部，參與各種 Fellow 計畫，如哈佛甘迺迪學院、以太坊基金會、TWNIC...等等，加入 Matters",
-  2024: "在數位發展部推動數位皮夾，研究各國數位身分政策",
-  2023: "加入數位發展部多元宇宙科，研究 web3 政策與國際標準組織（W3C），開始典藏Artouch 薄荷薄荷專欄",
-  2022: "創辦了 FAB DAO（#非營利 web3 行動），參與 Volume DAO（#數位藝術），參展林茲電子藝術節",
-  2021: "自醫師工作離職，開始探索 web3 與 NFT，畫了新時代國旗",
+  2022: "加入街口支付擔任董事長，深度參與台灣電子支付與數位金融法規",
+  2021: "在將來銀行推動純網路銀行創新服務",
+  2020: "永豐銀行電子金融處處長、永豐創投董事",
 };
 
 const RECENT_UPDATED_DAYS = 90;
@@ -114,28 +111,6 @@ for (const post of posts) {
               </div>
             </details>
           ))}
-          <details class="archive-accordion">
-            <summary class="archive-accordion-summary">
-              <span class="archive-accordion-title">
-                <span class="tag-chip-icon" aria-hidden="true">
-                  🗓️
-                </span>
-                2020 年
-              </span>
-              <span class="archive-accordion-note">
-                2020 年以前我在醫院見習、實習、一般住院醫師訓練，文章大多放在 Medium，可以點過去閱讀
-              </span>
-            </summary>
-            <div class="archive-accordion-body">
-              <div class="archive-accordion-body-inner">
-                <p class="archive-meta" style="margin: 0;">
-                  <a href="https://medium.com/@mashbean" target="_blank" rel="noopener noreferrer">
-                    前往 Medium 閱讀（@mashbean） →
-                  </a>
-                </p>
-              </div>
-            </div>
-          </details>
         </div>
       </>
     )

@@ -1,0 +1,14 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/utils/paths";
+---
+
+<BaseLayout title="找不到頁面" description="404 Not Found" noindex={true}>
+  <h1 class="section-title">404</h1>
+  <p>你要找的頁面不存在，或路徑已調整。</p>
+  <p>
+    <a href={withBase("")}>回首頁</a>
+    {" · "}
+    <a href={withBase("blog/")}>看文章列表</a>
+  </p>
+</BaseLayout>

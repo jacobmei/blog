@@ -1,0 +1,14 @@
+node_modules
+dist
+.astro
+.env
+.env*
+!.env.example
+tmp
+reports
+.DS_Store
+scripts/*-report.json
+scripts/__pycache__
+
+# Obsidian 個人設定（不納入版本控制）
+.obsidian

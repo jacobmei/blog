@@ -1,0 +1,8 @@
+<svg width="1200" height="680" viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Astro migration cover">
+  <rect width="1200" height="680" fill="#f2fbf8"/>
+  <circle cx="180" cy="140" r="120" fill="#d3f0e8"/>
+  <circle cx="1020" cy="540" r="150" fill="#ffecc4"/>
+  <rect x="140" y="130" width="920" height="420" rx="30" fill="#ffffff" stroke="#d2e8e0"/>
+  <text x="200" y="280" font-size="58" font-family="Noto Serif TC, serif" fill="#12303a">Jekyll -> Astro</text>
+  <text x="200" y="360" font-size="34" font-family="Noto Sans TC, sans-serif" fill="#24665d">內容優先遷移，逐步擴充互動能力</text>
+</svg>

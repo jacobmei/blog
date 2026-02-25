@@ -1,0 +1,641 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/utils/paths";
+
+const contactLinks = [
+  { label: "Email", href: "mailto:mashbean@gmail.com" },
+  { label: "Facebook", href: "https://www.facebook.com/mashbean" },
+  { label: "Matters", href: "https://matters.town/@mashbean" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mashbean" },
+  { label: "X (Twitter)", href: "https://x.com/mashbean" }
+];
+
+interface AffiliationItem {
+  key: string;
+  href: string;
+  zh: string;
+  en: string;
+  logo?: string;
+  logoKind?: "mask" | "image";
+  logoWidth?: string;
+  logoMonochrome?: boolean;
+  logoFilter?: string;
+}
+
+interface AffiliationGroup {
+  key: string;
+  titleZh: string;
+  titleEn: string;
+  items: AffiliationItem[];
+}
+
+const affiliationGroups: AffiliationGroup[] = [
+  {
+    key: "employment",
+    titleZh: "入職",
+    titleEn: "Employment",
+    items: [
+      {
+        key: "moda",
+        href: "https://moda.gov.tw/major-policies/wallet/1695",
+        logo: "images/about/org-logos/moda.svg",
+        logoWidth: "7.8rem",
+        zh: "數位發展部",
+        en: "Ministry of Digital Affairs"
+      },
+      {
+        key: "matters",
+        href: "https://matters.town/",
+        logo: "images/about/org-logos/matters.svg",
+        logoWidth: "7rem",
+        zh: "Matters",
+        en: "Matters"
+      },
+      {
+        key: "fabdao",
+        href: "https://fabdao.world/",
+        logo: "images/about/org-logos/fabdao-wordmark.png",
+        logoWidth: "8.6rem",
+        zh: "FAB DAO",
+        en: "Formosa Art Bank DAO"
+      }
+    ]
+  },
+  {
+    key: "fellow",
+    titleZh: "Fellow",
+    titleEn: "Fellowships",
+    items: [
+      {
+        key: "hks",
+        href: "https://ash.harvard.edu/people/yen-lin-huang/",
+        logo: "images/about/org-logos/hks.svg",
+        logoWidth: "8rem",
+        zh: "哈佛甘迺迪學院",
+        en: "Harvard Kennedy School"
+      },
+      {
+        key: "isf",
+        href: "https://internationalstrategyforum.io/fellow/yen-lin-huang/",
+        logo: "https://www.scsp.ai/wp-content/uploads/2022/01/SCSP__logo.png",
+        logoKind: "image",
+        logoWidth: "6.2rem",
+        zh: "International Strategy Forum（SCSP）",
+        en: "Special Competitive Studies Project (SCSP)"
+      },
+      {
+        key: "twnic",
+        href: "https://www.twnic.tw/community/twnic-academy/",
+        logo: "https://www.twnic.tw/images/logo.svg",
+        logoKind: "image",
+        logoWidth: "6rem",
+        zh: "台灣網路治理學院（TWNIC）",
+        en: "Taiwan Internet Governance Academy (TWNIC)"
+      },
+      {
+        key: "nxbn",
+        href: "https://nxbn.ethereum.foundation/fellowship/Mashbean",
+        logo: "images/about/org-logos/ethereum.svg",
+        logoWidth: "6.3rem",
+        zh: "以太坊基金會 Next Billion Fellowship",
+        en: "Ethereum Foundation - Next Billion Fellowship"
+      }
+    ]
+  },
+  {
+    key: "member",
+    titleZh: "成員",
+    titleEn: "Membership",
+    items: [
+      {
+        key: "advisory",
+        href: "https://advisory.yda.gov.tw/",
+        logo: "images/about/org-logos/advisory-yda.svg",
+        logoKind: "image",
+        logoWidth: "7.6rem",
+        zh: "行政院青年諮詢委員會",
+        en: "Executive Yuan Youth Advisory Committee"
+      },
+      {
+        key: "opencontemporary",
+        href: "https://www.facebook.com/opencontemporary/?locale=zh_TW",
+        logo: "https://volumedao.xyz/wp-content/uploads/2023/12/%E6%89%93%E9%96%8B-1.png",
+        logoKind: "image",
+        logoWidth: "8rem",
+        zh: "打開當代藝術工作站",
+        en: "Open Contemporary Art Hub"
+      },
+      {
+        key: "volume",
+        href: "https://volumedao.xyz/zh/home-zh/",
+        logo: "https://volumedao.xyz/wp-content/uploads/2023/11/vol-b.png",
+        logoKind: "image",
+        logoWidth: "6.6rem",
+        zh: "眾聲道 Volume DAO",
+        en: "Volume DAO"
+      }
+    ]
+  },
+  {
+    key: "participation",
+    titleZh: "參與",
+    titleEn: "Participation",
+    items: [
+      {
+        key: "dset",
+        href: "https://dset.tw/",
+        logo: "images/about/org-logos/dset.png",
+        logoWidth: "5rem",
+        zh: "DSET 科技、民主與社會研究中心",
+        en: "Center for Technology, Democracy and Society (DSET)"
+      },
+      {
+        key: "g0v",
+        href: "https://g0v.tw/",
+        logo: "images/about/org-logos/g0v.svg",
+        logoWidth: "4.8rem",
+        zh: "g0v 零時政府",
+        en: "g0v (gov-zero)"
+      },
+      {
+        key: "silviculture",
+        href: "https://ethereum.foundation/silviculture-society",
+        logo: "images/about/org-logos/ethereum.svg",
+        logoWidth: "6.3rem",
+        zh: "以太坊基金會森友會",
+        en: "Ethereum Foundation Silviculture Society"
+      }
+    ]
+  }
+];
+
+const resolveLogoUrl = (logo: string): string => (/^https?:\/\//i.test(logo) ? logo : withBase(logo));
+---
+
+<BaseLayout title="關於我 / About" description="Yen-Lin (mashbean) Huang 的履歷與工作重點（中英切換）。">
+  <section class="about-lang-switch" aria-label="語言切換">
+    <button type="button" class="about-lang-btn is-active" data-lang="zh">中文</button>
+    <button type="button" class="about-lang-btn" data-lang="en">English</button>
+  </section>
+
+  <article class="about-cv" data-lang-content="zh">
+    <header class="about-cv-header">
+      <p class="about-cv-kicker">關於我</p>
+      <h1 class="about-cv-name">黃彥霖 Yen-Lin (mashbean) Huang</h1>
+      <p class="about-cv-summary">
+        由於沈迷網際網路與社會網絡的深層結構，自醫師工作離職，現致力於將密碼龐克精神融入台灣數位社會。現為以太坊諮詢小組「森友會」成員，並為 2025
+        年哈佛甘迺迪學院（HKS）民主興革訪問學者。筆者曾任職於數位發展部推動分散式技術，現服務於抗審查內容平台
+        Matters。豆泥現同時參與 web3 公民科技社群 FAB DAO，透過區塊鏈技術幫助台灣非營利行動，曾於林茲電子藝術節展出。
+      </p>
+      <ul class="about-cv-manifesto" aria-label="工作方法關鍵詞">
+        <li>反脆弱</li>
+        <li>不對稱</li>
+        <li>去中心</li>
+        <li>抗霸權</li>
+      </ul>
+      <ul class="about-cv-links">
+        {contactLinks.map((item) => <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a></li>)}
+      </ul>
+    </header>
+
+    <section class="about-cv-section">
+      <h2>政府與公共治理經歷</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://moda.gov.tw/major-policies/wallet/1695" target="_blank" rel="noopener noreferrer">數位發展部（Taiwan MODA）</a>｜Decentralized Architect</h3>
+          <p>台灣 · 2023.02 - 2025.04</p>
+        </div>
+        <ul>
+          <li>主導新設 Section of Plurality，聚焦分散式技術與數位公民基礎建設。</li>
+          <li>管理累積超過 900 萬美元預算，推進台灣第一批數位公共基礎建設專案。</li>
+          <li>推動「台灣數位身分皮夾」並導入 AI 輔助開源審議工具至 Alignment Assemblies。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>行政院青年諮詢委員會｜委員</h3>
+          <p>台灣 · 2022.10 - 2024.10</p>
+        </div>
+        <ul>
+          <li>關注數位民主與制度改革，推進超過 10 項跨部會提案。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>DSET 科技、民主與社會研究中心｜Correspondent</h3>
+          <p>台灣 · 2025.06 - 至今</p>
+        </div>
+        <ul>
+          <li>支援國家級智庫在地化國際數位身分政策與治理框架。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>社會技術與國際角色</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://ash.harvard.edu/people/yen-lin-huang/" target="_blank" rel="noopener noreferrer">Harvard Kennedy School</a>｜Allen Lab Policy Fellow</h3>
+          <p>Non-resident · 2025.08 - 2026.07</p>
+        </div>
+        <ul>
+          <li>進行民主革新與數位身分的應用研究。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://internationalstrategyforum.io/fellow/yen-lin-huang/" target="_blank" rel="noopener noreferrer">International Strategy Forum（SCSP: Special Competitive Studies Project）</a>｜Fellow</h3>
+          <p>Global · 2026</p>
+        </div>
+        <ul>
+          <li>參與跨國戰略社群，聚焦民主韌性、科技治理與地緣政策對話。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://nxbn.ethereum.foundation/fellowship/Mashbean" target="_blank" rel="noopener noreferrer">Ethereum Foundation</a>｜The Next Billion Fellowship</h3>
+          <p>Remote · 2025.06 - 2025.11</p>
+        </div>
+        <ul>
+          <li>將 Privacy-Enhancing Technologies 納入國家級數位資料服務，並提出政策藍圖。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Matters｜General Manager</h3>
+          <p>Remote · 2025.05 - 至今</p>
+        </div>
+        <ul>
+          <li>帶領中文抗審查內容平台轉型，發展非營利替代型公共基礎設施框架。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>台灣數位信任協會｜Advisor</h3>
+          <p>台灣 · 2025.05 - 至今</p>
+        </div>
+        <ul>
+          <li>主責 Digital Identity Governance Interest Group，建立台灣多方利害關係人治理模型。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>公民社會與創作實踐</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>FAB DAO（Formosa Art Bank）｜Founder</h3>
+          <p>台灣 · 2021.12 - 至今</p>
+        </div>
+        <ul>
+          <li>創立台灣首個非營利 DAO，支援超過 20 個 NGO 與倡議團體。</li>
+          <li>以合作社形式群眾募資 14 萬美元，並於 Ars Electronica Festival 2022 展出。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>g0v 零時政府｜Contributor</h3>
+          <p>台灣 · 2022.03 - 至今</p>
+        </div>
+        <ul>
+          <li>參與去中心科技工作組（da0）與 g0v Summit 2024 籌辦。</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Independent Art Critic｜Columnist / Speaker / Translator</h3>
+          <p>2021.12 - 至今</p>
+        </div>
+        <ul>
+          <li>ARTouch 專欄作者，年均發表 20+ 文章；年均 30+ 演講（RightsCon、Harvard、東京大學、TEDx 等）。</li>
+          <li>共同作者與翻譯：Autonomous Worlds (2024)、Plurality (2023)。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>學歷、醫療訓練與成果</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>台北榮民總醫院（TVGH）｜住院醫師</h3>
+          <p>台灣 · 2020.08 - 2021.07</p>
+        </div>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>中國醫藥大學｜醫學士 M.D.</h3>
+          <p>台灣 · 2020.07</p>
+        </div>
+      </div>
+      <div class="about-cv-entry">
+        <ul>
+          <li>APRSAF 青年學者徵文佳作（2023）</li>
+          <li>Inter-Asian Studies 論文發表（2025）</li>
+          <li>美國專利公開案發明人（US 2024/0285913 A1）</li>
+          <li>Stanford Design Challenge Asia Winner（2019）</li>
+          <li>工業局智慧城市黑客松首獎（2016）</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-orgs" aria-labelledby="about-orgs-zh">
+      <div class="about-orgs-head">
+        <h2 id="about-orgs-zh">曾參與組織</h2>
+      </div>
+      <div class="about-org-groups">
+        {
+          affiliationGroups.map((group) => (
+            <section class="about-org-group" aria-label={group.titleZh}>
+              <h3>{group.titleZh}</h3>
+              <ul class="about-org-grid">
+                {
+                  group.items.map((org) => (
+                    <li class="about-org-card">
+                      <a href={org.href} target="_blank" rel="noopener noreferrer">
+                        <span class="about-org-logo-wrap">
+                          {
+                            org.logo ? (
+                              org.logoKind === "image" ? (
+                                <img
+                                  class="about-org-logo-image"
+                                  style={`--org-logo-w:${org.logoWidth};--org-logo-filter:${org.logoFilter ?? (org.logoMonochrome === false ? "none" : "brightness(0) saturate(100%) invert(31%) sepia(44%) saturate(915%) hue-rotate(130deg) brightness(95%) contrast(93%)")};`}
+                                  src={resolveLogoUrl(org.logo)}
+                                  alt=""
+                                  loading="lazy"
+                                  decoding="async"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <span
+                                  class="about-org-logo"
+                                  style={`--org-logo:url('${resolveLogoUrl(org.logo)}');--org-logo-w:${org.logoWidth};`}
+                                  aria-hidden="true"
+                                ></span>
+                              )
+                            ) : (
+                              <span class="about-org-logo-fallback" aria-hidden="true">{org.key.toUpperCase()}</span>
+                            )
+                          }
+                        </span>
+                        <span class="about-org-name-zh">{org.zh}</span>
+                        <span class="about-org-name-en">{org.en}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+
+  <article class="about-cv" data-lang-content="en" hidden>
+    <header class="about-cv-header">
+      <p class="about-cv-kicker">About</p>
+      <h1 class="about-cv-name">Yen-Lin (mashbean) Huang</h1>
+      <p class="about-cv-summary">
+        Fascinated by the deep structure of the internet and social networks, I left clinical practice and now focus on bringing
+        cypherpunk values into Taiwan’s digital society. I am a member of the Ethereum advisory group Silviculture Society and a
+        2025 visiting fellow at Harvard Kennedy School (HKS), working on democracy renovation. I previously worked at Taiwan’s Ministry
+        of Digital Affairs on decentralized technology, and currently serve at Matters, an anti-censorship content platform. I also
+        participate in FAB DAO, a web3 civic-tech community supporting Taiwanese nonprofits through blockchain-based coordination, with
+        work exhibited at Ars Electronica.
+      </p>
+      <ul class="about-cv-manifesto" aria-label="Operating principles">
+        <li>Antifragile</li>
+        <li>Asymmetric</li>
+        <li>Decentralized</li>
+        <li>Counter-hegemonic</li>
+      </ul>
+      <ul class="about-cv-links">
+        {contactLinks.map((item) => <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a></li>)}
+      </ul>
+    </header>
+
+    <section class="about-cv-section">
+      <h2>Governmental Experience</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://moda.gov.tw/major-policies/wallet/1695" target="_blank" rel="noopener noreferrer">Ministry of Digital Affairs, Taiwan</a> · Decentralized Architect</h3>
+          <p>Taiwan · Feb 2023 - Apr 2025</p>
+        </div>
+        <ul>
+          <li>Led the newly established Section of Plurality for decentralized technologies and digital civic infrastructure.</li>
+          <li>Managed cumulative budgets exceeding USD 9M and delivered Taiwan’s first digital public infrastructure initiatives.</li>
+          <li>Pioneered Taiwan Digital Identity Wallet and AI-assisted open-source deliberation in Alignment Assemblies.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Executive Yuan Youth Advisory Committee · Advisory Board Member</h3>
+          <p>Taiwan · Oct 2022 - Oct 2024</p>
+        </div>
+        <ul>
+          <li>Advanced digital democracy and institutional reform, pushing 10+ inter-ministerial proposals.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Center for Technology, Democracy and Society (DSET) · Correspondent</h3>
+          <p>Taiwan · Jun 2025 - Present</p>
+        </div>
+        <ul>
+          <li>Supports national think tanks in localizing international digital identity policy frameworks.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>Socio-technical Systems Experience</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://ash.harvard.edu/people/yen-lin-huang/" target="_blank" rel="noopener noreferrer">Harvard Kennedy School</a> · Allen Lab for Democracy Renovation Policy Fellow</h3>
+          <p>Non-resident · Aug 2025 - Jul 2026</p>
+        </div>
+        <ul>
+          <li>Conducts applied research on democracy renovation with a focus on digital identity.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://internationalstrategyforum.io/fellow/yen-lin-huang/" target="_blank" rel="noopener noreferrer">International Strategy Forum (SCSP: Special Competitive Studies Project)</a> · Fellow</h3>
+          <p>Global · 2026</p>
+        </div>
+        <ul>
+          <li>Contributes to cross-border strategy dialogue on democratic resilience, technology governance, and geopolitics.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3><a href="https://nxbn.ethereum.foundation/fellowship/Mashbean" target="_blank" rel="noopener noreferrer">Ethereum Foundation</a> · The Next Billion Fellowship</h3>
+          <p>Remote · Jun 2025 - Nov 2025</p>
+        </div>
+        <ul>
+          <li>Embeds privacy-enhancing technologies into public digital data services and drafts policy blueprints.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Matters · General Manager</h3>
+          <p>Remote · May 2025 - Present</p>
+        </div>
+        <ul>
+          <li>Leads transformation of a Chinese-language anti-censorship content platform with a nonprofit infrastructure model.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Digital Trust Association in Taiwan · Advisor</h3>
+          <p>Taiwan · May 2025 - Present</p>
+        </div>
+        <ul>
+          <li>Leads the Digital Identity Governance Interest Group and Taiwan’s multi-stakeholder governance design.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>Civil Society and Cultural Practice</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Formosa Art Bank (FAB DAO) · Founder</h3>
+          <p>Taiwan · Dec 2021 - Present</p>
+        </div>
+        <ul>
+          <li>Founded Taiwan’s first nonprofit DAO and supported 20+ NGOs and advocacy groups.</li>
+          <li>Raised USD 140K through a cooperative crowdfunding model; exhibited at Ars Electronica Festival (2022).</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>g0v (gov-zero) · Contributor</h3>
+          <p>Taiwan · Mar 2022 - Present</p>
+        </div>
+        <ul>
+          <li>Collaborates in decentralized tech community work, including co-organizing g0v Summit 2024.</li>
+        </ul>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Independent Art Critic · Columnist / Speaker / Translator</h3>
+          <p>Dec 2021 - Present</p>
+        </div>
+        <ul>
+          <li>Columnist for ARTouch, with 20+ articles and 30+ talks annually across RightsCon, Harvard, University of Tokyo, TEDx, and ENCATC.</li>
+          <li>Co-author and translator of Autonomous Worlds (2024) and Plurality (2023).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-cv-section">
+      <h2>Education, Clinical Practice, and Honors</h2>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>Taipei Veterans General Hospital (TVGH) · Resident Physician</h3>
+          <p>Taiwan · Aug 2020 - Jul 2021</p>
+        </div>
+      </div>
+      <div class="about-cv-entry">
+        <div class="about-cv-entry-head">
+          <h3>China Medical University · Doctor of Medicine (M.D.)</h3>
+          <p>Taiwan · Jul 2020</p>
+        </div>
+      </div>
+      <div class="about-cv-entry">
+        <ul>
+          <li>Honorable Mention, APRSAF Young Scholar Essay Competition (2023)</li>
+          <li>Inter-Asian Studies publication on identity autonomy (2025)</li>
+          <li>Inventor, U.S. Patent Application Publication US 2024/0285913 A1</li>
+          <li>Winner, Stanford Design Challenge Asia (2019)</li>
+          <li>Grand Prize, Smart City Hackathon, Taiwan Industrial Development Bureau (2016)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-orgs" aria-labelledby="about-orgs-en">
+      <div class="about-orgs-head">
+        <h2 id="about-orgs-en">Organizations I've Worked With</h2>
+      </div>
+      <div class="about-org-groups">
+        {
+          affiliationGroups.map((group) => (
+            <section class="about-org-group" aria-label={group.titleEn}>
+              <h3>{group.titleEn}</h3>
+              <ul class="about-org-grid">
+                {
+                  group.items.map((org) => (
+                    <li class="about-org-card">
+                      <a href={org.href} target="_blank" rel="noopener noreferrer">
+                        <span class="about-org-logo-wrap">
+                          {
+                            org.logo ? (
+                              org.logoKind === "image" ? (
+                                <img
+                                  class="about-org-logo-image"
+                                  style={`--org-logo-w:${org.logoWidth};--org-logo-filter:${org.logoFilter ?? (org.logoMonochrome === false ? "none" : "brightness(0) saturate(100%) invert(31%) sepia(44%) saturate(915%) hue-rotate(130deg) brightness(95%) contrast(93%)")};`}
+                                  src={resolveLogoUrl(org.logo)}
+                                  alt=""
+                                  loading="lazy"
+                                  decoding="async"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <span
+                                  class="about-org-logo"
+                                  style={`--org-logo:url('${resolveLogoUrl(org.logo)}');--org-logo-w:${org.logoWidth};`}
+                                  aria-hidden="true"
+                                ></span>
+                              )
+                            ) : (
+                              <span class="about-org-logo-fallback" aria-hidden="true">{org.key.toUpperCase()}</span>
+                            )
+                          }
+                        </span>
+                        <span class="about-org-name-en">{org.en}</span>
+                        <span class="about-org-name-zh">{org.zh}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<script is:inline>
+  const langButtons = Array.from(document.querySelectorAll(".about-lang-btn"));
+  const langPanels = Array.from(document.querySelectorAll("[data-lang-content]"));
+  const queryLang = new URLSearchParams(window.location.search).get("lang");
+  const storedLang = localStorage.getItem("mashbean.about.lang");
+  const preferredLang = queryLang === "en" || queryLang === "zh" ? queryLang : storedLang;
+  let currentLang = preferredLang === "en" ? "en" : "zh";
+
+  const syncState = (lang) => {
+    currentLang = lang;
+    langButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.lang === lang));
+    langPanels.forEach((panel) => {
+      const show = panel.getAttribute("data-lang-content") === lang;
+      panel.hidden = !show;
+    });
+    const url = new URL(window.location.href);
+    if (lang === "en") url.searchParams.set("lang", "en");
+    else url.searchParams.delete("lang");
+    window.history.replaceState({}, "", url.toString());
+    localStorage.setItem("mashbean.about.lang", lang);
+  };
+
+  langButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const next = button.dataset.lang === "en" ? "en" : "zh";
+      syncState(next);
+    });
+  });
+
+  syncState(currentLang);
+</script>

@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { buildPostUrl } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { withBase } from "@/utils/paths";
+import { cleanPostTitle } from "@/utils/title";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  variant?: "default" | "feature" | "compact";
+  minimal?: boolean;
+}
+
+const { post, variant = "default", minimal = false } = Astro.props as Props;
+const url = buildPostUrl(post);
+const coverSrc = post.data.cover
+  ? /^https?:\/\//.test(post.data.cover)
+    ? post.data.cover
+    : withBase(post.data.cover)
+  : undefined;
+const fallbackLabel = post.data.category ?? "文章";
+const postTitle = cleanPostTitle(post.data.title);
+const readingMinutes = (() => {
+  const plain = (post.body ?? "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1 ");
+  const latinWords = (plain.match(/[A-Za-z0-9_]+/g) ?? []).length;
+  const cjkChars = (plain.match(/[\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u30FF]/g) ?? []).length;
+  const mixedWordCount = latinWords + cjkChars / 2;
+  return Math.max(1, Math.round(mixedWordCount / 220));
+})();
+---
+
+<article class:list={{ "post-card": true, "post-card-feature": variant === "feature", "post-card-compact": variant === "compact", "post-card-minimal": minimal }}>
+  <a class="post-card-thumb-link" href={url} aria-hidden="true" tabindex="-1">
+    {post.data.cover ? (
+      <img
+        class="post-card-thumb"
+        src={coverSrc}
+        alt={post.data.coverAlt ?? postTitle}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div
+        class:list={{
+          "post-card-thumb": true,
+          "post-card-thumb-fallback": true,
+          "post-card-thumb-fallback-feature": variant === "feature",
+          "post-card-thumb-fallback-compact": variant === "compact"
+        }}
+      >
+        <span class="post-card-thumb-badge">{fallbackLabel}</span>
+        <small>{postTitle}</small>
+      </div>
+    )}
+  </a>
+  <p class="post-card-meta">
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    {" · 約 "}
+    {readingMinutes}
+    {" 分鐘"}
+    {!minimal && post.data.category && <>{" · "}{post.data.category}</>}
+    {!minimal &&
+      post.data.updatedDate && (
+        <>
+          {" · 更新 "}
+          <time datetime={post.data.updatedDate.toISOString()}>
+            {formatDate(post.data.updatedDate)}
+          </time>
+        </>
+      )}
+  </p>
+  <h2 class="post-card-title">
+    <a href={url}>{postTitle}</a>
+  </h2>
+  <p class="post-card-desc">{post.data.description}</p>
+  {!minimal && post.data.tags.length > 0 && (
+    <ul class="tag-list" aria-label="文章標籤">
+      {post.data.tags.map((tag) => <li class="tag-list-item">{tag}</li>)}
+    </ul>
+  )}
+</article>

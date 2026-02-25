@@ -1,0 +1,56 @@
+name: "Usability Review"
+description: "Monthly UX/UI regression and behavior review"
+title: "[Usability Review] YYYY-MM"
+labels:
+  - ux
+  - qa
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Run the visual/usability checklist and summarize findings.
+
+  - type: dropdown
+    id: release_scope
+    attributes:
+      label: Scope
+      options:
+        - Monthly baseline review
+        - Pre-release review
+        - Hotfix regression review
+    validations:
+      required: true
+
+  - type: textarea
+    id: checked_routes
+    attributes:
+      label: Checked Routes
+      description: "List tested routes (desktop + mobile)"
+      placeholder: "/, /blog/, /tags/, /search/, /blog/[post], /tags-graph/"
+    validations:
+      required: true
+
+  - type: textarea
+    id: findings
+    attributes:
+      label: Findings
+      description: "List concrete issues with route, device, and reproduction steps"
+      placeholder: "1) /search mobile: ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics_snapshot
+    attributes:
+      label: Metrics Snapshot
+      description: "Paste key analytics deltas for bounce, archive/tag CTR, search conversion"
+      placeholder: "Article bounce: ...; Search conversion: ..."
+
+  - type: textarea
+    id: actions
+    attributes:
+      label: Action Items
+      description: "Prioritized follow-ups"
+      placeholder: "P1 ... / P2 ..."
+    validations:
+      required: true

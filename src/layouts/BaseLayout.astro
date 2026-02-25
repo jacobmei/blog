@@ -1,0 +1,456 @@
+---
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_LANG, SITE_TITLE } from "@/site.config";
+import { withBase } from "@/utils/paths";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalURL?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
+  noindex?: boolean;
+  structuredData?: Record<string, unknown> | null;
+  isArticle?: boolean;
+}
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  canonicalURL,
+  ogImage,
+  ogType = "website",
+  noindex = false,
+  structuredData = null,
+  isArticle = false
+} = Astro.props as Props;
+
+const tabTitle = "mashbean blog";
+const seoTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+
+const canonical =
+  canonicalURL ??
+  (Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.href);
+
+const ogPath = ogImage
+  ? /^https?:\/\//.test(ogImage)
+    ? ogImage
+    : withBase(ogImage)
+  : withBase(DEFAULT_OG_IMAGE);
+
+const ogImageURL =
+  /^https?:\/\//.test(ogPath)
+    ? ogPath
+    : Astro.site
+      ? new URL(ogPath, Astro.site).toString()
+      : new URL(ogPath, Astro.url).toString();
+
+const logoPath = withBase("images/favicon-512.png");
+const logoURL =
+  Astro.site
+    ? new URL(logoPath, Astro.site).toString()
+    : new URL(logoPath, Astro.url).toString();
+
+const siteURL = Astro.site?.toString() ?? new URL(withBase(""), Astro.url).toString();
+const plausibleDomain = (import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? "").trim();
+const plausibleScriptSrc = (import.meta.env.PUBLIC_PLAUSIBLE_SCRIPT_SRC ?? "https://plausible.io/js/script.js").trim();
+const siteStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteURL}#organization`,
+      name: "mashbean blog",
+      url: siteURL,
+      logo: {
+        "@type": "ImageObject",
+        url: logoURL
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteURL}#website`,
+      url: siteURL,
+      name: "mashbean blog",
+      publisher: {
+        "@id": `${siteURL}#organization`
+      }
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang={SITE_LANG}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tabTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seoTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+    {plausibleDomain && (
+      <script is:inline defer data-domain={plausibleDomain} src={plausibleScriptSrc}></script>
+    )}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(siteStructuredData)} />
+    {structuredData && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+
+    <link rel="shortcut icon" href={withBase("images/favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="16x16" href={withBase("images/favicon-16.png")} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase("images/favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="512x512" href={withBase("images/favicon-512.png")} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase("images/apple-touch-icon.png")} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
+    {isArticle && (
+      <div class="reading-progress" aria-hidden="true">
+        <span id="reading-progress-bar"></span>
+      </div>
+    )}
+    <Header />
+    <main id="main-content" class="container page-shell">
+      <slot />
+    </main>
+    {isArticle && (
+      <button
+        id="reading-focus-toggle"
+        type="button"
+        class="reading-focus-fab"
+        aria-pressed="false"
+      >
+        聚焦閱讀
+      </button>
+    )}
+    {isArticle && (
+      <p id="reading-focus-hint" class="reading-focus-hint" hidden>
+        已進入聚焦閱讀，可點選下方按鈕解除
+      </p>
+    )}
+    <Footer />
+    <script is:inline define:vars={{ isArticle, searchPath: withBase("search/") }}>
+      window.mbTrack = (name, props = {}) => {
+        if (typeof window.plausible !== "function") return;
+        window.plausible(name, { props });
+      };
+
+      const track = (name, props = {}) => {
+        if (typeof window.mbTrack === "function") window.mbTrack(name, props);
+      };
+
+      const isEditableElement = (el) => {
+        if (!el) return false;
+        const tag = el.tagName?.toLowerCase?.() ?? "";
+        return el.isContentEditable || tag === "input" || tag === "textarea" || tag === "select";
+      };
+
+      document.addEventListener("keydown", (event) => {
+        const isMac = /(mac|iphone|ipad)/i.test(navigator.userAgent);
+        const mod = isMac ? event.metaKey : event.ctrlKey;
+        if (!mod || event.key.toLowerCase() !== "k" || isEditableElement(event.target)) return;
+        event.preventDefault();
+        track("Search Shortcut Used", { source: "global_hotkey" });
+        window.location.href = searchPath;
+      });
+
+      const header = document.querySelector(".site-header");
+      if (header instanceof HTMLElement) {
+        const mobileQuery = window.matchMedia("(max-width: 760px)");
+        let lastY = window.scrollY;
+        let ticking = false;
+
+        const updateHeaderVisibility = () => {
+          const y = window.scrollY;
+          if (!mobileQuery.matches) {
+            header.classList.remove("site-header-hidden");
+            lastY = y;
+            ticking = false;
+            return;
+          }
+          if (document.body.classList.contains("nav-drawer-open")) {
+            header.classList.remove("site-header-hidden");
+            lastY = y;
+            ticking = false;
+            return;
+          }
+          const delta = y - lastY;
+          if (y <= 28 || delta <= -7) header.classList.remove("site-header-hidden");
+          else if (delta >= 9) header.classList.add("site-header-hidden");
+          lastY = y;
+          ticking = false;
+        };
+
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(updateHeaderVisibility);
+          },
+          { passive: true }
+        );
+        window.addEventListener("resize", updateHeaderVisibility);
+        mobileQuery.addEventListener?.("change", updateHeaderVisibility);
+        updateHeaderVisibility();
+      }
+
+      if (isArticle) {
+        const storagePrefix = "mashbean.blog";
+        const body = document.body;
+        const fontDecButton = document.querySelector("#reading-font-dec");
+        const fontIncButton = document.querySelector("#reading-font-inc");
+        const focusButton = document.querySelector("#reading-focus-toggle");
+        const focusHint = document.querySelector("#reading-focus-hint");
+
+        let fontScale = Number(localStorage.getItem(`${storagePrefix}.fontScale`) ?? "1");
+        if (!Number.isFinite(fontScale)) fontScale = 1;
+        fontScale = Math.min(1.2, Math.max(0.92, fontScale));
+        body.style.setProperty("--article-font-scale", String(fontScale));
+
+        const setFocusMode = (enabled) => {
+          body.classList.toggle("focus-reading", enabled);
+          if (focusButton instanceof HTMLButtonElement) {
+            focusButton.textContent = enabled ? "結束聚焦" : "聚焦閱讀";
+            focusButton.setAttribute("aria-pressed", enabled ? "true" : "false");
+          }
+          localStorage.setItem(`${storagePrefix}.focusMode`, enabled ? "1" : "0");
+        };
+
+        // Always start article pages in focus mode for distraction-free reading.
+        setFocusMode(true);
+        track("Article Focus Mode", { state: "enabled_default" });
+
+        const hintKey = `${storagePrefix}.focusHintSeen`;
+        if (focusHint instanceof HTMLElement && !localStorage.getItem(hintKey)) {
+          focusHint.hidden = false;
+          window.setTimeout(() => {
+            focusHint.classList.add("is-visible");
+          }, 60);
+          window.setTimeout(() => {
+            focusHint.classList.remove("is-visible");
+            window.setTimeout(() => {
+              focusHint.hidden = true;
+            }, 220);
+          }, 3400);
+          localStorage.setItem(hintKey, "1");
+        }
+
+        const updateFontScale = (delta) => {
+          fontScale = Math.min(1.2, Math.max(0.92, Number((fontScale + delta).toFixed(2))));
+          body.style.setProperty("--article-font-scale", String(fontScale));
+          localStorage.setItem(`${storagePrefix}.fontScale`, String(fontScale));
+        };
+
+        fontDecButton?.addEventListener("click", () => updateFontScale(-0.05));
+        fontIncButton?.addEventListener("click", () => updateFontScale(0.05));
+        focusButton?.addEventListener("click", () => {
+          const nextEnabled = !body.classList.contains("focus-reading");
+          setFocusMode(nextEnabled);
+          track("Article Focus Mode", { state: nextEnabled ? "enabled" : "disabled" });
+        });
+
+        const bar = document.querySelector("#reading-progress-bar");
+        const article = document.querySelector("article.article-layout, article");
+        const articleTitle = document.querySelector(".article-title")?.textContent?.trim() ?? "";
+        const readingStateKey = `${storagePrefix}.lastReading`;
+        const persistReadingState = (progress) => {
+          try {
+            const payload = {
+              url: window.location.pathname,
+              title: articleTitle || document.title || "文章",
+              progress: Math.max(0, Math.min(100, Math.round(progress * 100))),
+              updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(readingStateKey, JSON.stringify(payload));
+          } catch {
+            // Ignore storage errors.
+          }
+        };
+        if (bar instanceof HTMLElement) {
+          let read50Tracked = false;
+          let rafId = 0;
+          let pollId = 0;
+          const clamp01 = (value) => Math.min(1, Math.max(0, value));
+          const getScrollTop = () =>
+            Math.max(
+              window.scrollY ?? 0,
+              window.pageYOffset ?? 0,
+              document.documentElement?.scrollTop ?? 0,
+              document.body?.scrollTop ?? 0
+            );
+          const getViewportHeight = () =>
+            Math.max(
+              1,
+              window.visualViewport?.height ?? window.innerHeight ?? document.documentElement?.clientHeight ?? 1
+            );
+          const getScrollableHeight = () => {
+            const doc = document.documentElement;
+            const bodyEl = document.body;
+            const scrollHeight = Math.max(
+              doc?.scrollHeight ?? 0,
+              bodyEl?.scrollHeight ?? 0,
+              doc?.offsetHeight ?? 0,
+              bodyEl?.offsetHeight ?? 0
+            );
+            return Math.max(1, scrollHeight - getViewportHeight());
+          };
+          const getReadingProgress = () => {
+            const scrollTop = getScrollTop();
+            if (article instanceof HTMLElement) {
+              const rect = article.getBoundingClientRect();
+              const articleTop = scrollTop + rect.top;
+              const articleHeight = Math.max(rect.height, article.offsetHeight, article.scrollHeight, 1);
+              const articleBottom = articleTop + articleHeight;
+              const viewport = getViewportHeight();
+              const start = Math.max(0, articleTop - viewport * 0.2);
+              const end = Math.max(start + 1, articleBottom - viewport * 0.8);
+              return clamp01((scrollTop - start) / (end - start));
+            }
+            return clamp01(scrollTop / getScrollableHeight());
+          };
+
+          const update = () => {
+            const progress = getReadingProgress();
+            bar.style.width = `${(progress * 100).toFixed(2)}%`;
+            persistReadingState(progress);
+            if (!read50Tracked && progress >= 0.5) {
+              read50Tracked = true;
+              track("Article Engaged", { signal: "scroll_50" });
+            }
+          };
+
+          const scheduleUpdate = () => {
+            if (rafId) return;
+            rafId = window.requestAnimationFrame(() => {
+              rafId = 0;
+              update();
+            });
+          };
+
+          update();
+          window.addEventListener("scroll", scheduleUpdate, { passive: true });
+          document.addEventListener("scroll", scheduleUpdate, { passive: true, capture: true });
+          window.addEventListener("touchmove", scheduleUpdate, { passive: true });
+          document.addEventListener("touchmove", scheduleUpdate, { passive: true, capture: true });
+          window.addEventListener("resize", scheduleUpdate);
+          window.addEventListener("orientationchange", scheduleUpdate);
+          window.addEventListener("pageshow", scheduleUpdate);
+          window.visualViewport?.addEventListener("resize", scheduleUpdate);
+          window.visualViewport?.addEventListener("scroll", scheduleUpdate);
+          pollId = window.setInterval(scheduleUpdate, 250);
+          window.addEventListener("pagehide", () => {
+            if (rafId) window.cancelAnimationFrame(rafId);
+            if (pollId) window.clearInterval(pollId);
+          });
+        }
+        window.addEventListener("beforeunload", () => {
+          const barWidth = Number((bar instanceof HTMLElement ? bar.style.width : "0").replace("%", ""));
+          const fallbackProgress = Number.isFinite(barWidth) ? barWidth / 100 : 0;
+          persistReadingState(fallbackProgress);
+        });
+        window.setTimeout(() => {
+          track("Article Engaged", { signal: "time_45s" });
+        }, 45000);
+
+        const tocLinks = Array.from(document.querySelectorAll(".toc-list a"))
+          .filter((el) => el instanceof HTMLAnchorElement);
+        const observedHeadings = tocLinks
+          .map((link) => {
+            const id = decodeURIComponent(link.hash.replace(/^#/, ""));
+            return document.getElementById(id);
+          })
+          .filter((el) => el instanceof HTMLElement);
+
+        if (tocLinks.length > 0 && observedHeadings.length > 0) {
+          const setActiveToc = (id) => {
+            tocLinks.forEach((link) => {
+              const active = decodeURIComponent(link.hash.replace(/^#/, "")) === id;
+              link.classList.toggle("toc-link-active", active);
+              if (active) link.setAttribute("aria-current", "true");
+              else link.removeAttribute("aria-current");
+            });
+            observedHeadings.forEach((heading) => {
+              heading.classList.toggle("section-active", heading.id === id);
+            });
+          };
+
+          const rootMargin = window.matchMedia("(max-width: 760px)").matches
+            ? "-18% 0px -72% 0px"
+            : window.matchMedia("(max-width: 1120px)").matches
+              ? "-14% 0px -70% 0px"
+              : "-12% 0px -68% 0px";
+
+          const observer = new IntersectionObserver(
+            (entries) => {
+              const visible = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+              if (visible[0]?.target?.id) setActiveToc(visible[0].target.id);
+            },
+            { rootMargin, threshold: [0, 1] }
+          );
+
+          observedHeadings.forEach((heading) => observer.observe(heading));
+          setActiveToc(observedHeadings[0].id);
+        }
+
+        const copyText = async (text) => {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            return false;
+          }
+        };
+
+        const prose = document.querySelector(".article-prose");
+        if (prose) {
+          const headings = prose.querySelectorAll("h2[id], h3[id]");
+          headings.forEach((heading) => {
+            const id = heading.getAttribute("id");
+            if (!id || heading.querySelector(".heading-anchor-btn")) return;
+            const anchorBtn = document.createElement("button");
+            anchorBtn.type = "button";
+            anchorBtn.className = "heading-anchor-btn";
+            anchorBtn.setAttribute("aria-label", "複製段落連結");
+            anchorBtn.textContent = "#";
+            anchorBtn.addEventListener("click", async () => {
+              const permalink = `${window.location.origin}${window.location.pathname}#${id}`;
+              const copied = await copyText(permalink);
+              const old = anchorBtn.textContent;
+              anchorBtn.textContent = copied ? "OK" : "X";
+              if (!copied) window.prompt("請手動複製此段落連結", permalink);
+              setTimeout(() => {
+                anchorBtn.textContent = old ?? "#";
+              }, 1200);
+            });
+            heading.appendChild(anchorBtn);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

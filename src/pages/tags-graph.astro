@@ -1,0 +1,1401 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { classifyPostTags, getTopicCatalog } from "@/utils/blogTags";
+import { withBase } from "@/utils/paths";
+import { cleanPostTitle } from "@/utils/title";
+
+const posts = (await getBlogPosts()).slice(0, 160);
+const topics = getTopicCatalog();
+const GRAPH_GENERIC_KEYWORD_PENALTY: Record<string, number> = {
+  nft: 0.46,
+  web3: 0.62,
+  區塊鏈: 0.7,
+  加密: 0.7,
+};
+
+const items = posts.map((post) => {
+  const classified = classifyPostTags({
+    title: cleanPostTitle(post.data.title),
+    description: post.data.description,
+    body: post.body,
+    tags: post.data.tags,
+  });
+  return {
+    id: `post:${post.id}`,
+    title: cleanPostTitle(post.data.title),
+    url: buildPostUrl(post),
+    topics: classified.topics,
+    keywords: classified.keywords.slice(0, 6),
+    secondaryKeywords: classified.secondaryKeywords.slice(0, 10),
+    keywordScores: classified.keywordScores.slice(0, 20),
+  };
+});
+
+const keywordCounter = new Map<string, { label: string; score: number; df: number }>();
+for (const item of items) {
+  const seenKeywords = new Set<string>();
+  for (const keyword of item.keywordScores) {
+    const key = keyword.keyword.trim().toLocaleLowerCase("zh-TW");
+    if (!key) continue;
+    const bucket = keywordCounter.get(key) ?? { label: keyword.keyword, score: 0, df: 0 };
+    const tierBonus = keyword.tier === "primary" ? 1.12 : 0.9;
+    bucket.score += keyword.score * tierBonus;
+    if (keyword.keyword.length > bucket.label.length) bucket.label = keyword.keyword;
+    if (!seenKeywords.has(key)) {
+      bucket.df += 1;
+      seenKeywords.add(key);
+    }
+    keywordCounter.set(key, bucket);
+  }
+}
+
+const topKeywords = Array.from(keywordCounter.entries())
+  .filter(([, stat]) => stat.df >= 3)
+  .map(([norm, stat]) => {
+    const idf = Math.log(1 + items.length / (1 + stat.df));
+    const overlyCommonPenalty = stat.df / items.length > 0.36 ? 0.42 : 1;
+    const genericPenalty = GRAPH_GENERIC_KEYWORD_PENALTY[norm] ?? 1;
+    const raritySmoothing = Math.sqrt(stat.df);
+    const weighted = stat.score * idf * raritySmoothing * overlyCommonPenalty * genericPenalty;
+    return [stat.label, weighted] as const;
+  })
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 56)
+  .map(([keyword]) => keyword);
+
+const keywordSet = new Set(topKeywords);
+const searchIndexUrl = withBase("search-index.json");
+
+const nodes: Array<{
+  id: string;
+  type: "topic" | "keyword" | "post";
+  label: string;
+  url?: string;
+  topic?: string;
+}> = [];
+const links: Array<{ source: string; target: string; kind: "topic" | "keyword"; weight: number }> =
+  [];
+
+for (const topic of topics) {
+  nodes.push({ id: `topic:${topic.key}`, type: "topic", label: topic.title, topic: topic.key });
+}
+
+for (const keyword of topKeywords) {
+  nodes.push({ id: `keyword:${keyword}`, type: "keyword", label: keyword });
+}
+
+for (const item of items) {
+  nodes.push({
+    id: item.id,
+    type: "post",
+    label: item.title,
+    url: item.url,
+    topic: item.topics[0],
+  });
+  for (const topic of item.topics) {
+    links.push({ source: item.id, target: `topic:${topic}`, kind: "topic", weight: 1 });
+  }
+  for (const keywordEntry of item.keywordScores) {
+    if (keywordSet.has(keywordEntry.keyword)) {
+      const linkWeight =
+        keywordEntry.tier === "primary"
+          ? Math.min(1.8, Math.max(0.55, keywordEntry.score / 2.2))
+          : Math.min(1.3, Math.max(0.35, keywordEntry.score / 2.8));
+      links.push({
+        source: item.id,
+        target: `keyword:${keywordEntry.keyword}`,
+        kind: "keyword",
+        weight: Number(linkWeight.toFixed(3)),
+      });
+    }
+  }
+}
+
+const graph = { nodes, links };
+---
+
+<BaseLayout
+  title="與豆泥的大腦互動"
+  description="歷年文章與歷年關鍵字的互動地圖，不妨在親疏遠近，感受豆泥的邏輯。"
+>
+  <h1 class="section-title graph-page-title">與豆泥的大腦互動</h1>
+  <p class="graph-intro">歷年文章與歷年關鍵字的互動地圖，不妨在親疏遠近，感受豆泥的邏輯。</p>
+
+  <section class="graph-panel" aria-label="關聯圖">
+    <div class="graph-toolbar">
+      <label>
+        篩選主題
+        <select id="graph-topic-filter">
+          <option value="all">全部主題</option>
+          {topics.map((t) => <option value={t.key}>{t.title}</option>)}
+        </select>
+      </label>
+      <label>
+        查找節點
+        <input id="graph-search" type="search" placeholder="輸入文章或關鍵字" />
+      </label>
+      <button id="graph-reset" type="button">重置視角</button>
+      <a href={withBase("search/")} class="graph-toolbar-link" aria-label="回一般搜尋頁面">
+        回一般搜尋
+      </a>
+    </div>
+    <div class="graph-guide" aria-label="使用說明">
+      <p class="graph-guide-text">拖曳旋轉、滾輪縮放；文章節點點一次看資訊、再點一次開啟文章。</p>
+      <p id="graph-search-status" class="graph-search-status" aria-live="polite">
+        搜尋結果：全部節點
+      </p>
+      <div class="graph-type-toggle" role="group" aria-label="節點類型顯示">
+        <label>
+          <input type="checkbox" data-node-type="topic" checked />
+          <span class="graph-legend-dot graph-legend-dot-topic"></span>
+          主題
+        </label>
+        <label>
+          <input type="checkbox" data-node-type="keyword" checked />
+          <span class="graph-legend-dot graph-legend-dot-keyword"></span>
+          關鍵字
+        </label>
+        <label>
+          <input type="checkbox" data-node-type="post" checked />
+          <span class="graph-legend-dot graph-legend-dot-post"></span>
+          文章
+        </label>
+      </div>
+    </div>
+    <div class="graph-main">
+      <div
+        id="graph-stage"
+        class="graph-stage"
+        role="application"
+        aria-label="互動圖譜"
+        tabindex="0"
+      >
+      </div>
+      <aside
+        id="graph-inspector"
+        class="graph-inspector"
+        aria-live="polite"
+        aria-label="節點資訊面板"
+      >
+        <div class="graph-inspector-head">
+          <h2>節點資訊</h2>
+          <button
+            id="graph-inspector-close"
+            type="button"
+            class="graph-inspector-close"
+            aria-label="關閉資訊面板">關閉</button
+          >
+        </div>
+        <div id="graph-inspector-content" class="graph-inspector-content">
+          <p>點擊任一節點查看詳細資訊。</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ graph, searchIndexUrl }}>
+  const stage = document.querySelector("#graph-stage");
+  const inspector = document.querySelector("#graph-inspector");
+  const inspectorContent = document.querySelector("#graph-inspector-content");
+  const inspectorClose = document.querySelector("#graph-inspector-close");
+  const topicFilter = document.querySelector("#graph-topic-filter");
+  const searchInput = document.querySelector("#graph-search");
+  const searchStatus = document.querySelector("#graph-search-status");
+  const resetButton = document.querySelector("#graph-reset");
+  const typeCheckboxes = Array.from(
+    document.querySelectorAll(".graph-type-toggle input[data-node-type]"),
+  );
+
+  if (!(stage instanceof HTMLElement)) throw new Error("graph stage missing");
+
+  const nodes = graph.nodes.map((n, idx) => ({
+    ...n,
+    i: idx,
+    x: (Math.random() - 0.5) * 640,
+    y: (Math.random() - 0.5) * 420,
+    z: (Math.random() - 0.5) * 340,
+    vx: 0,
+    vy: 0,
+    vz: 0,
+  }));
+
+  const byId = new Map(nodes.map((n) => [n.id, n]));
+  const links = graph.links
+    .map((link) => ({ ...link, s: byId.get(link.source), t: byId.get(link.target) }))
+    .filter((link) => link.s && link.t);
+
+  const topicToPosts = new Map();
+  const keywordToPosts = new Map();
+  const postToTopics = new Map();
+  const postToKeywords = new Map();
+  const postToKeywordWeights = new Map();
+  const adjacency = new Map();
+  const postSearchCorpus = new Map();
+
+  function pushMapSet(map, key, value) {
+    const set = map.get(key);
+    if (set) {
+      set.add(value);
+      return;
+    }
+    map.set(key, new Set([value]));
+  }
+
+  function pushKeywordWeight(postId, keywordId, weight) {
+    const bucket = postToKeywordWeights.get(postId);
+    if (bucket) {
+      bucket.set(keywordId, Math.max(weight, bucket.get(keywordId) ?? 0));
+      return;
+    }
+    postToKeywordWeights.set(postId, new Map([[keywordId, weight]]));
+  }
+
+  function pushAdjacency(a, b) {
+    const setA = adjacency.get(a);
+    if (setA) setA.add(b);
+    else adjacency.set(a, new Set([b]));
+    const setB = adjacency.get(b);
+    if (setB) setB.add(a);
+    else adjacency.set(b, new Set([a]));
+  }
+
+  for (const link of links) {
+    pushAdjacency(link.s.id, link.t.id);
+    if (link.kind === "topic" && link.s.type === "post" && link.t.type === "topic") {
+      pushMapSet(topicToPosts, link.t.id, link.s);
+      pushMapSet(postToTopics, link.s.id, link.t.id);
+    }
+    if (link.kind === "keyword" && link.s.type === "post" && link.t.type === "keyword") {
+      pushMapSet(postToKeywords, link.s.id, link.t.id);
+      pushMapSet(keywordToPosts, link.t.id, link.s);
+      pushKeywordWeight(link.s.id, link.t.id, Number(link.weight ?? 1));
+    }
+  }
+
+  async function loadSearchCorpus() {
+    try {
+      const response = await fetch(searchIndexUrl, { credentials: "same-origin" });
+      if (!response.ok) return;
+      const docs = await response.json();
+      if (!Array.isArray(docs)) return;
+      for (const doc of docs) {
+        if (!doc || doc.type !== "post" || typeof doc.id !== "string") continue;
+        const text = [
+          typeof doc.title === "string" ? doc.title : "",
+          typeof doc.description === "string" ? doc.description : "",
+          typeof doc.content === "string" ? doc.content : "",
+          Array.isArray(doc.tags) ? doc.tags.join(" ") : "",
+          Array.isArray(doc.topics) ? doc.topics.join(" ") : "",
+        ]
+          .join(" ")
+          .toLocaleLowerCase("zh-TW");
+        if (text) postSearchCorpus.set(doc.id, text);
+      }
+      applyFilters();
+    } catch {
+      // Keep graph search functional even if index request fails.
+    }
+  }
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.classList.add("graph-links");
+  stage.appendChild(svg);
+
+  const nodesLayer = document.createElement("div");
+  nodesLayer.className = "graph-nodes";
+  stage.appendChild(nodesLayer);
+
+  const linkEls = links.map((link) => {
+    const el = document.createElementNS(svgNS, "line");
+    el.setAttribute("class", `graph-link graph-link-${link.kind}`);
+    const weight = Number(link.weight ?? 1);
+    if (link.kind === "keyword") {
+      el.style.strokeWidth = `${(0.8 + weight * 0.9).toFixed(2)}`;
+      el.style.strokeOpacity = `${Math.min(0.82, 0.28 + weight * 0.28)}`;
+    } else {
+      el.style.strokeWidth = "1.35";
+    }
+    svg.appendChild(el);
+    return el;
+  });
+
+  const nodeEls = nodes.map((node) => {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = `graph-node graph-node-${node.type}`;
+    el.textContent = node.type === "post" ? "" : node.label;
+    el.title = node.label;
+    const typeLabel = node.type === "topic" ? "主題" : node.type === "keyword" ? "關鍵字" : "文章";
+    el.setAttribute("aria-label", `${typeLabel}：${node.label}`);
+    el.setAttribute("aria-pressed", "false");
+
+    nodesLayer.appendChild(el);
+    return el;
+  });
+
+  function escapeHtml(text) {
+    return text
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  let selectedNodeId = "";
+  let lastSelectedNodeId = "";
+  let lastSelectedAt = 0;
+  let centerNodeId = "";
+  let viewOffsetX = 0;
+  let viewOffsetY = 0;
+  const visibleTypes = new Set(["topic", "keyword", "post"]);
+  let visibleNodeIds = new Set(nodes.map((n) => n.id));
+  let visibleLinkFlags = links.map(() => true);
+  let focusNodeIds = new Set();
+  const defaultInspectorHtml = "<p>點擊任一節點查看詳細資訊。</p>";
+
+  function setSelectedNode(nodeId) {
+    selectedNodeId = nodeId;
+    centerNodeId = nodeId;
+    nodeEls.forEach((el, i) => {
+      const selected = nodes[i].id === nodeId;
+      el.classList.toggle("graph-node-selected", selected);
+      el.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
+    inspector?.classList.toggle("graph-inspector-open", Boolean(nodeId));
+  }
+
+  function renderRelatedPostCards(posts) {
+    if (posts.length === 0) return '<p class="graph-info-empty">目前沒有對應文章。</p>';
+    return `<ul class="graph-inspector-card-list">${posts
+      .slice(0, 80)
+      .map(
+        (post) => `
+          <li class="graph-inspector-card-item">
+            <button type="button" class="graph-inspector-card-link" data-focus-node-id="${escapeHtml(post.id)}">${escapeHtml(post.label)}</button>
+          </li>
+        `,
+      )
+      .join("")}</ul>`;
+  }
+
+  function renderInspector(node) {
+    if (!(inspectorContent instanceof HTMLElement)) return;
+
+    if (node.type === "topic") {
+      const posts = Array.from(topicToPosts.get(node.id) ?? []).sort((a, b) =>
+        a.label.localeCompare(b.label, "zh-Hant"),
+      );
+      const listHtml = renderRelatedPostCards(posts);
+      inspectorContent.innerHTML = `
+        <article class="graph-info-card">
+          <div class="graph-info-head">
+            <h3>${escapeHtml(node.label)}</h3>
+            <span class="graph-info-type">主題</span>
+          </div>
+          <p class="graph-info-count">關聯文章 ${posts.length} 篇</p>
+          ${listHtml}
+        </article>
+      `;
+      return;
+    }
+
+    if (node.type === "post") {
+      const topicLabels = Array.from(postToTopics.get(node.id) ?? [])
+        .map((topicId) => byId.get(topicId))
+        .filter((topicNode) => topicNode && topicNode.type === "topic")
+        .map((topicNode) => topicNode.label);
+      const keywordLabels = Array.from(postToKeywords.get(node.id) ?? [])
+        .map((keywordId) => {
+          const keywordNode = byId.get(keywordId);
+          const weight = postToKeywordWeights.get(node.id)?.get(keywordId) ?? 0;
+          return keywordNode && keywordNode.type === "keyword"
+            ? { id: keywordId, label: keywordNode.label, weight }
+            : null;
+        })
+        .filter((item) => item !== null)
+        .sort((a, b) => b.weight - a.weight || a.label.localeCompare(b.label, "zh-Hant"))
+        .slice(0, 16);
+
+      const topicText = topicLabels.length > 0 ? topicLabels.join("・") : "未分類";
+      const keywordHtml =
+        keywordLabels.length > 0
+          ? `<ul class="graph-tag-chip-list">${keywordLabels
+              .map(
+                (item) =>
+                  `<li><button type="button" class="graph-tag-chip graph-tag-chip-btn" data-focus-node-id="${escapeHtml(item.id)}">${escapeHtml(item.label)}</button></li>`,
+              )
+              .join("")}</ul>`
+          : '<p class="graph-post-card-empty">目前沒有關鍵字。</p>';
+
+      inspectorContent.innerHTML = `
+        <article class="graph-post-card">
+          <div class="graph-post-card-head">
+            <span class="graph-post-card-type">文章資訊</span>
+          </div>
+          <a class="graph-post-card-link" href="${node.url}">${escapeHtml(node.label)}</a>
+          <dl class="graph-post-meta-grid">
+            <div>
+              <dt>主題</dt>
+              <dd>${escapeHtml(topicText)}</dd>
+            </div>
+            <div>
+              <dt>關鍵字</dt>
+              <dd>${keywordHtml}</dd>
+            </div>
+          </dl>
+        </article>
+      `;
+      return;
+    }
+
+    const posts = Array.from(keywordToPosts.get(node.id) ?? []).sort((a, b) =>
+      a.label.localeCompare(b.label, "zh-Hant"),
+    );
+    const listHtml = renderRelatedPostCards(posts);
+    inspectorContent.innerHTML = `
+      <article class="graph-info-card">
+        <div class="graph-info-head">
+          <h3>${escapeHtml(node.label)}</h3>
+          <span class="graph-info-type">關鍵字</span>
+        </div>
+        <p class="graph-info-count">關聯文章 ${posts.length} 篇</p>
+        ${listHtml}
+      </article>
+    `;
+  }
+
+  inspectorContent?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const button = target.closest("[data-focus-node-id]");
+    if (!(button instanceof HTMLElement)) return;
+    const nodeId = button.getAttribute("data-focus-node-id");
+    if (!nodeId) return;
+    const node = byId.get(nodeId);
+    if (!node) return;
+    event.preventDefault();
+    setSelectedNode(node.id);
+    renderInspector(node);
+    applyFilters();
+  });
+
+  function clearSelection() {
+    setSelectedNode("");
+    focusNodeIds = new Set();
+    if (inspectorContent instanceof HTMLElement) inspectorContent.innerHTML = defaultInspectorHtml;
+  }
+
+  function nodeMatchesQuery(node, q, terms) {
+    if (!q) return true;
+    const base = node.label.toLocaleLowerCase("zh-TW");
+    if (node.type !== "post") return terms.every((term) => base.includes(term));
+    const corpus = `${base} ${postSearchCorpus.get(node.id) ?? ""}`;
+    return terms.every((term) => corpus.includes(term));
+  }
+
+  function applyFilters() {
+    const selectedTopicValue = topicFilter instanceof HTMLSelectElement ? topicFilter.value : "all";
+    const selectedTopicId = selectedTopicValue !== "all" ? `topic:${selectedTopicValue}` : "all";
+    const q = (searchInput instanceof HTMLInputElement ? searchInput.value : "")
+      .trim()
+      .toLocaleLowerCase("zh-TW");
+    const terms = q.split(/\s+/).filter(Boolean);
+
+    const visiblePostIds = new Set();
+    const visibleKeywordIds = new Set();
+    const visibleTopicIds = new Set();
+
+    if (selectedTopicId === "all") {
+      for (const n of nodes) {
+        if (n.type === "post") visiblePostIds.add(n.id);
+        if (n.type === "keyword") visibleKeywordIds.add(n.id);
+        if (n.type === "topic") visibleTopicIds.add(n.id);
+      }
+    } else {
+      visibleTopicIds.add(selectedTopicId);
+      const posts = topicToPosts.get(selectedTopicId) ?? new Set();
+      for (const postNode of posts) {
+        visiblePostIds.add(postNode.id);
+        for (const keywordId of postToKeywords.get(postNode.id) ?? []) {
+          visibleKeywordIds.add(keywordId);
+        }
+      }
+    }
+
+    visibleNodeIds = new Set();
+    focusNodeIds = selectedNodeId
+      ? new Set([selectedNodeId, ...(adjacency.get(selectedNodeId) ?? [])])
+      : new Set();
+    let matchCount = 0;
+
+    nodeEls.forEach((el, i) => {
+      const n = nodes[i];
+      let topicVisible = true;
+      if (selectedTopicId !== "all") {
+        if (n.type === "topic") topicVisible = visibleTopicIds.has(n.id);
+        if (n.type === "post") topicVisible = visiblePostIds.has(n.id);
+        if (n.type === "keyword") topicVisible = visibleKeywordIds.has(n.id);
+      }
+      const typeVisible = visibleTypes.has(n.type);
+
+      if (!topicVisible || !typeVisible) {
+        el.style.opacity = "0";
+        el.style.pointerEvents = "none";
+        el.classList.remove("graph-node-match");
+        el.classList.remove("graph-node-focus");
+        return;
+      }
+
+      visibleNodeIds.add(n.id);
+      const matched = nodeMatchesQuery(n, q, terms);
+      el.classList.toggle("graph-node-match", Boolean(q) && matched);
+      const inFocus = focusNodeIds.size > 0 && focusNodeIds.has(n.id);
+      el.classList.toggle("graph-node-focus", inFocus);
+      if (matched) matchCount += 1;
+      let opacity = q && !matched ? 0.22 : 1;
+      if (focusNodeIds.size > 0 && !inFocus) opacity = Math.min(opacity, 0.12);
+      el.style.opacity = String(opacity);
+      el.style.pointerEvents = "auto";
+    });
+
+    visibleLinkFlags = links.map(() => true);
+    linkEls.forEach((el, i) => {
+      const link = links[i];
+      let topicVisible = true;
+      if (selectedTopicId !== "all") {
+        if (link.kind === "topic") {
+          topicVisible = link.t.id === selectedTopicId && visiblePostIds.has(link.s.id);
+        } else {
+          topicVisible = visiblePostIds.has(link.s.id) && visibleKeywordIds.has(link.t.id);
+        }
+      }
+      const typeVisible = visibleTypes.has(link.s.type) && visibleTypes.has(link.t.type);
+      if (!topicVisible || !typeVisible) {
+        visibleLinkFlags[i] = false;
+        el.style.display = "none";
+        return;
+      }
+      el.style.display = "block";
+      const weight = Number(link.weight ?? 1);
+      const baseOpacity = link.kind === "keyword" ? Math.min(0.82, 0.28 + weight * 0.28) : 0.72;
+      const inFocusLink =
+        focusNodeIds.size === 0 || (focusNodeIds.has(link.s.id) && focusNodeIds.has(link.t.id));
+      if (!q) {
+        el.style.strokeOpacity = String(inFocusLink ? baseOpacity : 0.08);
+        return;
+      }
+      const srcMatched = nodeMatchesQuery(link.s, q, terms);
+      const tarMatched = nodeMatchesQuery(link.t, q, terms);
+      const searchOpacity = srcMatched || tarMatched ? baseOpacity : 0.1;
+      el.style.strokeOpacity = String(inFocusLink ? searchOpacity : Math.min(searchOpacity, 0.08));
+    });
+
+    if (selectedNodeId && !visibleNodeIds.has(selectedNodeId)) {
+      clearSelection();
+      applyFilters();
+      return;
+    }
+
+    if (searchStatus instanceof HTMLElement) {
+      if (!q) {
+        searchStatus.textContent = `搜尋結果：全部節點（${visibleNodeIds.size}）`;
+      } else {
+        searchStatus.textContent = `搜尋結果：${matchCount} / ${visibleNodeIds.size}`;
+      }
+    }
+
+  }
+
+  let suppressClickUntil = 0;
+  nodeEls.forEach((el, i) => {
+    const node = nodes[i];
+    let nodePointerMoved = false;
+    let nodeStartX = 0;
+    let nodeStartY = 0;
+
+    el.addEventListener("pointerdown", (event) => {
+      nodePointerMoved = false;
+      nodeStartX = event.clientX;
+      nodeStartY = event.clientY;
+    });
+
+    el.addEventListener("pointermove", (event) => {
+      if (nodePointerMoved) return;
+      const moved = Math.hypot(event.clientX - nodeStartX, event.clientY - nodeStartY);
+      if (moved >= 5) nodePointerMoved = true;
+    });
+
+    el.addEventListener("pointerup", () => {
+      if (nodePointerMoved) suppressClickUntil = performance.now() + 260;
+    });
+
+    el.addEventListener("click", () => {
+      if (performance.now() < suppressClickUntil) return;
+      const wasSelected = selectedNodeId === node.id;
+      const rapidSecondTap =
+        wasSelected && lastSelectedNodeId === node.id && performance.now() - lastSelectedAt < 950;
+      setSelectedNode(node.id);
+      renderInspector(node);
+      applyFilters();
+      lastSelectedNodeId = node.id;
+      lastSelectedAt = performance.now();
+      if (node.url && rapidSecondTap) window.location.href = node.url;
+    });
+  });
+
+  inspectorClose?.addEventListener("click", () => {
+    clearSelection();
+    applyFilters();
+    stage.focus();
+  });
+
+  let yaw = 0;
+  let pitch = 0;
+  let zoom = 1;
+  let dragging = false;
+  let pointerMoved = false;
+  let dragPointerId = -1;
+  const dragThreshold = 6;
+  let lx = 0;
+  let ly = 0;
+
+  function project(n, w, h) {
+    const cy = Math.cos(yaw);
+    const sy = Math.sin(yaw);
+    const cp = Math.cos(pitch);
+    const sp = Math.sin(pitch);
+
+    const x1 = n.x * cy - n.z * sy;
+    const z1 = n.x * sy + n.z * cy;
+    const y1 = n.y * cp - z1 * sp;
+    const z2 = n.y * sp + z1 * cp;
+
+    const p = (760 / (760 + z2)) * zoom;
+    return {
+      x: w / 2 + x1 * p,
+      y: h / 2 + y1 * p,
+      s: Math.max(0.3, p),
+      z: z2,
+    };
+  }
+
+  function applyForces() {
+    for (let i = 0; i < nodes.length; i += 1) {
+      for (let j = i + 1; j < nodes.length; j += 1) {
+        const a = nodes[i];
+        const b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dz = a.z - b.z;
+        const d2 = dx * dx + dy * dy + dz * dz + 0.1;
+        const f = 2200 / d2;
+        const inv = 1 / Math.sqrt(d2);
+        const fx = dx * inv * f;
+        const fy = dy * inv * f;
+        const fz = dz * inv * f;
+        a.vx += fx;
+        a.vy += fy;
+        a.vz += fz;
+        b.vx -= fx;
+        b.vy -= fy;
+        b.vz -= fz;
+      }
+    }
+
+    for (const link of links) {
+      const a = link.s;
+      const b = link.t;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dz = b.z - a.z;
+      const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+      const weight = Number(link.weight ?? 1);
+      const target = link.kind === "topic" ? 140 : Math.max(128, 230 - weight * 52);
+      const k = link.kind === "topic" ? 0.03 : 0.01 + weight * 0.013;
+      const f = (d - target) * k;
+      const fx = (dx / d) * f;
+      const fy = (dy / d) * f;
+      const fz = (dz / d) * f;
+      a.vx += fx;
+      a.vy += fy;
+      a.vz += fz;
+      b.vx -= fx;
+      b.vy -= fy;
+      b.vz -= fz;
+    }
+  }
+
+  function integrate() {
+    for (const n of nodes) {
+      n.vx *= 0.88;
+      n.vy *= 0.88;
+      n.vz *= 0.88;
+      n.x += n.vx;
+      n.y += n.vy;
+      n.z += n.vz;
+    }
+  }
+
+  function settleLayout() {
+    const rounds = Math.min(520, Math.max(180, Math.round(nodes.length * 1.25)));
+    for (let i = 0; i < rounds; i += 1) {
+      applyForces();
+      integrate();
+    }
+    for (const n of nodes) {
+      n.vx = 0;
+      n.vy = 0;
+      n.vz = 0;
+    }
+  }
+
+  function draw() {
+    const rect = stage.getBoundingClientRect();
+    svg.setAttribute("viewBox", `0 0 ${rect.width} ${rect.height}`);
+    const p = nodes.map((n) => project(n, rect.width, rect.height));
+
+    if (centerNodeId && !dragging) {
+      const focusNode = byId.get(centerNodeId);
+      const projectedFocus = focusNode ? p[focusNode.i] : null;
+      if (projectedFocus) {
+        const targetOffsetX = rect.width / 2 - projectedFocus.x;
+        const targetOffsetY = rect.height / 2 - projectedFocus.y;
+        viewOffsetX += (targetOffsetX - viewOffsetX) * 0.18;
+        viewOffsetY += (targetOffsetY - viewOffsetY) * 0.18;
+      } else {
+        viewOffsetX += (0 - viewOffsetX) * 0.18;
+        viewOffsetY += (0 - viewOffsetY) * 0.18;
+      }
+    } else {
+      viewOffsetX += (0 - viewOffsetX) * 0.18;
+      viewOffsetY += (0 - viewOffsetY) * 0.18;
+    }
+
+    links.forEach((link, i) => {
+      const el = linkEls[i];
+      if (!visibleLinkFlags[i]) return;
+      const a = p[link.s.i];
+      const b = p[link.t.i];
+      el.setAttribute("x1", String(a.x + viewOffsetX));
+      el.setAttribute("y1", String(a.y + viewOffsetY));
+      el.setAttribute("x2", String(b.x + viewOffsetX));
+      el.setAttribute("y2", String(b.y + viewOffsetY));
+    });
+
+    nodes.forEach((_, i) => {
+      const el = nodeEls[i];
+      const pp = p[i];
+      el.style.left = `${pp.x + viewOffsetX}px`;
+      el.style.top = `${pp.y + viewOffsetY}px`;
+      el.style.transform = `translate(-50%, -50%) scale(${pp.s})`;
+      el.style.zIndex = String(Math.round(pp.z + 1000));
+    });
+  }
+
+  function frame() {
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.target instanceof HTMLElement && e.target.closest(".graph-node")) return;
+    dragging = true;
+    pointerMoved = false;
+    dragPointerId = e.pointerId;
+    lx = e.clientX;
+    ly = e.clientY;
+    stage.setPointerCapture(e.pointerId);
+  });
+
+  stage.addEventListener("pointermove", (e) => {
+    if (!dragging || e.pointerId !== dragPointerId) return;
+    const dx = e.clientX - lx;
+    const dy = e.clientY - ly;
+    if (!pointerMoved && Math.hypot(dx, dy) >= dragThreshold) pointerMoved = true;
+    if (!pointerMoved) return;
+    yaw += dx * 0.004;
+    pitch += dy * 0.003;
+    lx = e.clientX;
+    ly = e.clientY;
+  });
+
+  stage.addEventListener("pointerup", (e) => {
+    if (e.pointerId !== dragPointerId) return;
+    if (pointerMoved) suppressClickUntil = performance.now() + 200;
+    dragging = false;
+    pointerMoved = false;
+    dragPointerId = -1;
+    stage.releasePointerCapture(e.pointerId);
+  });
+
+  stage.addEventListener("pointercancel", (e) => {
+    if (e.pointerId !== dragPointerId) return;
+    dragging = false;
+    pointerMoved = false;
+    dragPointerId = -1;
+  });
+
+  stage.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      zoom = Math.min(2.2, Math.max(0.55, zoom + (e.deltaY < 0 ? 0.08 : -0.08)));
+    },
+    { passive: false },
+  );
+
+  stage.addEventListener("click", (e) => {
+    if (e.target instanceof HTMLElement && e.target.closest(".graph-node")) return;
+    clearSelection();
+    applyFilters();
+  });
+
+  topicFilter?.addEventListener("change", applyFilters);
+
+  searchInput?.addEventListener("input", applyFilters);
+
+  typeCheckboxes.forEach((input) => {
+    input.addEventListener("change", () => {
+      const checkedTypes = typeCheckboxes
+        .filter((item) => item instanceof HTMLInputElement && item.checked)
+        .map((item) => item.getAttribute("data-node-type"))
+        .filter(Boolean);
+      if (checkedTypes.length === 0) {
+        if (input instanceof HTMLInputElement) input.checked = true;
+        return;
+      }
+      visibleTypes.clear();
+      checkedTypes.forEach((type) => visibleTypes.add(type));
+      if (!visibleTypes.has("post")) clearSelection();
+      applyFilters();
+    });
+  });
+
+  stage.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      clearSelection();
+      applyFilters();
+      return;
+    }
+    if (e.key === "+" || e.key === "=") {
+      e.preventDefault();
+      zoom = Math.min(2.2, zoom + 0.08);
+      return;
+    }
+    if (e.key === "-" || e.key === "_") {
+      e.preventDefault();
+      zoom = Math.max(0.55, zoom - 0.08);
+    }
+  });
+
+  resetButton?.addEventListener("click", () => {
+    yaw = 0;
+    pitch = 0;
+    zoom = 1;
+    if (topicFilter instanceof HTMLSelectElement) {
+      topicFilter.value = "all";
+    }
+    if (searchInput instanceof HTMLInputElement) searchInput.value = "";
+    typeCheckboxes.forEach((input) => {
+      if (input instanceof HTMLInputElement) input.checked = true;
+    });
+    visibleTypes.clear();
+    visibleTypes.add("topic");
+    visibleTypes.add("keyword");
+    visibleTypes.add("post");
+    clearSelection();
+    applyFilters();
+  });
+
+  settleLayout();
+  applyFilters();
+  loadSearchCorpus();
+  frame();
+</script>
+
+<style>
+  .graph-panel {
+    border: 1px solid #d8e6e1;
+    border-radius: 1rem;
+    background: #fff;
+    padding: 0.9rem;
+  }
+  .graph-page-title {
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .graph-intro {
+    margin: 0 0 1.14rem;
+  }
+  .graph-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.6rem;
+    margin-bottom: 0.72rem;
+  }
+  .graph-toolbar label {
+    display: grid;
+    gap: 0.24rem;
+    font-size: 0.84rem;
+    color: #39525d;
+  }
+  .graph-toolbar input,
+  .graph-toolbar select,
+  .graph-toolbar button {
+    border: 1px solid #c8ddd7;
+    border-radius: 0.72rem;
+    background: #f8fcfa;
+    color: #1f3c49;
+    min-height: 2rem;
+    padding: 0.24rem 0.58rem;
+    font-size: 0.88rem;
+  }
+  .graph-toolbar .graph-toolbar-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #b9d9cf;
+    border-radius: 0.72rem;
+    background: #ffffff;
+    color: #2d5160;
+    min-height: 2rem;
+    padding: 0.24rem 0.62rem;
+    font-size: 0.86rem;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .graph-toolbar .graph-toolbar-link:hover {
+    border-color: #8fcab9;
+    color: #0b7d6d;
+    background: #f2fbf7;
+  }
+  .graph-guide {
+    display: grid;
+    gap: 0.38rem;
+    margin: 0 0 0.7rem;
+    padding: 0.56rem 0.64rem;
+    border-radius: 0.76rem;
+    background: #f3faf7;
+    border: 1px solid #d6ebe3;
+  }
+  .graph-guide-text,
+  .graph-search-status {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #345260;
+  }
+  .graph-search-status {
+    font-weight: 600;
+    color: #1f4c62;
+  }
+  .graph-type-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.44rem 0.78rem;
+    font-size: 0.8rem;
+    color: #2f4b57;
+  }
+  .graph-type-toggle label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.14rem 0.4rem;
+    border: 1px solid #d5e9e2;
+    border-radius: 999px;
+    background: #ffffff;
+  }
+  .graph-type-toggle input {
+    accent-color: #0b7d6d;
+  }
+  .graph-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.58rem 0.9rem;
+    font-size: 0.79rem;
+    color: #31515f;
+  }
+  .graph-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+  .graph-legend-dot {
+    width: 0.58rem;
+    height: 0.58rem;
+    border-radius: 999px;
+    border: 1px solid #accfc4;
+    background: #f9fcfb;
+  }
+  .graph-legend-dot-topic {
+    background: #eef9f5;
+    border-color: #9fcec3;
+  }
+  .graph-legend-dot-keyword {
+    background: #f9fcfb;
+    border-color: #d2e4de;
+  }
+  .graph-legend-dot-post {
+    background: #28a18c;
+    border-color: #92ccc0;
+  }
+  .graph-main {
+    position: relative;
+  }
+  .graph-stage {
+    position: relative;
+    height: min(72vh, 740px);
+    border: 1px solid #d8e6e1;
+    border-radius: 0.85rem;
+    background: radial-gradient(circle at 20% 10%, #f0faf6, #ffffff 60%);
+    overflow: hidden;
+    touch-action: none;
+    z-index: 0;
+  }
+  :global(.graph-links) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  :global(.graph-link) {
+    stroke: #c9ddd8;
+    stroke-opacity: 0.72;
+    stroke-width: 1.2;
+  }
+  :global(.graph-link-topic) {
+    stroke: #95c8bb;
+  }
+  :global(.graph-nodes) {
+    position: absolute;
+    inset: 0;
+  }
+  :global(.graph-node) {
+    position: absolute;
+    border: 1px solid #c8ddd7;
+    border-radius: 999px;
+    background: #fff;
+    color: #20404d;
+    padding: 0.15rem 0.44rem;
+    font-size: 0.74rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(25, 56, 52, 0.08);
+  }
+  :global(.graph-node:focus-visible) {
+    outline: 2px solid #1f79a4;
+    outline-offset: 2px;
+  }
+  :global(.graph-node-post) {
+    width: 0.56rem;
+    height: 0.56rem;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    text-indent: -9999px;
+    border-radius: 999px;
+    border-color: #92ccc0;
+    background: #28a18c;
+  }
+  :global(.graph-node-topic) {
+    background: #eef9f5;
+    border-color: #9fcec3;
+    font-weight: 600;
+  }
+  :global(.graph-node-keyword) {
+    background: #f9fcfb;
+    border-color: #d2e4de;
+    color: #40606a;
+  }
+  :global(.graph-node-match) {
+    outline: 2px solid #ffc766;
+    outline-offset: 1px;
+  }
+  :global(.graph-node-selected) {
+    outline: 2px solid #5ab6a4;
+    outline-offset: 1px;
+  }
+  :global(.graph-node-focus) {
+    outline: 2px solid #ffc766;
+    outline-offset: 1px;
+  }
+  .graph-inspector {
+    position: absolute;
+    top: 0.72rem;
+    right: 0.72rem;
+    width: min(22rem, calc(100% - 1.44rem));
+    max-height: calc(100% - 1.44rem);
+    overflow: auto;
+    border: 1px solid #d8e6e1;
+    border-radius: 0.82rem;
+    background: #f8fcfa;
+    padding: 0.65rem 0.72rem;
+    min-height: 0;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(16, 48, 55, 0.14);
+    overscroll-behavior: contain;
+  }
+  .graph-inspector-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin: 0 0 0.4rem;
+  }
+  .graph-inspector h2 {
+    margin: 0;
+    font-size: 0.96rem;
+  }
+  .graph-inspector h3 {
+    margin: 0;
+    font-size: 0.92rem;
+    color: #143645;
+  }
+  .graph-inspector p {
+    margin: 0.34rem 0 0;
+    color: #40606a;
+    font-size: 0.86rem;
+  }
+  .graph-inspector-close {
+    border: 1px solid #b8d6cd;
+    border-radius: 0.6rem;
+    background: #ffffff;
+    color: #2e5462;
+    font-size: 0.78rem;
+    line-height: 1;
+    min-height: 1.75rem;
+    padding: 0.2rem 0.52rem;
+    cursor: pointer;
+  }
+  .graph-inspector-content {
+    min-height: 0;
+    display: grid;
+    gap: 0.52rem;
+  }
+  .graph-inspector :global(.graph-info-card) {
+    border: 1px solid #d8e6e1;
+    border-radius: 0.72rem;
+    background: #ffffff;
+    padding: 0.58rem 0.64rem;
+  }
+  .graph-inspector :global(.graph-info-head) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.52rem;
+  }
+  .graph-inspector :global(.graph-info-type) {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #c8ddd7;
+    border-radius: 999px;
+    background: #f3faf7;
+    color: #2f5963;
+    font-size: 0.72rem;
+    line-height: 1;
+    padding: 0.18rem 0.46rem;
+    white-space: nowrap;
+  }
+  .graph-inspector :global(.graph-info-count) {
+    margin: 0.36rem 0 0;
+    color: #47616b;
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .graph-inspector :global(.graph-info-empty) {
+    margin: 0.34rem 0 0;
+    color: #5b737c;
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .graph-inspector :global(.graph-inspector-card-list) {
+    margin: 0.46rem 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: min(42vh, 18rem);
+    overflow: auto;
+    display: grid;
+    gap: 0.46rem;
+  }
+  .graph-inspector :global(.graph-inspector-card-item) {
+    margin: 0;
+    border: 1px solid #d8e6e1;
+    border-radius: 0.68rem;
+    background: #fff;
+    padding: 0.42rem 0.56rem;
+  }
+  .graph-inspector :global(.graph-inspector-card-link) {
+    display: inline-block;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    color: #1f5f86;
+    text-decoration: underline;
+    line-height: 1.72;
+    font-size: 0.87rem;
+    cursor: pointer;
+  }
+  .graph-inspector :global(.graph-post-card) {
+    border: 1px solid #d8e6e1;
+    border-radius: 0.72rem;
+    background: #ffffff;
+    padding: 0.58rem 0.64rem;
+  }
+  .graph-inspector :global(.graph-post-card-head) {
+    margin: 0 0 0.3rem;
+  }
+  .graph-inspector :global(.graph-post-card-type) {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #9fcec3;
+    border-radius: 999px;
+    background: #eef9f5;
+    color: #0d6f61;
+    font-size: 0.72rem;
+    line-height: 1;
+    padding: 0.18rem 0.46rem;
+  }
+  .graph-inspector :global(.graph-post-card-link) {
+    display: inline-block;
+    color: #1f3f4d;
+    text-decoration: none;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+  .graph-inspector :global(.graph-post-card-link:hover) {
+    color: #0b7d6d;
+  }
+  .graph-inspector :global(.graph-post-card-meta) {
+    margin: 0.28rem 0 0;
+    color: #47616b;
+    font-size: 0.82rem;
+  }
+  .graph-inspector :global(.graph-post-meta-grid) {
+    margin: 0.38rem 0 0;
+    display: grid;
+    gap: 0.32rem;
+  }
+  .graph-inspector :global(.graph-post-meta-grid div) {
+    margin: 0;
+  }
+  .graph-inspector :global(.graph-post-meta-grid dt) {
+    margin: 0;
+    color: #3f5e69;
+    font-size: 0.74rem;
+    line-height: 1.2;
+  }
+  .graph-inspector :global(.graph-post-meta-grid dd) {
+    margin: 0.14rem 0 0;
+    color: #1f3f4d;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+  .graph-inspector :global(.graph-post-card-empty) {
+    margin: 0.3rem 0 0;
+    color: #5b737c;
+    font-size: 0.8rem;
+  }
+  .graph-inspector :global(.graph-tag-chip-list) {
+    list-style: none;
+    margin: 0.14rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.34rem;
+  }
+  .graph-inspector :global(.graph-tag-chip-list li) {
+    margin: 0;
+  }
+  .graph-inspector :global(.graph-tag-chip) {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #c8ddd7;
+    border-radius: 999px;
+    background: #f3faf7;
+    color: #2f5963;
+    font-size: 0.74rem;
+    line-height: 1;
+    padding: 0.2rem 0.44rem;
+  }
+  .graph-inspector :global(.graph-tag-chip-btn) {
+    cursor: pointer;
+    font: inherit;
+  }
+  .graph-inspector :global(.graph-tag-chip-btn:hover) {
+    border-color: #92ccc0;
+    background: #e9f8f2;
+    color: #0d6f61;
+  }
+  @media (max-width: 760px) {
+    .graph-main {
+      display: block;
+      position: relative;
+    }
+    .graph-stage {
+      height: min(66vh, 560px);
+    }
+    .graph-guide {
+      gap: 0.34rem;
+    }
+    .graph-legend {
+      gap: 0.4rem 0.7rem;
+    }
+    .graph-inspector {
+      position: fixed;
+      left: 0.55rem;
+      right: 0.55rem;
+      top: auto;
+      bottom: 0.5rem;
+      width: auto;
+      max-height: min(74vh, 36rem);
+      border-radius: 0.9rem;
+      box-shadow: 0 10px 32px rgba(10, 27, 35, 0.24);
+      transform: translateY(calc(100% + 1rem));
+      opacity: 0;
+      pointer-events: none;
+      z-index: 45;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      touch-action: pan-y;
+    }
+    .graph-inspector.graph-inspector-open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .graph-inspector-content {
+      min-height: 0;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .graph-inspector-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .graph-inspector-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f8fcfa;
+      padding-bottom: 0.34rem;
+      border-bottom: 1px solid #e0ede8;
+    }
+  }
+</style>

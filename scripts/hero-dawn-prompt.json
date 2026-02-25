@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-02-22T00:00:00.000Z",
+  "items": [
+    {
+      "file": "hero-dawn",
+      "title": "Hero Dawn Collage",
+      "coverPng": "images/hero/dawn-paper-collage.png",
+      "prompt": "playful naive storybook illustration, hand-cut paper collage, visible torn paper edges, wax crayon and dry gouache texture, imperfect hand-drawn ink outlines, dawn atmosphere, warm sunrise over abstract hills, soft pink and apricot palette, right-weighted composition with open left space for text readability, subtle paper grain, editorial background image",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, UI, photorealistic, 3d render"
+    }
+  ]
+}

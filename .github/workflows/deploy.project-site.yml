@@ -1,0 +1,61 @@
+name: Deploy Astro to GitHub Pages (Project Site)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-project-site-${{ github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: "https://username.github.io"
+      BASE_PATH: "/repo-name"
+      PUBLIC_TIP_ENS_NAME: "mashbean.eth"
+      PUBLIC_SIGNER_ENS_NAME: ${{ vars.PUBLIC_SIGNER_ENS_NAME }}
+      PUBLIC_WEB3_CHAIN_ID: "1"
+      PUBLIC_WEB3_RPC_URL: "https://ethereum.publicnode.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verify post signatures
+        run: npm run sign:posts:check
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

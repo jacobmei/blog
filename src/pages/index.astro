@@ -1,0 +1,115 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getBlogPosts } from "@/utils/blog";
+import { withBase } from "@/utils/paths";
+
+const posts = await getBlogPosts();
+const latestPosts = posts.slice(0, 12);
+---
+
+<BaseLayout description="站在單向鏡後方觀看世界應對加速科技的方式。">
+  <section class="home-hero-grid" aria-label="首頁引言">
+    <section class="hero">
+      <figure style="margin:0;">
+        <blockquote class="hero-text" style="margin:0;">
+          <p style="margin:0 0 .5rem;">能身處黎明時分，簡直是天賜之福；</p>
+          <p style="margin:0;">若還年輕，更如置身天堂！</p>
+        </blockquote>
+        <figcaption class="hero-kicker" style="margin-top:.75rem;">華茲華斯（Wordsworth）</figcaption>
+      </figure>
+    </section>
+  </section>
+
+  <aside
+    id="continue-reading-toast"
+    class="continue-reading-toast"
+    hidden
+    aria-label="繼續閱讀通知"
+  >
+    <button
+      id="continue-reading-close"
+      class="continue-reading-close"
+      type="button"
+      aria-label="關閉繼續閱讀通知"
+    >
+      關閉
+    </button>
+    <a id="continue-reading-link" class="continue-reading-link" href="/blog/">
+      <strong id="continue-reading-title">繼續閱讀</strong>
+      <span id="continue-reading-meta">進度 0%</span>
+    </a>
+  </aside>
+
+  <div class="home-section-head">
+    <h2 class="section-title">最新文章</h2>
+    <p class="home-section-meta">最近更新 {latestPosts.length} 篇</p>
+  </div>
+  {
+    latestPosts.length === 0 ? (
+      <p class="empty-state">目前還沒有文章。</p>
+    ) : (
+      <section class="home-post-grid" aria-label="近期更新">
+        <ul class="post-list post-list-compact-grid">
+          {latestPosts.map((post) => (
+            <li>
+              <PostCard post={post} variant="compact" minimal={true} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <p class="home-all-link">
+    <a href={withBase("blog/")}>查看全部文章 -></a>
+  </p>
+</BaseLayout>
+
+<script is:inline>
+  const section = document.querySelector("#continue-reading-toast");
+  const closeButton = document.querySelector("#continue-reading-close");
+  const link = document.querySelector("#continue-reading-link");
+  const title = document.querySelector("#continue-reading-title");
+  const meta = document.querySelector("#continue-reading-meta");
+  const key = "mashbean.blog.lastReading";
+  const dismissPrefix = "mashbean.blog.lastReading.dismissed.";
+
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) throw new Error("empty");
+    const data = JSON.parse(raw);
+    if (!data || typeof data.url !== "string" || typeof data.title !== "string") {
+      throw new Error("invalid");
+    }
+
+    if (link instanceof HTMLAnchorElement) {
+      link.href = data.url;
+    }
+    if (title instanceof HTMLElement) {
+      title.textContent = `繼續閱讀｜${data.title}`;
+    }
+    if (meta instanceof HTMLElement) {
+      const progress =
+        typeof data.progress === "number" ? Math.max(0, Math.min(100, data.progress)) : 0;
+      meta.textContent = `進度 ${progress}%`;
+    }
+    const dismissKey = `${dismissPrefix}${data.url}::${data.title}`;
+    const dismissed = localStorage.getItem(dismissKey) === "1";
+    if (section instanceof HTMLElement && !dismissed) {
+      section.hidden = false;
+      section.dataset.dismissKey = dismissKey;
+    }
+  } catch {
+    if (section instanceof HTMLElement) section.hidden = true;
+  }
+
+  closeButton?.addEventListener("click", () => {
+    if (!(section instanceof HTMLElement)) return;
+    section.hidden = true;
+    const dismissKey = section.dataset.dismissKey;
+    if (dismissKey) {
+      localStorage.setItem(dismissKey, "1");
+    }
+  });
+</script>

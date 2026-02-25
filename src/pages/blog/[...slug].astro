@@ -1,0 +1,510 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildPostUrl, getBlogPosts, getPostCanonicalPathSegment, getPostPathCandidates } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { withBase } from "@/utils/paths";
+import { cleanPostTitle } from "@/utils/title";
+import { classifyPostTags } from "@/utils/blogTags";
+import { topicToRouteSegment } from "@/utils/topicRoutes";
+import { verifyArticleSignature } from "@/utils/articleSignature";
+import { requireWeb3PublicConfig } from "@/utils/web3Config";
+import { resolveEnsProfile } from "@/utils/ens";
+import Web3TipJar from "@/components/Web3TipJar.astro";
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts({
+    includeDrafts: !import.meta.env.PROD,
+    includeFuture: !import.meta.env.PROD
+  });
+
+  return posts.flatMap((post) => {
+    const canonical = getPostCanonicalPathSegment(post);
+    return getPostPathCandidates(post).map((segment) => ({
+      params: { slug: segment },
+      props: { post, isLegacyPath: segment !== canonical }
+    }));
+  });
+}
+
+const { post, isLegacyPath = false } = Astro.props as {
+  post: CollectionEntry<"blog">;
+  isLegacyPath?: boolean;
+};
+const { Content, headings } = await render(post);
+const postTitle = cleanPostTitle(post.data.title);
+const allPosts = await getBlogPosts();
+const signatureCheck = verifyArticleSignature(
+  {
+    slug: post.id,
+    title: post.data.title,
+    description: post.data.description,
+    pubDateISO: post.data.pubDate.toISOString(),
+    updatedDateISO: post.data.updatedDate?.toISOString(),
+    body: post.body ?? ""
+  },
+  {
+    contentHash: post.data.contentHash,
+    signature: post.data.signature,
+    signer: post.data.signer,
+    signatureVersion: post.data.signatureVersion
+  }
+);
+const signatureBadgeState =
+  signatureCheck.status === "verified"
+    ? "verified"
+    : signatureCheck.status === "unsigned"
+      ? "unsigned"
+      : "invalid";
+const signatureBadgeText =
+  signatureCheck.status === "verified"
+    ? "已簽名"
+    : signatureCheck.status === "unsigned"
+      ? "未簽名"
+      : "簽名異常";
+const signatureBadgeTitle =
+  signatureCheck.status === "verified"
+    ? "已驗證簽名"
+    : signatureCheck.status === "unsigned"
+      ? "此篇文章尚未簽名"
+      : "簽名資料需更新";
+const signatureHash = post.data.contentHash ?? signatureCheck.computedHash;
+const web3Config = requireWeb3PublicConfig();
+const tipEnsProfile = await resolveEnsProfile(web3Config.tipEnsName);
+const signerEnsProfile = await resolveEnsProfile(web3Config.signerEnsName);
+const signerEnsName = web3Config.signerEnsName;
+const signerEnsVerified =
+  Boolean(signatureCheck.expectedSigner) &&
+  Boolean(signerEnsProfile?.resolvedAddress) &&
+  signatureCheck.expectedSigner === signerEnsProfile?.resolvedAddress &&
+  Boolean(signerEnsProfile?.isVerified);
+const signerEnsStatusText = signerEnsName
+  ? signerEnsVerified
+    ? "已驗證"
+    : "待驗證"
+  : "未設定";
+const signerEnsStatusHint =
+  signerEnsStatusText === "待驗證"
+    ? signerEnsProfile?.verificationMessage ?? "請檢查 ENS 正反向設定"
+    : null;
+const classifiedCurrent = classifyPostTags({
+  title: postTitle,
+  description: post.data.description,
+  body: post.body,
+  tags: post.data.tags
+});
+const semanticTagsCurrent = [
+  ...classifiedCurrent.topics,
+  ...classifiedCurrent.keywords,
+  ...classifiedCurrent.secondaryKeywords
+];
+
+const coverSrc =
+  post.data.cover && /^https?:\/\//.test(post.data.cover)
+    ? post.data.cover
+    : post.data.cover
+      ? withBase(post.data.cover)
+      : undefined;
+
+const canonicalURL = post.data.canonicalURL;
+const pageURL = canonicalURL ??
+  (Astro.site ? new URL(buildPostUrl(post), Astro.site).toString() : buildPostUrl(post));
+const canonicalPostURL = Astro.site ? new URL(buildPostUrl(post), Astro.site).toString() : buildPostUrl(post);
+const effectiveCanonicalURL = isLegacyPath ? canonicalPostURL : canonicalURL;
+
+const coverURL = coverSrc
+  ? /^https?:\/\//.test(coverSrc)
+    ? coverSrc
+    : Astro.site
+      ? new URL(coverSrc, Astro.site).toString()
+      : coverSrc
+  : undefined;
+
+const readingMinutes = (() => {
+  const plain = (post.body ?? "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1 ");
+  const latinWords = (plain.match(/[A-Za-z0-9_]+/g) ?? []).length;
+  const cjkChars = (plain.match(/[\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u30FF]/g) ?? []).length;
+  const mixedWordCount = latinWords + cjkChars / 2;
+  return Math.max(1, Math.round(mixedWordCount / 220));
+})();
+
+const tocHeadings = headings.filter((item) => item.depth === 2 || item.depth === 3);
+
+const currentIndex = allPosts.findIndex((item) => item.id === post.id);
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+const olderPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+
+const normalizeTitle = (value: string): string =>
+  value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
+const bigrams = (value: string): Set<string> => {
+  if (value.length < 2) return new Set([value]);
+  const out = new Set<string>();
+  for (let i = 0; i < value.length - 1; i += 1) out.add(value.slice(i, i + 2));
+  return out;
+};
+
+const titleSimilarity = (a: string, b: string): number => {
+  const aa = bigrams(normalizeTitle(a));
+  const bb = bigrams(normalizeTitle(b));
+  const union = new Set([...aa, ...bb]).size;
+  if (union === 0) return 0;
+  const overlap = [...aa].filter((item) => bb.has(item)).length;
+  return overlap / union;
+};
+
+const baseTitle = normalizeTitle(postTitle);
+const baseDate = post.data.pubDate.getTime();
+
+const relatedCandidates = allPosts
+  .filter((item) => item.id !== post.id)
+  .filter((item) => {
+    const candidateTitleClean = cleanPostTitle(item.data.title);
+    const sim = titleSimilarity(postTitle, candidateTitleClean);
+    const candidateTitle = normalizeTitle(candidateTitleClean);
+    const nearDuplicate =
+      sim >= 0.66 ||
+      candidateTitle.includes(baseTitle) ||
+      baseTitle.includes(candidateTitle);
+    const nearDate = Math.abs(item.data.pubDate.getTime() - baseDate) <= 7 * 24 * 60 * 60 * 1000;
+    return !(nearDuplicate && nearDate);
+  })
+  .map((item) => {
+    const classifiedItem = classifyPostTags({
+      title: cleanPostTitle(item.data.title),
+      description: item.data.description,
+      body: item.body,
+      tags: item.data.tags
+    });
+    const semanticItemTags = [
+      ...classifiedItem.topics,
+      ...classifiedItem.keywords,
+      ...classifiedItem.secondaryKeywords
+    ];
+    const sharedTags = semanticItemTags.filter((tag) => semanticTagsCurrent.includes(tag));
+    const sameCategory =
+      post.data.category && item.data.category && post.data.category === item.data.category;
+    const yearGap = Math.abs(item.data.pubDate.getFullYear() - post.data.pubDate.getFullYear());
+    const score = sharedTags.length * 3 + (sameCategory ? 1 : 0) + (yearGap <= 2 ? 1 : 0);
+    return { item, score, sharedTags, year: item.data.pubDate.getFullYear(), classifiedItem };
+  })
+  .filter((entry) => entry.score > 0)
+  .sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return b.item.data.pubDate.getTime() - a.item.data.pubDate.getTime();
+  });
+
+const relatedPosts: CollectionEntry<"blog">[] = [];
+const usedYears = new Set<number>();
+const usedPrimaryTags = new Set<string>();
+for (const entry of relatedCandidates) {
+  if (relatedPosts.length >= 4) break;
+  const primaryTag =
+    entry.sharedTags[0] ??
+    entry.classifiedItem.topics[0] ??
+    entry.classifiedItem.keywords[0] ??
+    entry.classifiedItem.secondaryKeywords[0] ??
+    "";
+  const yearUsed = usedYears.has(entry.year);
+  const tagUsed = primaryTag !== "" && usedPrimaryTags.has(primaryTag);
+  if (relatedPosts.length < 2 || !(yearUsed && tagUsed)) {
+    relatedPosts.push(entry.item);
+    usedYears.add(entry.year);
+    if (primaryTag) usedPrimaryTags.add(primaryTag);
+  }
+}
+if (relatedPosts.length < 4) {
+  for (const entry of relatedCandidates) {
+    if (relatedPosts.length >= 4) break;
+    if (relatedPosts.some((item) => item.id === entry.item.id)) continue;
+    relatedPosts.push(entry.item);
+  }
+}
+
+const articleStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: postTitle,
+  description: post.data.description,
+  inLanguage: post.data.lang ?? "zh-TW",
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  author: {
+    "@type": "Person",
+    name: post.data.author ?? "Mashbean"
+  },
+  mainEntityOfPage: pageURL,
+  image: coverURL ? [coverURL] : undefined
+};
+---
+
+<BaseLayout
+  title={postTitle}
+  description={post.data.description}
+  canonicalURL={effectiveCanonicalURL}
+  ogImage={post.data.cover}
+  ogType="article"
+  structuredData={isLegacyPath ? null : articleStructuredData}
+  isArticle={!isLegacyPath}
+  noindex={false}
+>
+  {
+    isLegacyPath ? (
+      <section class="subscribe-panel">
+        <h1 class="section-title" style="margin-top: 0;">文章網址已更新</h1>
+        <p>你目前在舊連結，我們會自動導向新網址。</p>
+        <p>
+          若未自動跳轉，請點這裡：<a href={buildPostUrl(post)}>{buildPostUrl(post)}</a>
+        </p>
+      </section>
+    ) : (
+  <article class="article-layout">
+    <div class="article-main">
+      <header class="article-header">
+        <h1 class="article-title">{postTitle}</h1>
+        <div class="article-meta-row">
+          <p class="article-meta">
+            發布：
+            <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+            {" · 約 "}
+            {readingMinutes}
+            {" 分鐘閱讀"}
+            {
+              post.data.updatedDate && (
+                <>
+                  {" · 更新："}
+                  <time datetime={post.data.updatedDate.toISOString()}>
+                    {formatDate(post.data.updatedDate)}
+                  </time>
+                </>
+              )
+            }
+            {post.data.draft && !import.meta.env.PROD && " · 草稿"}
+          </p>
+        </div>
+        <details
+          class:list={{
+            "signature-disclosure": true,
+            "signature-disclosure-verified": signatureBadgeState === "verified",
+            "signature-disclosure-unsigned": signatureBadgeState === "unsigned",
+            "signature-disclosure-invalid": signatureBadgeState === "invalid"
+          }}
+        >
+          <summary
+            class:list={{
+              "signature-badge": true,
+              "signature-badge-verified": signatureBadgeState === "verified",
+              "signature-badge-unsigned": signatureBadgeState === "unsigned",
+              "signature-badge-invalid": signatureBadgeState === "invalid"
+            }}
+            title={signatureBadgeTitle}
+            aria-label={`${signatureBadgeTitle}（點擊查看簽名細節）`}
+          >
+            {
+              signatureBadgeState === "verified" ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Zm-1.4 12.1-2.7-2.72 1.2-1.2 1.5 1.52 4.23-4.22 1.2 1.2-5.43 5.42Z" />
+                </svg>
+              ) : signatureBadgeState === "unsigned" ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Zm0 4.4a1.15 1.15 0 0 1 1.15 1.15v5.05a1.15 1.15 0 1 1-2.3 0V8.3A1.15 1.15 0 0 1 12 7.15Zm0 9.15a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3.25 2.5 20.75h19L12 3.25Zm0 4.1 6.14 11.3H5.86L12 7.35Zm-1.1 3.75v3.45h2.2V11.1h-2.2Zm0 4.65v1.95h2.2v-1.95h-2.2Z" />
+                </svg>
+              )
+            }
+            <span>{signatureBadgeText}</span>
+            <span class="signature-badge-caret" aria-hidden="true">▾</span>
+          </summary>
+          <div class="signature-panel">
+            <div class="signature-panel-head">
+              <span class="signature-panel-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Zm-1.4 12.1-2.7-2.72 1.2-1.2 1.5 1.52 4.23-4.22 1.2 1.2-5.43 5.42Z" />
+                </svg>
+                已簽名資訊
+              </span>
+              <button type="button" class="signature-panel-close" aria-label="關閉已簽名資訊">
+                關閉
+              </button>
+            </div>
+            <p>
+              <strong>豆泥的以太坊地址：</strong>
+              {signerEnsName}
+            </p>
+            <p>
+              <strong>狀態：</strong>
+              {signerEnsStatusText}
+            </p>
+            {signerEnsStatusHint && <p class="signature-panel-note">提示：{signerEnsStatusHint}</p>}
+            <div class="signature-explain-row">
+              <details class="signature-explain">
+                <summary class="signature-explain-btn">文章的身分證字號</summary>
+                <p>
+                  <code>{signatureHash}</code>
+                </p>
+              </details>
+              <details class="signature-explain">
+                <summary class="signature-explain-btn">這是什麼？</summary>
+                <p>
+                  已簽名表示這篇文章已建立獨特的身分證字號（內容雜湊，contentHash）並且由豆泥簽署認證，簽署是採用以太坊區塊鏈的豆泥專用地址（signer.mashbean.eth）。只要內容一經修改，就會需要重新驗證換發新的身分證字號。但豆泥不是每天都在公所上班，所以偶爾會慢一點認證。
+                </p>
+              </details>
+            </div>
+          </div>
+        </details>
+        {post.data.author && <p class="article-author">作者：{post.data.author}</p>}
+        {post.data.lead && <p class="article-lead">{post.data.lead}</p>}
+
+        {classifiedCurrent.topics.length > 0 && (
+          <ul class="tag-list" aria-label="文章標籤">
+            {classifiedCurrent.topics.map((topic) => (
+              <li class="tag-list-item">
+                <a class="tag-list-link" href={withBase(`tags/${topicToRouteSegment(topic)}/`)}>
+                  {topic}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div class="reading-tools" role="group" aria-label="閱讀偏好">
+          <span class="reading-tools-label">閱讀偏好</span>
+          <button id="reading-font-dec" type="button" class="reading-tool-btn" aria-label="縮小字級">
+            A-
+          </button>
+          <button id="reading-font-inc" type="button" class="reading-tool-btn" aria-label="放大字級">
+            A+
+          </button>
+        </div>
+      </header>
+
+      {coverSrc && (
+        <figure class="article-cover">
+          <img src={coverSrc} alt={post.data.coverAlt ?? postTitle} loading="lazy" />
+        </figure>
+      )}
+
+      <div class="article-prose">
+        <Content />
+      </div>
+
+      <nav class="article-pagination" aria-label="文章導覽">
+        <div>
+          <small>較新文章</small>
+          {newerPost ? (
+            <a href={buildPostUrl(newerPost)}>{cleanPostTitle(newerPost.data.title)}</a>
+          ) : (
+            <span>目前已是最新</span>
+          )}
+        </div>
+        <div>
+          <small>較舊文章</small>
+          {olderPost ? (
+            <a href={buildPostUrl(olderPost)}>{cleanPostTitle(olderPost.data.title)}</a>
+          ) : (
+            <span>目前已是最舊</span>
+          )}
+        </div>
+      </nav>
+
+      {relatedPosts.length > 0 && (
+        <section class="related-posts" aria-label="相關文章">
+          <h2>相關文章</h2>
+          <ul class="post-list-compact">
+            {relatedPosts.map((item) => (
+              <li class="post-list-compact-item">
+                <a class="post-list-compact-link" href={buildPostUrl(item)}>{cleanPostTitle(item.data.title)}</a>
+                <small class="post-list-compact-date">({formatDate(item.data.pubDate)})</small>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <p class="article-back-link">
+        <a href={withBase("blog/")}>← 回文章列表</a>
+      </p>
+    </div>
+
+    <aside class="article-sidebar" aria-label="文章目錄與分享">
+      <div class="toc-card">
+        {tocHeadings.length > 0 && (
+          <>
+            <h2>目錄</h2>
+            <ol class="toc-list">
+              {tocHeadings.map((item) => (
+                <li class:list={{ "toc-item": true, "toc-item-depth-3": item.depth === 3 }}>
+                  <a href={`#${item.slug}`}>{item.text}</a>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
+        <div class="toc-share-card">
+          <button id="article-copy-link" type="button" class="toc-share-btn">分享本文</button>
+        </div>
+        <Web3TipJar ensName={web3Config.tipEnsName} chainId={web3Config.chainId} ens={tipEnsProfile} />
+      </div>
+    </aside>
+  </article>
+    )
+  }
+</BaseLayout>
+
+{
+  isLegacyPath && (
+    <script is:inline define:vars={{ canonicalPath: buildPostUrl(post) }}>
+      if (window.location.pathname !== canonicalPath) {
+        window.location.replace(canonicalPath);
+      }
+    </script>
+  )
+}
+
+{
+  !isLegacyPath && (
+    <script is:inline define:vars={{ pageURL }}>
+      const copyButton = document.querySelector("#article-copy-link");
+
+      copyButton?.addEventListener("click", async () => {
+        if (!(copyButton instanceof HTMLButtonElement)) return;
+        const originalLabel = copyButton.textContent;
+        try {
+          await navigator.clipboard.writeText(pageURL);
+          copyButton.textContent = "已複製";
+          if (typeof window.mbTrack === "function") {
+            window.mbTrack("Share Link Copied", { location: "toc_share" });
+          }
+        } catch {
+          copyButton.textContent = "複製失敗";
+        }
+        window.setTimeout(() => {
+          copyButton.textContent = originalLabel ?? "分享本文";
+        }, 1200);
+      });
+    </script>
+  )
+}
+
+{
+  !isLegacyPath && (
+    <script is:inline>
+      const signatureDisclosures = Array.from(document.querySelectorAll(".signature-disclosure"));
+      signatureDisclosures.forEach((panel) => {
+        if (!(panel instanceof HTMLDetailsElement)) return;
+        const closeButton = panel.querySelector(".signature-panel-close");
+        if (!(closeButton instanceof HTMLButtonElement)) return;
+        closeButton.addEventListener("click", () => {
+          panel.open = false;
+        });
+      });
+    </script>
+  )
+}

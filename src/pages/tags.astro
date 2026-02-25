@@ -1,0 +1,208 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { classifyPostTags, getTopicCatalog } from "@/utils/blogTags";
+import { cleanPostTitle } from "@/utils/title";
+import { TOPIC_ROUTE_CODE_MAP } from "@/utils/topicRoutes";
+
+const allPosts = await getBlogPosts();
+const topicCatalog = getTopicCatalog();
+
+const rows = allPosts.map((post) => {
+  const classified = classifyPostTags({
+    title: cleanPostTitle(post.data.title),
+    description: post.data.description,
+    body: post.body,
+    tags: post.data.tags,
+  });
+  return {
+    post,
+    topics: classified.topics,
+  };
+});
+
+const yearOptions = Array.from(
+  new Set(allPosts.map((post) => post.data.pubDate.getFullYear())),
+).sort((a, b) => b - a);
+
+const topicOptions = topicCatalog
+  .map((item) => ({
+    ...item,
+    count: rows.filter((row) => row.topics.includes(item.key)).length,
+  }))
+  .filter((item) => item.count > 0);
+
+const routeCodeToTopic = Object.fromEntries(
+  Object.entries(TOPIC_ROUTE_CODE_MAP).map(([topic, code]) => [code, topic]),
+);
+---
+
+<BaseLayout title="標籤" description="依主題與年份雙層導覽探索文章。">
+  <h1 class="section-title">標籤</h1>
+
+  <section class="tag-dual-nav" aria-label="標籤雙層導覽">
+    <div class="archive-quick-filter" role="group" aria-label="主題篩選">
+      <button type="button" class="archive-filter-btn is-active" data-topic="all">全部主題</button>
+      {
+        topicOptions.map((topic) => (
+          <button type="button" class="archive-filter-btn" data-topic={topic.key}>
+            {topic.icon} {topic.title}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="archive-quick-filter" role="group" aria-label="年份篩選">
+      <button type="button" class="archive-filter-btn is-active" data-year="all">全年份</button>
+      {
+        yearOptions.map((year) => (
+          <button type="button" class="archive-filter-btn" data-year={String(year)}>
+            {year} 年
+          </button>
+        ))
+      }
+    </div>
+
+    <p id="tags-dual-status" class="archive-filter-status" aria-live="polite">
+      目前顯示全部主題、全部年份
+    </p>
+
+    <ul id="tags-dual-list" class="archive-list">
+      {
+        rows.map((row) => (
+          <li
+            class="archive-item"
+            data-topics={row.topics.join("|")}
+            data-year={String(row.post.data.pubDate.getFullYear())}
+          >
+            <time class="archive-date" datetime={row.post.data.pubDate.toISOString()}>
+              {formatDate(row.post.data.pubDate)}
+            </time>
+            <div class="archive-main">
+              <a class="archive-link" href={buildPostUrl(row.post)}>
+                {cleanPostTitle(row.post.data.title)}
+              </a>
+              <p class="archive-meta">
+                主題：{row.topics.join("・")}
+                {row.post.data.category && (
+                  <>
+                    {" · 分類："}
+                    {row.post.data.category}
+                  </>
+                )}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <p id="tags-dual-empty" class="empty-state" hidden>沒有符合目前主題與年份條件的文章。</p>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ topicRouteCodeMap: TOPIC_ROUTE_CODE_MAP, routeCodeToTopic }}>
+  const track = (name, props = {}) => {
+    if (typeof window.mbTrack === "function") window.mbTrack(name, props);
+  };
+
+  const toShortTopic = (topic) => topicRouteCodeMap[topic] ?? topic;
+  const fromShortTopic = (segment) => routeCodeToTopic[segment] ?? decodeURIComponent(segment);
+
+  const topicButtons = Array.from(document.querySelectorAll(".archive-filter-btn[data-topic]"));
+  const yearButtons = Array.from(document.querySelectorAll(".archive-filter-btn[data-year]"));
+  const rows = Array.from(document.querySelectorAll("#tags-dual-list .archive-item"));
+  const status = document.querySelector("#tags-dual-status");
+  const empty = document.querySelector("#tags-dual-empty");
+
+  let activeTopic = "all";
+  let activeYear = "all";
+  const validTopics = new Set(topicButtons.map((button) => button.dataset.topic ?? "all"));
+  const validYears = new Set(yearButtons.map((button) => button.dataset.year ?? "all"));
+
+  const getShareURL = () => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams();
+    if (activeTopic !== "all") params.set("topic", toShortTopic(activeTopic));
+    if (activeYear !== "all") params.set("year", activeYear);
+    url.search = params.toString();
+    return url.toString();
+  };
+
+  const syncURL = () => {
+    const next = getShareURL();
+    if (next !== window.location.href) {
+      window.history.replaceState({}, "", next);
+    }
+  };
+
+  const updateStatus = (count) => {
+    if (!(status instanceof HTMLElement)) return;
+    const topicText =
+      activeTopic === "all"
+        ? "全部主題"
+        : (topicButtons
+            .find((button) => button.dataset.topic === activeTopic)
+            ?.textContent?.trim() ?? activeTopic);
+    const yearText = activeYear === "all" ? "全部年份" : `${activeYear} 年`;
+    status.textContent = `目前顯示 ${topicText}、${yearText}（${count} 篇）`;
+  };
+
+  const applyFilters = () => {
+    topicButtons.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.topic === activeTopic);
+    });
+    yearButtons.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.year === activeYear);
+    });
+
+    let visibleCount = 0;
+    for (const row of rows) {
+      const rowTopics = (row.getAttribute("data-topics") ?? "").split("|").filter(Boolean);
+      const rowYear = row.getAttribute("data-year") ?? "";
+      const matchTopic = activeTopic === "all" || rowTopics.includes(activeTopic);
+      const matchYear = activeYear === "all" || rowYear === activeYear;
+      const visible = matchTopic && matchYear;
+      row.hidden = !visible;
+      if (visible) visibleCount += 1;
+    }
+
+    if (empty instanceof HTMLElement) empty.hidden = visibleCount !== 0;
+    updateStatus(visibleCount);
+    syncURL();
+  };
+
+  topicButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeTopic = button.dataset.topic ?? "all";
+      applyFilters();
+      track("Tag Filter Click", { topic: activeTopic, year: activeYear, source: "topic" });
+    });
+  });
+
+  yearButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeYear = button.dataset.year ?? "all";
+      applyFilters();
+      track("Tag Filter Click", { topic: activeTopic, year: activeYear, source: "year" });
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const link = target.closest(".archive-link");
+    if (!(link instanceof HTMLAnchorElement)) return;
+    track("Archive Post Click", { source: "tags_dual_nav" });
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const initialTopicRaw = params.get("topic") ?? params.get("tag") ?? "all";
+  const initialTopic = initialTopicRaw === "all" ? "all" : fromShortTopic(initialTopicRaw);
+  const initialYear = params.get("year") ?? "all";
+
+  if (validTopics.has(initialTopic)) activeTopic = initialTopic;
+  if (validYears.has(initialYear)) activeYear = initialYear;
+
+  applyFilters();
+</script>

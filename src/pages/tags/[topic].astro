@@ -1,0 +1,48 @@
+---
+import { getTopicCatalog } from "@/utils/blogTags";
+import { withBase } from "@/utils/paths";
+import { routeSegmentToTopic, topicToRouteSegment } from "@/utils/topicRoutes";
+
+export async function getStaticPaths() {
+  return getTopicCatalog().flatMap((topic) => {
+    const shortCode = topicToRouteSegment(topic.key);
+    const paths = [
+      {
+        params: { topic: shortCode },
+        props: { topicSegment: shortCode, title: topic.title }
+      }
+    ];
+    if (shortCode !== topic.key) {
+      paths.push({
+        params: { topic: topic.key },
+        props: { topicSegment: topic.key, title: topic.title }
+      });
+    }
+    return paths;
+  });
+}
+
+const { topicSegment, title } = Astro.props as { topicSegment: string; title: string };
+const resolvedTopic = routeSegmentToTopic(topicSegment);
+const shortTopic = topicToRouteSegment(resolvedTopic);
+const destination = withBase(`tags/?topic=${encodeURIComponent(shortTopic)}`);
+---
+
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title} 標籤導向中</title>
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+  </head>
+  <body>
+    <p>
+      正在前往標籤頁：<a href={destination}>{title}</a>
+    </p>
+    <script is:inline define:vars={{ destination }}>
+      window.location.replace(destination);
+    </script>
+  </body>
+</html>

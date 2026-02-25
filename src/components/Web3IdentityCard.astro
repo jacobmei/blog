@@ -1,0 +1,20 @@
+---
+interface Props {
+  name: string;
+  avatarSrc: string;
+  ens: string;
+}
+
+const { name, avatarSrc, ens } = Astro.props;
+---
+
+<article class="web3-card" aria-label="web3 身分卡">
+  <header class="web3-card-head">
+    <img class="web3-card-avatar" src={avatarSrc} alt={`${name} avatar`} width="56" height="56" loading="lazy" />
+    <div class="web3-card-head-copy">
+      <h3>{name}</h3>
+      <p>{ens}</p>
+    </div>
+  </header>
+
+</article>

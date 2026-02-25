@@ -1,0 +1,18 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="mashbean blog og image">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8faf5" />
+      <stop offset="100%" stop-color="#fff4d8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="#ffffff" stroke="#cde8df" />
+  <path d="M812 154c63 13 136 58 164 111 33 62-8 141-82 176-69 32-177 28-245-20-56-40-77-113-35-166 34-45 122-77 198-73z" fill="#f4fbf9" />
+  <path d="M768 430c87-10 178 15 241 58" stroke="#98c8bb" stroke-width="4" fill="none" stroke-linecap="round" />
+  <text x="120" y="244" font-size="72" font-family="Noto Serif TC, serif" fill="#13242f">Mashbean Blog</text>
+  <text x="120" y="318" font-size="32" font-family="Noto Sans TC, sans-serif" fill="#285a52">
+    <tspan x="120" dy="0">站在單向鏡後方觀看世界</tspan>
+    <tspan x="120" dy="48">應對加速科技的方式。</tspan>
+  </text>
+  <text x="120" y="512" font-size="28" font-family="Noto Sans TC, sans-serif" fill="#4f6f69">mashbean.net</text>
+</svg>

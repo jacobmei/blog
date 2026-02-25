@@ -1,0 +1,57 @@
+{
+  "name": "mashbean-blog-astro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "postbuild": "node scripts/postbuild-search.mjs",
+    "build:pagefind": "pagefind --site dist --glob \"**/*.html\"",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "npm run check && npm run format:check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "migrate:posts": "node scripts/migrate-jekyll-posts.mjs",
+    "sign:posts": "node scripts/sign-blog-posts.mjs",
+    "sign:posts:check": "node scripts/sign-blog-posts.mjs --check",
+    "web3:ipfs:publish": "node scripts/web3-publish-ipfs.mjs",
+    "web3:ipfs:publish:dry": "node scripts/web3-publish-ipfs.mjs --dry-run",
+    "web3:ipns:update": "node scripts/web3-update-ipns.mjs",
+    "web3:ipns:update:dry": "node scripts/web3-update-ipns.mjs --dry-run --cid bafybeigdyrztxci5jhj4s2fd3mhmrcoak6m6f6hke5u4smbmctf5bswdzu",
+    "web3:ens:contenthash": "node scripts/web3-update-ens-contenthash.mjs",
+    "web3:ens:contenthash:dry": "node scripts/web3-update-ens-contenthash.mjs --dry-run --skip-chain-check --ipns k51qzi5uqu5dl4-example",
+    "web3:ethlimo:check": "node scripts/web3-check-ethlimo.mjs",
+    "web3:ethlimo:check:dry": "node scripts/web3-check-ethlimo.mjs --dry-run",
+    "web3:healthcheck": "node scripts/web3-healthcheck.mjs",
+    "web3:rollback": "node scripts/web3-rollback-release.mjs",
+    "web3:rollback:dry": "node scripts/web3-rollback-release.mjs",
+    "images:batch:openai": "node scripts/batch-generate-images-openai.mjs",
+    "images:batch:openai:dry": "node scripts/batch-generate-images-openai.mjs --dry-run",
+    "cover:latest": "node scripts/generate-latest-cover-openai.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "^3.6.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.13.6",
+    "ethers": "^5.4.6",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "tailwindcss": "^4.1.13",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "pagefind": "^1.4.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.3"
+  }
+}

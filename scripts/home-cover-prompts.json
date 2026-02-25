@@ -1,0 +1,259 @@
+{
+  "generatedAt": "2026-02-24T16:08:06.690Z",
+  "basePrompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo",
+  "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+  "items": [
+    {
+      "file": "2026-02-24-vibe-coding-blog-launch.md",
+      "title": "馬年過年當個隔壁家 Vibe Coding 叔叔，部落格開張大吉",
+      "coverPng": "images/covers/home/2026-02-24-vibe-coding-blog-launch.jpg",
+      "width": 1200,
+      "height": 630,
+      "seed": 3778864039,
+      "prompt": "playful naive storybook illustration, hand-cut paper collage, visible torn paper edges, wax crayon and dry gouache texture, imperfect hand-drawn ink outlines, childlike animal characters (curious raccoon, zebra, sparrows, one cat), airy editorial composition with large negative space, mint + apricot + cream + sky blue palette, a cozy studio desk with tiny terminal windows, sticky notes, and handwritten planning cards, one medium dark cat as visual anchor on the left, optimistic maker mood, editorial illustration, no text",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality, dark red, maroon, burgundy",
+      "keywords": [
+        "公共網路",
+        "ai與科技",
+        "數位自主",
+        "部落格",
+        "blog",
+        "馬年過年當個隔壁家 vibe coding 叔叔,部落格開張大吉",
+        "vibe",
+        "coding"
+      ],
+      "motif": "network"
+    },
+    {
+      "file": "2026-02-22-bonds-litepaper-project-scan.md",
+      "title": "有備而來（Bond）專案掃描：互動網站與 Litepaper 重點整理",
+      "coverPng": "images/covers/home/2026-02-22-bonds-litepaper-project-scan.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 2516343170,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, civic architecture, columns, assembly, structured grid, governance, keywords: 公共網路, 治理與民主, ai與科技, blog, 有備而來(bond)專案掃描:互動網站與 litepaper 重點整理, litepaper",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "公共網路",
+        "治理與民主",
+        "ai與科技",
+        "blog",
+        "有備而來(bond)專案掃描:互動網站與 litepaper 重點整理",
+        "litepaper",
+        "有備而來",
+        "專案掃描"
+      ],
+      "motif": "governance"
+    },
+    {
+      "file": "2026-01-23-風暴鈔隱の池與軌道炮-挑戰白話解析匿名加密-豆泥-matters.md",
+      "title": "風暴鈔、隱の池與軌道炮 — 挑戰白話解析「匿名」加密… - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2026-01-23-風暴鈔隱の池與軌道炮-挑戰白話解析匿名加密-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 791454872,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, symbolic lock, shield, hidden patterns, privacy by design, keywords: matters, 風暴鈔, imported, 匿名, 池與軌道炮, 挑戰白話解析",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "風暴鈔",
+        "imported",
+        "匿名",
+        "池與軌道炮",
+        "挑戰白話解析",
+        "風暴鈔、隱の池與軌道炮 — 挑戰白話解析「匿名」加密... - 豆泥 - matters",
+        "來源"
+      ],
+      "motif": "privacy"
+    },
+    {
+      "file": "2025-12-30-我眼中的-matters-豆泥-matters.md",
+      "title": "我眼中的 Matters - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-12-30-我眼中的-matters-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 2710558085,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, nodes and links, community graph, connection lines, constellation, keywords: matters, imported, privilege, 我眼中的, 最近在台灣, 翻為特權",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "imported",
+        "privilege",
+        "我眼中的",
+        "最近在台灣",
+        "翻為特權",
+        "但我更喜歡翻為福",
+        "模式"
+      ],
+      "motif": "network"
+    },
+    {
+      "file": "2025-12-28-dacc-day-argentina-演講維持現狀加速主義-豆泥-matters.md",
+      "title": "d/acc day Argentina 演講：維持現狀加速主義 - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-12-28-dacc-day-argentina-演講維持現狀加速主義-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 3289302839,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, nodes and links, community graph, connection lines, constellation, keywords: matters, d/acc, imported, 維持現狀加速主義, 演講, d/acc day argentina 演講:維持現狀加速主義 - 豆泥 - matters",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "d/acc",
+        "imported",
+        "維持現狀加速主義",
+        "演講",
+        "d/acc day argentina 演講:維持現狀加速主義 - 豆泥 - matters",
+        "day",
+        "digital"
+      ],
+      "motif": "network"
+    },
+    {
+      "file": "2025-12-28-ethereum-privacy-stack-演講抗審查真的不可或缺嗎-豆泥-matters.md",
+      "title": "Ethereum Privacy Stack 演講：抗審查真的不可或缺嗎 - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-12-28-ethereum-privacy-stack-演講抗審查真的不可或缺嗎-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 96421592,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, nodes and links, community graph, connection lines, constellation, keywords: matters, 抗審查真的不可或, 缺嗎, imported, 演講, 來源",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "抗審查真的不可或",
+        "缺嗎",
+        "imported",
+        "演講",
+        "來源",
+        "市場需求",
+        "最後"
+      ],
+      "motif": "network"
+    },
+    {
+      "file": "2025-12-28-zkid-day在政府推動密碼龐克id政策的困境-豆泥-matters.md",
+      "title": "zkID Day：在政府推動密碼龐克ID政策的困境 - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-12-28-zkid-day在政府推動密碼龐克id政策的困境-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 992471129,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, symbolic lock, shield, hidden patterns, privacy by design, keywords: digital, identity, matters, zero-knowledge, proof, 身分",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "digital",
+        "identity",
+        "matters",
+        "zero-knowledge",
+        "proof",
+        "身分",
+        "錢包",
+        "zkp"
+      ],
+      "motif": "privacy"
+    },
+    {
+      "file": "2025-10-30-matters-esim-限時福利用錢包餘額實現全球連線-matty-matters.md",
+      "title": "Matters eSIM 限時福利｜用錢包餘額實現全球連線 - Matty - Matters",
+      "coverPng": "images/covers/home/2025-10-30-matters-esim-限時福利用錢包餘額實現全球連線-matty-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 3393001014,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, globe lines, travel map, routes, connection arcs, keywords: esim, matters, customer, imported, 使用你的, 綁定的錢包",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "esim",
+        "matters",
+        "customer",
+        "imported",
+        "使用你的",
+        "綁定的錢包",
+        "支持作者",
+        "的方式轉帳至本帳"
+      ],
+      "motif": "globe"
+    },
+    {
+      "file": "2025-09-12-和平演變抑或風暴前夜淺談數位世代的廚房呢-豆泥-matters.md",
+      "title": "和平演變抑或風暴前夜？淺談數位世代的廚房呢… - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-09-12-和平演變抑或風暴前夜淺談數位世代的廚房呢-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 3256509218,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, nodes and links, community graph, connection lines, constellation, keywords: matters, imported, 廚房, 和平演變抑或風暴, 前夜, 和平演變抑或風暴前夜?淺談數位世代的廚房呢... - 豆泥 - matters",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "imported",
+        "廚房",
+        "和平演變抑或風暴",
+        "前夜",
+        "和平演變抑或風暴前夜?淺談數位世代的廚房呢... - 豆泥 - matters",
+        "淺談數位世代的廚",
+        "來源"
+      ],
+      "motif": "network"
+    },
+    {
+      "file": "2025-08-27-從編戶齊民到避秦數位時代的亞洲身分自主權-豆泥-matters.md",
+      "title": "從編戶齊民到避秦：數位時代的亞洲身分自主權… - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-08-27-從編戶齊民到避秦數位時代的亞洲身分自主權-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 670480035,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, identity card silhouette, wallet motif, credential layers, subtle geometric frames, keywords: matters, imported, 從編戶齊民到避秦, 數位時代的亞洲身, 分自主權發展, 編戶齊民",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "imported",
+        "從編戶齊民到避秦",
+        "數位時代的亞洲身",
+        "分自主權發展",
+        "編戶齊民",
+        "從編戶齊民到避秦:數位時代的亞洲身分自主權... - 豆泥 - matters",
+        "來源"
+      ],
+      "motif": "identity"
+    },
+    {
+      "file": "2025-08-21-先進的數位身分法令是什麼模樣-豆泥-matters.md",
+      "title": "先進的數位身分法令是什麼模樣？ - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-08-21-先進的數位身分法令是什麼模樣-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 3333302858,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, symbolic lock, shield, hidden patterns, privacy by design, keywords: 身分, 與第, 條定義相同, matters, 政府機構, 生物特徵資料",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "身分",
+        "與第",
+        "條定義相同",
+        "matters",
+        "政府機構",
+        "生物特徵資料",
+        "數位身分",
+        "首席隱私官"
+      ],
+      "motif": "privacy"
+    },
+    {
+      "file": "2025-08-14-以保護之名造成傷害-豆泥-matters.md",
+      "title": "以保護之名造成傷害 - 豆泥 - Matters",
+      "coverPng": "images/covers/home/2025-08-14-以保護之名造成傷害-豆泥-matters.png",
+      "width": 1200,
+      "height": 630,
+      "seed": 1193803127,
+      "prompt": "minimal pencil sketch, bologna illustration style, editorial cover art, clean composition, soft graphite shading, textured paper, no text, no typography, no letters, no watermark, no logo, nodes and links, community graph, connection lines, constellation, keywords: matters, imported, 以保護之名造成傷, 以保護之名造成傷害 - 豆泥 - matters, 來源, 扁平時代",
+      "negativePrompt": "text, typography, letters, watermark, logo, signature, caption, UI, screenshot, photo, photorealistic, 3d render, ugly, low quality",
+      "keywords": [
+        "matters",
+        "imported",
+        "以保護之名造成傷",
+        "以保護之名造成傷害 - 豆泥 - matters",
+        "來源",
+        "扁平時代",
+        "作者凱爾",
+        "切卡上週在紐約客"
+      ],
+      "motif": "network"
+    }
+  ]
+}

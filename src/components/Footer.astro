@@ -1,0 +1,36 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/site.config";
+import { withBase } from "@/utils/paths";
+
+const year = new Date().getFullYear();
+const links = [
+  { href: withBase("subscribe/"), label: "RSS 訂閱" }
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      <strong>{SITE_TITLE}</strong> · {SITE_DESCRIPTION}
+    </p>
+    <div class="footer-meta-row">
+      <p class="footer-links">
+        {links.map((item) => <a href={item.href}>{item.label}</a>)}
+      </p>
+      <p class="footer-license">
+        本站文章皆採
+        {" "}
+        <a
+          href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh-hant"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CC BY-NC 4.0（姓名標示-非商業性）
+        </a>
+        {" "}
+        授權。
+      </p>
+    </div>
+    <p>© {year} Mashbean. Some rights reserved.</p>
+  </div>
+</footer>

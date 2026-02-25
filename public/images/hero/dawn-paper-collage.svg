@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Dawn collage">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9b5c7" />
+      <stop offset="52%" stop-color="#f7d7ac" />
+      <stop offset="100%" stop-color="#f4efe2" />
+    </linearGradient>
+    <radialGradient id="sun" cx="0.6" cy="0.34" r="0.46">
+      <stop offset="0%" stop-color="#ffd98f" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#ffd98f" stop-opacity="0" />
+    </radialGradient>
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.87" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.05" />
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#bg)" />
+  <rect width="1200" height="720" fill="url(#sun)" />
+
+  <g opacity="0.92">
+    <path d="M464 112 L1060 72 L1172 216 L586 256 Z" fill="#ff8db5"/>
+    <path d="M586 256 L1172 216 L1188 404 L634 416 Z" fill="#fb7ead"/>
+    <path d="M634 416 L1188 404 L1200 632 L666 602 Z" fill="#e16292"/>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M686 468 L850 426 L934 512 L762 556 Z" fill="#1f2b3f"/>
+    <path d="M778 366 L950 324 L1066 424 L880 468 Z" fill="#2f3a4c"/>
+    <path d="M870 512 L1034 470 L1148 574 L972 620 Z" fill="#253246"/>
+  </g>
+
+  <g opacity="0.86">
+    <ellipse cx="910" cy="288" rx="44" ry="18" fill="#122131"/>
+    <ellipse cx="972" cy="340" rx="38" ry="15" fill="#122131"/>
+    <ellipse cx="1036" cy="292" rx="30" ry="12" fill="#122131"/>
+  </g>
+
+  <path d="M704 606 C814 556 954 550 1148 610 L1148 720 L704 720 Z" fill="#101726" opacity="0.9"/>
+
+  <rect width="1200" height="720" filter="url(#grain)" />
+</svg>

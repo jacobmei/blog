@@ -1,0 +1,157 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { classifyPostTags } from "@/utils/blogTags";
+import { cleanPostTitle } from "@/utils/title";
+
+const posts = await getBlogPosts();
+const yearMap = new Map<number, typeof posts>();
+
+for (const post of posts) {
+  const year = post.data.pubDate.getFullYear();
+  const bucket = yearMap.get(year);
+  if (bucket) {
+    bucket.push(post);
+  } else {
+    yearMap.set(year, [post]);
+  }
+}
+
+const yearSections = Array.from(yearMap.entries())
+  .map(([year, yearPosts]) => ({
+    year,
+    posts: yearPosts,
+    count: yearPosts.length,
+  }))
+  .sort((a, b) => b.year - a.year);
+
+const yearNotes: Record<number, string> = {
+  2026: "試圖融合密碼龐克、曲線救國、以及政策設計等不同路線",
+  2025: "離開數位發展部，參與各種 Fellow 計畫，如哈佛甘迺迪學院、以太坊基金會、TWNIC...等等，加入 Matters",
+  2024: "在數位發展部推動數位皮夾，研究各國數位身分政策",
+  2023: "加入數位發展部多元宇宙科，研究 web3 政策與國際標準組織（W3C），開始典藏Artouch 薄荷薄荷專欄",
+  2022: "創辦了 FAB DAO（#非營利 web3 行動），參與 Volume DAO（#數位藝術），參展林茲電子藝術節",
+  2021: "自醫師工作離職，開始探索 web3 與 NFT，畫了新時代國旗",
+};
+
+const RECENT_UPDATED_DAYS = 90;
+const recentThreshold = Date.now() - RECENT_UPDATED_DAYS * 24 * 60 * 60 * 1000;
+const isRecentlyUpdated = (pubDate: Date, updatedDate?: Date) => {
+  const reference = updatedDate ?? pubDate;
+  return reference.getTime() >= recentThreshold;
+};
+
+const topicByPostId = new Map<string, string[]>();
+for (const post of posts) {
+  const classified = classifyPostTags({
+    title: cleanPostTitle(post.data.title),
+    description: post.data.description,
+    body: post.body,
+    tags: post.data.tags,
+  });
+  topicByPostId.set(post.id, classified.topics);
+}
+---
+
+<BaseLayout title="文章列表" description="依日期由新到舊的所有文章。">
+  <h1 class="section-title">文章列表</h1>
+  <p>共 {posts.length} 篇，依日期由新到舊。</p>
+
+  {
+    posts.length === 0 ? (
+      <p class="empty-state">目前還沒有文章。</p>
+    ) : (
+      <>
+        <div class="archive-accordion-list" aria-label="年份文章收合列表">
+          {yearSections.map((section, index) => (
+            <details class="archive-accordion" open={index === 0}>
+              <summary class="archive-accordion-summary">
+                <span class="archive-accordion-title">
+                  <span class="tag-chip-icon" aria-hidden="true">
+                    🗓️
+                  </span>
+                  {section.year} 年
+                </span>
+                {yearNotes[section.year] && (
+                  <span class="archive-accordion-note">{yearNotes[section.year]}</span>
+                )}
+                <span class="archive-accordion-count" data-count data-total={section.count}>
+                  {section.count} 篇
+                </span>
+              </summary>
+              <div class="archive-accordion-body">
+                <div class="archive-accordion-body-inner">
+                  <ul class="archive-list">
+                    {section.posts.map((post) => {
+                      const topics = topicByPostId.get(post.id) ?? ["公共網路"];
+                      return (
+                        <li class="archive-item">
+                          <time class="archive-date" datetime={post.data.pubDate.toISOString()}>
+                            {formatDate(post.data.pubDate)}
+                          </time>
+                          <div class="archive-main">
+                            <a class="archive-link" href={buildPostUrl(post)}>
+                              {cleanPostTitle(post.data.title)}
+                            </a>
+                            <p class="archive-meta">
+                              <span class="archive-meta-topics">主題：{topics.join("・")}</span>
+                              {isRecentlyUpdated(post.data.pubDate, post.data.updatedDate) && (
+                                <span
+                                  class="archive-update-badge"
+                                  title={`近 ${RECENT_UPDATED_DAYS} 天內更新`}
+                                >
+                                  最近更新
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </details>
+          ))}
+          <details class="archive-accordion">
+            <summary class="archive-accordion-summary">
+              <span class="archive-accordion-title">
+                <span class="tag-chip-icon" aria-hidden="true">
+                  🗓️
+                </span>
+                2020 年
+              </span>
+              <span class="archive-accordion-note">
+                2020 年以前我在醫院見習、實習、一般住院醫師訓練，文章大多放在 Medium，可以點過去閱讀
+              </span>
+            </summary>
+            <div class="archive-accordion-body">
+              <div class="archive-accordion-body-inner">
+                <p class="archive-meta" style="margin: 0;">
+                  <a href="https://medium.com/@mashbean" target="_blank" rel="noopener noreferrer">
+                    前往 Medium 閱讀（@mashbean） →
+                  </a>
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </>
+    )
+  }
+</BaseLayout>
+
+<script is:inline>
+  const track = (name, props = {}) => {
+    if (typeof window.mbTrack === "function") window.mbTrack(name, props);
+  };
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const link = target.closest(".archive-link");
+    if (!(link instanceof HTMLAnchorElement)) return;
+    track("Archive Post Click", { source: "blog_archive" });
+  });
+</script>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/utils/paths";
+
+const feedPath = withBase("rss.xml");
+const feedUrl = Astro.site ? new URL(feedPath, Astro.site).toString() : feedPath;
+const encodedFeedUrl = encodeURIComponent(feedUrl);
+---
+
+<BaseLayout title="RSS 訂閱" description="使用 RSS Reader 訂閱本站更新。">
+  <section class="subscribe-panel">
+    <h1 class="section-title" style="margin-top:0;">RSS 訂閱</h1>
+    <p>如果你使用 RSS Reader，建議先選閱讀器，再貼上 Feed URL。</p>
+
+    <ol class="subscribe-steps">
+      <li><strong>選一個閱讀器：</strong>Feedly、Inoreader、NetNewsWire 都可以。</li>
+      <li><strong>匯入 Feed URL：</strong>複製下面網址貼到閱讀器的「Add Feed」。</li>
+      <li><strong>確認更新頻率：</strong>預設會抓最新文章與摘要。</li>
+    </ol>
+
+    <div class="subscribe-feed-box">
+      <label for="rss-feed-url"><strong>Feed URL</strong></label>
+      <code id="rss-feed-url">{feedUrl}</code>
+      <button id="rss-copy-btn" class="nav-link" type="button">複製 Feed URL</button>
+      <p id="rss-copy-status" class="subscribe-note" aria-live="polite"></p>
+    </div>
+
+    <div class="subscribe-actions">
+      <a class="nav-link" href={`https://feedly.com/i/subscription/feed/${encodedFeedUrl}`} target="_blank" rel="noopener noreferrer">用 Feedly 開啟</a>
+      <a class="nav-link" href={`https://www.inoreader.com/?add_feed=${encodedFeedUrl}`} target="_blank" rel="noopener noreferrer">用 Inoreader 開啟</a>
+    </div>
+  </section>
+
+  <script is:inline>
+    const copyBtn = document.getElementById("rss-copy-btn");
+    const feedUrlNode = document.getElementById("rss-feed-url");
+    const copyStatus = document.getElementById("rss-copy-status");
+
+    copyBtn?.addEventListener("click", async () => {
+      const text = (feedUrlNode?.textContent || "").trim();
+      if (!text || !copyStatus) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copyStatus.textContent = "Feed URL 已複製";
+      } catch {
+        copyStatus.textContent = "複製失敗，請手動選取網址";
+      }
+    });
+  </script>
+</BaseLayout>

@@ -8,15 +8,15 @@ const posts = await getBlogPosts();
 const latestPosts = posts.slice(0, 12);
 ---
 
-<BaseLayout description="站在單向鏡後方觀看世界應對加速科技的方式。">
+<BaseLayout description="此身譬如朝露易逝，終究難留；幾番波折方知，人生似夢一場。">
   <section class="home-hero-grid" aria-label="首頁引言">
     <section class="hero">
       <figure style="margin:0;">
         <blockquote class="hero-text" style="margin:0;">
-          <p style="margin:0 0 .5rem;">能身處黎明時分，簡直是天賜之福；</p>
-          <p style="margin:0;">若還年輕，更如置身天堂！</p>
+          <p style="margin:0 0 .5rem;">此身譬如朝露易逝，終究難留；</p>
+          <p style="margin:0;">幾番波折方知，人生似夢一場。</p>
         </blockquote>
-        <figcaption class="hero-kicker" style="margin-top:.75rem;">華茲華斯（Wordsworth）</figcaption>
+        <figcaption class="hero-kicker" style="margin-top:.75rem;">梅驊 Jacob Mei</figcaption>
       </figure>
     </section>
   </section>
@@ -72,8 +72,8 @@ const latestPosts = posts.slice(0, 12);
   const link = document.querySelector("#continue-reading-link");
   const title = document.querySelector("#continue-reading-title");
   const meta = document.querySelector("#continue-reading-meta");
-  const key = "mashbean.blog.lastReading";
-  const dismissPrefix = "mashbean.blog.lastReading.dismissed.";
+  const key = "jacobmei.blog.lastReading";
+  const dismissPrefix = "jacobmei.blog.lastReading.dismissed.";
 
   try {
     const raw = localStorage.getItem(key);

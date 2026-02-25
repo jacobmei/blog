@@ -27,7 +27,7 @@ const {
   isArticle = false
 } = Astro.props as Props;
 
-const tabTitle = "mashbean blog";
+const tabTitle = SITE_TITLE;
 const seoTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
 
 const canonical =
@@ -62,7 +62,7 @@ const siteStructuredData = {
     {
       "@type": "Organization",
       "@id": `${siteURL}#organization`,
-      name: "mashbean blog",
+      name: SITE_TITLE,
       url: siteURL,
       logo: {
         "@type": "ImageObject",
@@ -73,7 +73,7 @@ const siteStructuredData = {
       "@type": "WebSite",
       "@id": `${siteURL}#website`,
       url: siteURL,
-      name: "mashbean blog",
+      name: SITE_TITLE,
       publisher: {
         "@id": `${siteURL}#organization`
       }
@@ -142,12 +142,12 @@ const siteStructuredData = {
         class="reading-focus-fab"
         aria-pressed="false"
       >
-        聚焦閱讀
+        展開文章
       </button>
     )}
     {isArticle && (
       <p id="reading-focus-hint" class="reading-focus-hint" hidden>
-        已進入聚焦閱讀，可點選下方按鈕解除
+        文章已展開，可點選下方按鈕關上
       </p>
     )}
     <Footer />
@@ -218,7 +218,7 @@ const siteStructuredData = {
       }
 
       if (isArticle) {
-        const storagePrefix = "mashbean.blog";
+        const storagePrefix = "jacobmei.blog";
         const body = document.body;
         const fontDecButton = document.querySelector("#reading-font-dec");
         const fontIncButton = document.querySelector("#reading-font-inc");
@@ -233,7 +233,7 @@ const siteStructuredData = {
         const setFocusMode = (enabled) => {
           body.classList.toggle("focus-reading", enabled);
           if (focusButton instanceof HTMLButtonElement) {
-            focusButton.textContent = enabled ? "結束聚焦" : "聚焦閱讀";
+            focusButton.textContent = enabled ? "關上文章" : "展開文章";
             focusButton.setAttribute("aria-pressed", enabled ? "true" : "false");
           }
           localStorage.setItem(`${storagePrefix}.focusMode`, enabled ? "1" : "0");

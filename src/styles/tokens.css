@@ -1,15 +1,15 @@
 :root {
-  --color-paper: #f8f7f4;
-  --color-ink: #1a2332;
-  --color-muted: #4a5a6e;
-  --color-accent: #2563eb;
-  --color-accent-soft: #dbeafe;
+  --color-paper: #faf8f7;
+  --color-ink: #2a1820;
+  --color-muted: #7a5060;
+  --color-accent: #8c3a52;
+  --color-accent-soft: #f0d8e2;
 
-  --color-border-subtle: #d1dce8;
-  --color-border-strong: #b8cad9;
+  --color-border-subtle: #e0c4d0;
+  --color-border-strong: #cfa8b8;
   --color-surface-elevated: #ffffff;
-  --color-surface-muted: #f0f4f8;
-  --color-focus-ring: #93c5fd;
+  --color-surface-muted: #f5eff2;
+  --color-focus-ring: #c98aa0;
 
   --radius-sm: 0.72rem;
   --radius-md: 0.85rem;

@@ -8,7 +8,7 @@ import { cleanPostTitle } from "@/utils/title";
 import { classifyPostTags } from "@/utils/blogTags";
 import { topicToRouteSegment } from "@/utils/topicRoutes";
 import { verifyArticleSignature } from "@/utils/articleSignature";
-import { requireWeb3PublicConfig } from "@/utils/web3Config";
+import { getWeb3PublicConfig } from "@/utils/web3Config";
 import { resolveEnsProfile } from "@/utils/ens";
 import Web3TipJar from "@/components/Web3TipJar.astro";
 
@@ -69,10 +69,10 @@ const signatureBadgeTitle =
       ? "此篇文章尚未簽名"
       : "簽名資料需更新";
 const signatureHash = post.data.contentHash ?? signatureCheck.computedHash;
-const web3Config = requireWeb3PublicConfig();
-const tipEnsProfile = await resolveEnsProfile(web3Config.tipEnsName);
-const signerEnsProfile = await resolveEnsProfile(web3Config.signerEnsName);
-const signerEnsName = web3Config.signerEnsName;
+const web3Config = getWeb3PublicConfig();
+const tipEnsProfile = web3Config ? await resolveEnsProfile(web3Config.tipEnsName) : null;
+const signerEnsProfile = web3Config ? await resolveEnsProfile(web3Config.signerEnsName) : null;
+const signerEnsName = web3Config?.signerEnsName ?? "";
 const signerEnsVerified =
   Boolean(signatureCheck.expectedSigner) &&
   Boolean(signerEnsProfile?.resolvedAddress) &&
@@ -450,7 +450,7 @@ const articleStructuredData = {
         <div class="toc-share-card">
           <button id="article-copy-link" type="button" class="toc-share-btn">分享本文</button>
         </div>
-        <Web3TipJar ensName={web3Config.tipEnsName} chainId={web3Config.chainId} ens={tipEnsProfile} />
+        {web3Config && <Web3TipJar ensName={web3Config.tipEnsName} chainId={web3Config.chainId} ens={tipEnsProfile ?? { inputName: web3Config.tipEnsName, resolvedAddress: null, reverseName: null, forwardMatchesInput: false, reverseMatchesInput: false, isVerified: false, verificationCode: "unresolved", verificationMessage: "ENS 未設定" }} />}
       </div>
     </aside>
   </article>

@@ -22,8 +22,8 @@ jobs:
       BASE_PATH: "blog"
       PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
       PUBLIC_PLAUSIBLE_SCRIPT_SRC: ${{ vars.PUBLIC_PLAUSIBLE_SCRIPT_SRC }}
-      PUBLIC_TIP_ENS_NAME: ""
-      PUBLIC_SIGNER_ENS_NAME: ${{ vars.PUBLIC_SIGNER_ENS_NAME }}
+      PUBLIC_TIP_ENS_NAME: "jacobmei.eth"
+      PUBLIC_SIGNER_ENS_NAME: "jacobmei.eth"
       PUBLIC_WEB3_CHAIN_ID: "1"
       PUBLIC_WEB3_RPC_URL: "https://ethereum.publicnode.com"
     steps:

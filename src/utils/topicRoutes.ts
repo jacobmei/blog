@@ -1,7 +1,7 @@
 export const TOPIC_ROUTE_CODE_MAP: Record<string, string> = {
   "數位藝術": "art",
   "治理與民主": "gov",
-  "公共網路": "internet",
+  "網路與社群": "internet",
   "AI與科技": "ai_tech",
   "薄荷薄荷專欄": "mintmint",
   web3: "web3"

@@ -67,7 +67,7 @@ const TOPIC_HINTS: Array<{ topic: string; regex: RegExp }> = [
   { topic: "信仰", regex: /靈修|基督教|禱告|見證|教會|靈糧堂|執事|牧師|奉獻/i },
   { topic: "AI與科技", regex: /\bai\b|人工智慧|數位身分|did|隱私|科技|技術/i },
   { topic: "治理與民主", regex: /治理|民主|政策|審議|公民|dao|公共財|資助|制度/i },
-  { topic: "網路與社群", regex: /網路與社群|網路國家|網路架構|matters|言論自由|抗審查|去中心化平台/i },
+  { topic: "網路與社群", regex: /網路與社群|網路國家|網路架構|matters|言論自由|抗審查|去中心化平台|社群|平台|網絡/i },
   { topic: "web3", regex: /\bnft\b|web3|tezos|ethereum|區塊鏈|以太坊|加密/i },
   { topic: "數位藝術", regex: /數位藝術|生成藝術|藝術|展覽|策展|linz|林茲/i }
 ];

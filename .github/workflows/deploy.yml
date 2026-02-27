@@ -18,8 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SITE_URL: "https://jacobmei.github.io"
-      BASE_PATH: "blog"
+      SITE_URL: "https://jacobmei.com"
+      BASE_PATH: "/"
       PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
       PUBLIC_PLAUSIBLE_SCRIPT_SRC: ${{ vars.PUBLIC_PLAUSIBLE_SCRIPT_SRC }}
       PUBLIC_TIP_ENS_NAME: "jacobmei.eth"

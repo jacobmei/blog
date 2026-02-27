@@ -6,7 +6,7 @@ import remarkFlexibleMarkers from "remark-flexible-markers";
 // @ts-ignore
 import rehypeRaw from "rehype-raw";
 
-const site = process.env.SITE_URL ?? "https://username.github.io";
+const site = process.env.SITE_URL ?? "https://jacobmei.com";
 const rawBase = process.env.BASE_PATH ?? "/";
 const normalizedBase = rawBase === "/" ? "/" : `/${rawBase.replace(/^\/+|\/+$/g, "")}`;
 

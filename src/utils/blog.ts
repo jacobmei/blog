@@ -3,6 +3,27 @@ import { withBase } from "@/utils/paths";
 
 export type BlogEntry = CollectionEntry<"blog">;
 
+/**
+ * 取得文章的有效發布日期。
+ * 優先順序：Frontmatter pubDate > 檔名開頭日期 (YYYY-MM-DD) > 目前日期。
+ */
+export function getEffectiveDate(post: BlogEntry): Date {
+  if (post.data.pubDate) {
+    return post.data.pubDate;
+  }
+
+  // 嘗試從 post.id (通常是檔名) 擷取日期，例如 2026-02-25-xxx.md
+  const match = post.id.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (match) {
+    const date = new Date(match[1]);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+  }
+
+  return new Date();
+}
+
 interface GetBlogPostsOptions {
   includeDrafts?: boolean;
   includeFuture?: boolean;
@@ -17,11 +38,17 @@ export async function getBlogPosts(options: GetBlogPostsOptions = {}): Promise<B
 
   return posts
     .filter((post) => {
+      const effectiveDate = getEffectiveDate(post);
       if (!includeDrafts && post.data.draft) return false;
-      if (!includeFuture && post.data.pubDate.getTime() > now) return false;
+      if (!includeFuture && effectiveDate.getTime() > now) return false;
       return true;
     })
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+    .sort((a, b) => {
+      const aFeatured = a.data.featured ? 1 : 0;
+      const bFeatured = b.data.featured ? 1 : 0;
+      if (bFeatured !== aFeatured) return bFeatured - aFeatured;
+      return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
+    });
 }
 
 function normalizeSlug(input: string): string {
@@ -54,7 +81,13 @@ function stripLegacyPartsFromId(id: string): string {
 }
 
 function getShortCode(post: BlogEntry): string {
-  const identity = `${post.id}|${post.data.pubDate.toISOString()}|${post.data.slug ?? ""}`;
+  // 如果 Frontmatter 中有手動指定 shortCode，優先使用它，實現「更名不改網址」
+  if (post.data.shortCode) {
+    return post.data.shortCode;
+  }
+
+  const effectiveDate = getEffectiveDate(post);
+  const identity = `${post.id}|${effectiveDate.toISOString()}|${post.data.slug ?? ""}`;
   return hashText(identity).toString(36).padStart(6, "0").slice(0, 6);
 }
 
@@ -63,8 +96,9 @@ function pad2(value: number): string {
 }
 
 export function getPostCanonicalPathSegment(post: BlogEntry): string {
-  const year = post.data.pubDate.getFullYear();
-  const monthDay = `${pad2(post.data.pubDate.getMonth() + 1)}${pad2(post.data.pubDate.getDate())}`;
+  const effectiveDate = getEffectiveDate(post);
+  const year = effectiveDate.getFullYear();
+  const monthDay = `${pad2(effectiveDate.getMonth() + 1)}${pad2(effectiveDate.getDate())}`;
   const shortCode = getShortCode(post);
   return `${year}/${monthDay}-${shortCode}`;
 }
@@ -74,8 +108,9 @@ export function getLegacyPostPathSegment(post: BlogEntry): string {
 }
 
 function getVerbosePathSegment(post: BlogEntry): string {
-  const year = post.data.pubDate.getFullYear();
-  const monthDay = `${pad2(post.data.pubDate.getMonth() + 1)}${pad2(post.data.pubDate.getDate())}`;
+  const effectiveDate = getEffectiveDate(post);
+  const year = effectiveDate.getFullYear();
+  const monthDay = `${pad2(effectiveDate.getMonth() + 1)}${pad2(effectiveDate.getDate())}`;
   const rawSlug = post.data.slug ?? stripLegacyPartsFromId(post.id);
   const normalized = normalizeSlug(rawSlug);
   const shortened = normalized.length > 40 ? normalized.slice(0, 40).replace(/-+$/g, "") : normalized;

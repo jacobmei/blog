@@ -2,7 +2,7 @@
 import "@/styles/global.css";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_LANG, SITE_TITLE } from "@/site.config";
+import { AUTHOR_PROFILE, DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_LANG, SITE_TITLE, SITE_URL } from "@/site.config";
 import { withBase } from "@/utils/paths";
 
 interface Props {
@@ -77,6 +77,21 @@ const siteStructuredData = {
       publisher: {
         "@id": `${siteURL}#organization`
       }
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#author`,
+      "name": AUTHOR_PROFILE.name,
+      "alternateName": AUTHOR_PROFILE.alternateName,
+      "description": AUTHOR_PROFILE.description,
+      "jobTitle": AUTHOR_PROFILE.jobTitle,
+      "url": AUTHOR_PROFILE.url,
+      "image": {
+        "@type": "ImageObject",
+        "url": new URL(withBase(AUTHOR_PROFILE.image), siteURL).toString()
+      },
+      "sameAs": AUTHOR_PROFILE.sameAs,
+      "knowsAbout": AUTHOR_PROFILE.knowsAbout
     }
   ]
 };
@@ -142,12 +157,12 @@ const siteStructuredData = {
         class="reading-focus-fab"
         aria-pressed="false"
       >
-        展開文章
+        步入沉浸閱讀
       </button>
     )}
     {isArticle && (
       <p id="reading-focus-hint" class="reading-focus-hint" hidden>
-        文章已展開，可點選下方按鈕關上
+        已進入沉浸閱讀，可點選下方按鈕結束
       </p>
     )}
     <Footer />
@@ -233,7 +248,7 @@ const siteStructuredData = {
         const setFocusMode = (enabled) => {
           body.classList.toggle("focus-reading", enabled);
           if (focusButton instanceof HTMLButtonElement) {
-            focusButton.textContent = enabled ? "關上文章" : "展開文章";
+            focusButton.textContent = enabled ? "結束沉浸時光" : "步入沉浸閱讀";
             focusButton.setAttribute("aria-pressed", enabled ? "true" : "false");
           }
           localStorage.setItem(`${storagePrefix}.focusMode`, enabled ? "1" : "0");

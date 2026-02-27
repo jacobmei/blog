@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getEffectiveDate } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { classifyPostTags, getTopicCatalog } from "@/utils/blogTags";
 import { cleanPostTitle } from "@/utils/title";
@@ -23,7 +23,7 @@ const rows = allPosts.map((post) => {
 });
 
 const yearOptions = Array.from(
-  new Set(allPosts.map((post) => post.data.pubDate.getFullYear())),
+  new Set(allPosts.map((post) => getEffectiveDate(post).getFullYear())),
 ).sort((a, b) => b - a);
 
 const topicOptions = topicCatalog
@@ -74,10 +74,10 @@ const routeCodeToTopic = Object.fromEntries(
           <li
             class="archive-item"
             data-topics={row.topics.join("|")}
-            data-year={String(row.post.data.pubDate.getFullYear())}
+            data-year={String(getEffectiveDate(row.post).getFullYear())}
           >
-            <time class="archive-date" datetime={row.post.data.pubDate.toISOString()}>
-              {formatDate(row.post.data.pubDate)}
+            <time class="archive-date" datetime={getEffectiveDate(row.post).toISOString()}>
+              {formatDate(getEffectiveDate(row.post))}
             </time>
             <div class="archive-main">
               <a class="archive-link" href={buildPostUrl(row.post)}>

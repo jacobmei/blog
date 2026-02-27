@@ -8,9 +8,9 @@ export const GET: APIRoute = async ({ site, url }) => {
   const base = site ? site.toString().replace(/\/$/, "") : `${url.origin}${withBase("")}`.replace(/\/$/, "");
 
   const lines: string[] = [
-    "# mashbean blog",
+    "# 小梅子 / Jacob Mei Labs",
     "",
-    "Site: mashbean.net",
+    "Site: jacobmei.com",
     "Description: 站在單向鏡後方觀看世界應對加速科技的方式。",
     "",
     "## Key URLs",

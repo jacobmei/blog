@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { buildPostUrl } from "@/utils/blog";
+import { buildPostUrl, getEffectiveDate } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { withBase } from "@/utils/paths";
 import { cleanPostTitle } from "@/utils/title";
@@ -14,9 +14,11 @@ interface Props {
 const { post, variant = "default", minimal = false } = Astro.props as Props;
 const url = buildPostUrl(post);
 const coverSrc = post.data.cover
-  ? /^https?:\/\//.test(post.data.cover)
-    ? post.data.cover
-    : withBase(post.data.cover)
+  ? typeof post.data.cover === "object"
+    ? post.data.cover.src
+    : /^https?:\/\//.test(post.data.cover)
+      ? post.data.cover
+      : withBase(post.data.cover)
   : undefined;
 const fallbackLabel = post.data.category ?? "文章";
 const postTitle = cleanPostTitle(post.data.title);
@@ -58,7 +60,7 @@ const readingMinutes = (() => {
     )}
   </a>
   <p class="post-card-meta">
-    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    <time datetime={getEffectiveDate(post).toISOString()}>{formatDate(getEffectiveDate(post))}</time>
     {" · 約 "}
     {readingMinutes}
     {" 分鐘"}
@@ -74,6 +76,7 @@ const readingMinutes = (() => {
       )}
   </p>
   <h2 class="post-card-title">
+    {post.data.featured && <span class="post-card-featured-badge" aria-label="置頂文章">📌</span>}
     <a href={url}>{postTitle}</a>
   </h2>
   <p class="post-card-desc">{post.data.description}</p>

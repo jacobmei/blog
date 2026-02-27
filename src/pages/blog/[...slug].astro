@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildPostUrl, getBlogPosts, getPostCanonicalPathSegment, getPostPathCandidates } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getEffectiveDate, getPostCanonicalPathSegment, getPostPathCandidates } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { withBase } from "@/utils/paths";
 import { cleanPostTitle } from "@/utils/title";
@@ -10,6 +10,7 @@ import { topicToRouteSegment } from "@/utils/topicRoutes";
 import { verifyArticleSignature } from "@/utils/articleSignature";
 import { getWeb3PublicConfig } from "@/utils/web3Config";
 import { resolveEnsProfile } from "@/utils/ens";
+import { SITE_URL } from "@/site.config";
 import Web3TipJar from "@/components/Web3TipJar.astro";
 
 export async function getStaticPaths() {
@@ -39,15 +40,15 @@ const signatureCheck = verifyArticleSignature(
     slug: post.id,
     title: post.data.title,
     description: post.data.description,
-    pubDateISO: post.data.pubDate.toISOString(),
+    pubDateISO: getEffectiveDate(post).toISOString(),
     updatedDateISO: post.data.updatedDate?.toISOString(),
     body: post.body ?? ""
   },
   {
-    contentHash: post.data.contentHash,
-    signature: post.data.signature,
-    signer: post.data.signer,
-    signatureVersion: post.data.signatureVersion
+    contentHash: post.data.contentHash ?? undefined,
+    signature: post.data.signature ?? undefined,
+    signer: post.data.signer ?? undefined,
+    signatureVersion: post.data.signatureVersion ?? undefined
   }
 );
 const signatureBadgeState =
@@ -99,12 +100,13 @@ const semanticTagsCurrent = [
   ...classifiedCurrent.secondaryKeywords
 ];
 
-const coverSrc =
-  post.data.cover && /^https?:\/\//.test(post.data.cover)
-    ? post.data.cover
-    : post.data.cover
-      ? withBase(post.data.cover)
-      : undefined;
+const coverSrc = post.data.cover
+  ? typeof post.data.cover === "object"
+    ? post.data.cover.src
+    : /^https?:\/\//.test(post.data.cover)
+      ? post.data.cover
+      : withBase(post.data.cover)
+  : undefined;
 
 const canonicalURL = post.data.canonicalURL;
 const pageURL = canonicalURL ??
@@ -158,7 +160,7 @@ const titleSimilarity = (a: string, b: string): number => {
 };
 
 const baseTitle = normalizeTitle(postTitle);
-const baseDate = post.data.pubDate.getTime();
+const baseDate = getEffectiveDate(post).getTime();
 
 const relatedCandidates = allPosts
   .filter((item) => item.id !== post.id)
@@ -170,7 +172,7 @@ const relatedCandidates = allPosts
       sim >= 0.66 ||
       candidateTitle.includes(baseTitle) ||
       baseTitle.includes(candidateTitle);
-    const nearDate = Math.abs(item.data.pubDate.getTime() - baseDate) <= 7 * 24 * 60 * 60 * 1000;
+    const nearDate = Math.abs(getEffectiveDate(item).getTime() - baseDate) <= 7 * 24 * 60 * 60 * 1000;
     return !(nearDuplicate && nearDate);
   })
   .map((item) => {
@@ -188,14 +190,14 @@ const relatedCandidates = allPosts
     const sharedTags = semanticItemTags.filter((tag) => semanticTagsCurrent.includes(tag));
     const sameCategory =
       post.data.category && item.data.category && post.data.category === item.data.category;
-    const yearGap = Math.abs(item.data.pubDate.getFullYear() - post.data.pubDate.getFullYear());
+    const yearGap = Math.abs(getEffectiveDate(item).getFullYear() - getEffectiveDate(post).getFullYear());
     const score = sharedTags.length * 3 + (sameCategory ? 1 : 0) + (yearGap <= 2 ? 1 : 0);
-    return { item, score, sharedTags, year: item.data.pubDate.getFullYear(), classifiedItem };
+    return { item, score, sharedTags, year: getEffectiveDate(item).getFullYear(), classifiedItem };
   })
   .filter((entry) => entry.score > 0)
   .sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    return b.item.data.pubDate.getTime() - a.item.data.pubDate.getTime();
+    return getEffectiveDate(b.item).getTime() - getEffectiveDate(a.item).getTime();
   });
 
 const relatedPosts: CollectionEntry<"blog">[] = [];
@@ -225,28 +227,64 @@ if (relatedPosts.length < 4) {
   }
 }
 
-const articleStructuredData = {
+const faqItems = (() => {
+  const content = post.body ?? "";
+  const questions: { question: string; answer: string }[] = [];
+  const qMatches = content.matchAll(/\*\*Q:\*\*\s*(.*?)\n\*\*A:\*\*\s*(.*?)(?=\n\n|\n\*\*Q:\*\*|$)/gs);
+  for (const match of qMatches) {
+    if (match[1] && match[2]) {
+      questions.push({
+        question: match[1].replace(/<[^>]+>/g, "").trim(),
+        answer: match[2].replace(/<[^>]+>/g, "").trim()
+      });
+    }
+  }
+  return questions;
+})();
+
+const articleStructuredData: any = {
   "@context": "https://schema.org",
-  "@type": "Article",
-  headline: postTitle,
-  description: post.data.description,
-  inLanguage: post.data.lang ?? "zh-TW",
-  datePublished: post.data.pubDate.toISOString(),
-  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-  author: {
-    "@type": "Person",
-    name: post.data.author ?? "Mashbean"
-  },
-  mainEntityOfPage: pageURL,
-  image: coverURL ? [coverURL] : undefined
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": `${pageURL}#article`,
+      headline: postTitle,
+      description: post.data.description,
+      inLanguage: post.data.lang ?? "zh-TW",
+      datePublished: getEffectiveDate(post).toISOString(),
+      dateModified: (post.data.updatedDate ?? getEffectiveDate(post)).toISOString(),
+      author: {
+        "@id": `${SITE_URL}/#author`
+      },
+      publisher: {
+        "@id": `${SITE_URL}/#organization`
+      },
+      mainEntityOfPage: pageURL,
+      image: coverURL ? [coverURL] : undefined
+    }
+  ]
 };
+
+if (faqItems.length > 0) {
+  articleStructuredData["@graph"].push({
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  });
+}
 ---
 
 <BaseLayout
   title={postTitle}
   description={post.data.description}
-  canonicalURL={effectiveCanonicalURL}
-  ogImage={post.data.cover}
+  canonicalURL={effectiveCanonicalURL ?? undefined}
+  ogImage={coverSrc}
   ogType="article"
   structuredData={isLegacyPath ? null : articleStructuredData}
   isArticle={!isLegacyPath}
@@ -269,7 +307,7 @@ const articleStructuredData = {
         <div class="article-meta-row">
           <p class="article-meta">
             發布：
-            <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+            <time datetime={getEffectiveDate(post).toISOString()}>{formatDate(getEffectiveDate(post))}</time>
             {" · 約 "}
             {readingMinutes}
             {" 分鐘閱讀"}
@@ -286,7 +324,7 @@ const articleStructuredData = {
             {post.data.draft && !import.meta.env.PROD && " · 草稿"}
           </p>
         </div>
-        <details
+        {post.data.contentHash && <details
           class:list={{
             "signature-disclosure": true,
             "signature-disclosure-verified": signatureBadgeState === "verified",
@@ -335,7 +373,7 @@ const articleStructuredData = {
               </button>
             </div>
             <p>
-              <strong>豆泥的以太坊地址：</strong>
+              <strong>作者的以太坊地址：</strong>
               {signerEnsName}
             </p>
             <p>
@@ -353,12 +391,12 @@ const articleStructuredData = {
               <details class="signature-explain">
                 <summary class="signature-explain-btn">這是什麼？</summary>
                 <p>
-                  已簽名表示這篇文章已建立獨特的身分證字號（內容雜湊，contentHash）並且由豆泥簽署認證，簽署是採用以太坊區塊鏈的豆泥專用地址（signer.mashbean.eth）。只要內容一經修改，就會需要重新驗證換發新的身分證字號。但豆泥不是每天都在公所上班，所以偶爾會慢一點認證。
+                  已簽名表示這篇文章已建立獨特的身分證字號（內容雜湊，contentHash）並且由作者簽署認證，簽署是採用以太坊區塊鏈的專用地址（jacobmei.eth）。只要內容一經修改，就會需要重新驗證換發新的身分證字號。
                 </p>
               </details>
             </div>
           </div>
-        </details>
+        </details>}
         {post.data.author && <p class="article-author">作者：{post.data.author}</p>}
         {post.data.lead && <p class="article-lead">{post.data.lead}</p>}
 
@@ -421,7 +459,7 @@ const articleStructuredData = {
             {relatedPosts.map((item) => (
               <li class="post-list-compact-item">
                 <a class="post-list-compact-link" href={buildPostUrl(item)}>{cleanPostTitle(item.data.title)}</a>
-                <small class="post-list-compact-date">({formatDate(item.data.pubDate)})</small>
+                <small class="post-list-compact-date">({formatDate(getEffectiveDate(item))})</small>
               </li>
             ))}
           </ul>

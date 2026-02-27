@@ -52,22 +52,19 @@ const TOPIC_ALIASES: Record<string, string> = {
   "以太坊": "web3",
   "加密貨幣": "web3",
 
-  "生成藝術": "數位藝術",
-  "數位藝術": "數位藝術",
-  art: "數位藝術",
-  "藝術": "數位藝術",
-  exhibition: "數位藝術",
-  "展覽": "數位藝術",
-
-  artouch: "薄荷薄荷專欄",
-  mintmint: "薄荷薄荷專欄",
-  "薄菏薄菏": "薄荷薄荷專欄",
-  "薄荷薄荷": "薄荷薄荷專欄",
-  "薄荷薄荷專欄": "薄荷薄荷專欄"
+  "靈修": "信仰",
+  "基督教": "信仰",
+  "禱告": "信仰",
+  "見證": "信仰",
+  "教會": "信仰",
+  "靈糧堂": "信仰",
+  "執事": "信仰",
+  "牧師": "信仰",
+  "奉獻": "信仰"
 };
 
 const TOPIC_HINTS: Array<{ topic: string; regex: RegExp }> = [
-  { topic: "薄荷薄荷專欄", regex: /薄荷薄荷|artouch/i },
+  { topic: "信仰", regex: /靈修|基督教|禱告|見證|教會|靈糧堂|執事|牧師|奉獻/i },
   { topic: "AI與科技", regex: /\bai\b|人工智慧|數位身分|did|隱私|科技|技術/i },
   { topic: "治理與民主", regex: /治理|民主|政策|審議|公民|dao|公共財|補助|制度/i },
   { topic: "公共網路", regex: /公共網路|社群|媒體|出版|matters|網路|言論|抗審查|平台/i },
@@ -150,7 +147,6 @@ const TOKEN_STOPWORDS = new Set([
   "原文標題",
   "本文為外部文",
   "章索引",
-  "豆泥",
   "此外",
   "因此",
   "例如",
@@ -163,8 +159,7 @@ const TOKEN_STOPWORDS = new Set([
   "服務",
   "工具",
   "內文",
-  "專欄",
-  "黃豆泥提"
+  "專欄"
 ]);
 
 const GENERIC_KEYWORD_PENALTY: Record<string, number> = {

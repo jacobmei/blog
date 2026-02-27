@@ -37,9 +37,9 @@ export const tagCatalog: TagCatalogItem[] = [
     description: "AI、數位身分、工具演進與科技社會影響。"
   },
   {
-    key: "薄荷薄荷專欄",
-    title: "薄荷薄荷專欄",
-    icon: "🌿",
-    description: "ARTouch 薄荷薄荷專欄與延伸評論，聚焦文化科技與網路社會。"
+    key: "信仰",
+    title: "信仰",
+    icon: "✝️",
+    description: "基督信仰、靈修默想、教會生活與信仰規跡的生命觀察。"
   }
 ];

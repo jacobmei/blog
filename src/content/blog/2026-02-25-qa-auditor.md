@@ -1,6 +1,6 @@
 ---
 title: QA Auditor - 跨節點環境審計與混沌測試技能 心得
-description: 在 AI Agent 或是小龍蝦環境中加上 QA Auditor Skill，AI 從「開發者」轉為「破壞者」與「審查員」。其唯一目的是在 不破壞真實環境的前提下，透過強制模擬異常與時間流逝，找出系統狀態與併發邏輯中的盲點（即「隔日 Bug」）。自從有了這個，每次小龍蝦或是 Google Antigravity 開發時都會自動導入，我目前遇到開發上的錯誤幾乎沒有，有錯誤也會自動修補，省心不少。
+description: 在 AI Agent 或是小龍蝦環境中加上 QA Auditor Skill，AI 從「開發者」轉為「破壞者」與「審查員」。找出系統狀態與併發邏輯中的盲點（即「隔日 Bug」）。自從有了這個，我目前遇到開發上的錯誤幾乎沒有，有錯誤也會自動修補，省心不少。
 pubDate: 2026-02-25T10:00:00+08:00
 tags:
   - openclaw
@@ -9,8 +9,10 @@ tags:
   - Auditor
   - governance
 author: jacobmei
+featured: false
+cover: ./assets/2026-02-24-qa_auditor_01.jpg
 ---
-之前寫了一篇 [從「隔日 Bug」到安穩入睡：如何用一套 QA 體系馴服 AI 開發](https://draft.blogger.com/blog/post/edit/3617166264733836146/403580802518328421#)，提到可以在 AI Agent 或是小龍蝦環境中加上 QA Auditor Skill，這是一個特殊扮演角色。
+之前寫了一篇 [從「隔日 Bug」到安穩入睡：如何用一套 QA 體系馴服 AI 開發](https://jacobmei.blogspot.com/2026/02/bug-qa-ai.html)，提到可以在 AI Agent 或是小龍蝦環境中加上 QA Auditor Skill，這是一個特殊扮演角色。
 
 當啟動此 Skill 時，AI 從「開發者」轉為「破壞者」與「審查員」。其唯一目的是在 **不破壞真實環境的前提下**，透過強制模擬異常與時間流逝，找出系統狀態與併發邏輯中的盲點（即「隔日 Bug」）。
 

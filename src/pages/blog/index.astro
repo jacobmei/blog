@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getEffectiveDate } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { classifyPostTags } from "@/utils/blogTags";
 import { cleanPostTitle } from "@/utils/title";
@@ -9,7 +9,7 @@ const posts = await getBlogPosts();
 const yearMap = new Map<number, typeof posts>();
 
 for (const post of posts) {
-  const year = post.data.pubDate.getFullYear();
+  const year = getEffectiveDate(post).getFullYear();
   const bucket = yearMap.get(year);
   if (bucket) {
     bucket.push(post);
@@ -84,16 +84,17 @@ for (const post of posts) {
                       const topics = topicByPostId.get(post.id) ?? ["公共網路"];
                       return (
                         <li class="archive-item">
-                          <time class="archive-date" datetime={post.data.pubDate.toISOString()}>
-                            {formatDate(post.data.pubDate)}
+                          <time class="archive-date" datetime={getEffectiveDate(post).toISOString()}>
+                            {formatDate(getEffectiveDate(post))}
                           </time>
                           <div class="archive-main">
                             <a class="archive-link" href={buildPostUrl(post)}>
+                              {post.data.featured && <span aria-label="置頂" style="margin-right:0.25rem;">📌</span>}
                               {cleanPostTitle(post.data.title)}
                             </a>
                             <p class="archive-meta">
                               <span class="archive-meta-topics">主題：{topics.join("・")}</span>
-                              {isRecentlyUpdated(post.data.pubDate, post.data.updatedDate) && (
+                              {isRecentlyUpdated(getEffectiveDate(post), post.data.updatedDate ?? undefined) && (
                                 <span
                                   class="archive-update-badge"
                                   title={`近 ${RECENT_UPDATED_DAYS} 天內更新`}

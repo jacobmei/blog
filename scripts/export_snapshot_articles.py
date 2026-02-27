@@ -1,9 +1,28 @@
 #!/usr/bin/env python3
 """Export articles from a Snapshot IPNS registry to Markdown and plain text.
 
+【用途說明】
+從 Snapshot（去中心化治理投票平台）的 IPNS 登錄（registry）匯出文章內容，
+並轉換成 Markdown（markdown/）和純文字（text/）兩種格式。
+
+適用情境：
+- DAO 成員或個人備份特定 ENS 空間（如 mashbean.eth）的歷史文章
+- 避免內容只存在線上平台，達成去中心化備份
+- 資料分析、文章遷移、或建立個人知識庫
+
+【輸出結構】
+  <out>/
+  ├── raw/           ← 下載的原始 IPFS payload（.bin / .json）
+  ├── markdown/      ← 萃取後的 Markdown 文章
+  ├── text/          ← 純文字版本
+  ├── index.json     ← IPNS index 原始回應
+  ├── cids.txt       ← 從 index 找到的所有 CID 清單
+  ├── manifest.json  ← 抓取與萃取摘要
+  └── README.txt     ← 自動產生的說明檔
+
 Usage example:
-  python3 scripts/export_snapshot_articles.py \
-    --ipns "ipns://storage.snapshot.page/registry/.../mashbean.eth" \
+  python3 scripts/export_snapshot_articles.py \\
+    --ipns "ipns://storage.snapshot.page/registry/.../mashbean.eth" \\
     --out "snapshot_export"
 """
 

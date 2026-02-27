@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import rss from "@astrojs/rss";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/site.config";
-import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getEffectiveDate } from "@/utils/blog";
 import { cleanPostTitle } from "@/utils/title";
 
 export const GET: APIRoute = async ({ site }) => {
@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ site }) => {
     items: posts.map((post) => ({
       title: cleanPostTitle(post.data.title),
       description: post.data.description,
-      pubDate: post.data.pubDate,
+      pubDate: getEffectiveDate(post),
       link: buildPostUrl(post)
     })),
     customData: `<language>zh-TW</language>`

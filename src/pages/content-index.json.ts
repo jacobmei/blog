@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { buildPostUrl, getBlogPosts } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getEffectiveDate } from "@/utils/blog";
 import { classifyPostTags } from "@/utils/blogTags";
 import { cleanPostTitle } from "@/utils/title";
 
@@ -30,7 +30,7 @@ export const GET: APIRoute = async () => {
       title: cleanPostTitle(post.data.title),
       description: post.data.description,
       url: buildPostUrl(post),
-      pubDate: post.data.pubDate.toISOString(),
+      pubDate: getEffectiveDate(post).toISOString(),
       updatedDate: post.data.updatedDate?.toISOString(),
       category: post.data.category ?? null,
       topics: classified.topics,

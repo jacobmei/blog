@@ -3,9 +3,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import { getBlogPosts } from "@/utils/blog";
 import { withBase } from "@/utils/paths";
+import mottos from "@/data/motto.json";
 
 const posts = await getBlogPosts();
-const latestPosts = posts.slice(0, 12);
+const latestPosts = posts.slice(0, 8);
+const randomMotto = mottos[Math.floor(Math.random() * mottos.length)];
 ---
 
 <BaseLayout description="此身譬如朝露易逝，終究難留；幾番波折方知，人生似夢一場。">
@@ -13,10 +15,9 @@ const latestPosts = posts.slice(0, 12);
     <section class="hero">
       <figure style="margin:0;">
         <blockquote class="hero-text" style="margin:0;">
-          <p style="margin:0 0 .5rem;">喜樂的心乃是良藥，</p>
-          <p style="margin:0;">憂傷的靈使骨枯乾。</p>
+          <p style="margin:0;" id="motto-text">{randomMotto.text}</p>
         </blockquote>
-        <figcaption class="hero-kicker" style="margin-top:.75rem;">箴言 17:22</figcaption>
+        <figcaption class="hero-kicker" id="motto-source">{randomMotto.source}</figcaption>
       </figure>
     </section>
   </section>
@@ -112,4 +113,17 @@ const latestPosts = posts.slice(0, 12);
       localStorage.setItem(dismissKey, "1");
     }
   });
+</script>
+
+<script is:inline define:vars={{ mottos }}>
+  (function () {
+    const textEl = document.getElementById("motto-text");
+    const sourceEl = document.getElementById("motto-source");
+    if (textEl && sourceEl && Array.isArray(mottos) && mottos.length > 0) {
+      const idx = Math.floor(Math.random() * mottos.length);
+      const random = mottos[idx];
+      textEl.textContent = random.text;
+      sourceEl.textContent = random.source;
+    }
+  })();
 </script>

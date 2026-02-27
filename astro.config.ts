@@ -1,6 +1,10 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+// @ts-ignore
+import remarkFlexibleMarkers from "remark-flexible-markers";
+// @ts-ignore
+import rehypeRaw from "rehype-raw";
 
 const site = process.env.SITE_URL ?? "https://username.github.io";
 const rawBase = process.env.BASE_PATH ?? "/";
@@ -27,6 +31,8 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   markdown: {
+    remarkPlugins: [remarkFlexibleMarkers],
+    rehypePlugins: [rehypeRaw],
     shikiConfig: {
       theme: "github-dark",
       wrap: true

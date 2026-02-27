@@ -67,6 +67,12 @@ const siteStructuredData = {
       logo: {
         "@type": "ImageObject",
         url: logoURL
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        email: AUTHOR_PROFILE.email,
+        url: new URL(withBase(AUTHOR_PROFILE.contactUrl), siteURL).toString()
       }
     },
     {

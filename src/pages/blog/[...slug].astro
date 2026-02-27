@@ -159,6 +159,22 @@ const titleSimilarity = (a: string, b: string): number => {
   return overlap / union;
 };
 
+const faqStructuredData =
+  post.data.faq && post.data.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: post.data.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer
+          }
+        }))
+      }
+    : null;
+
 const baseTitle = normalizeTitle(postTitle);
 const baseDate = getEffectiveDate(post).getTime();
 
@@ -265,15 +281,20 @@ const articleStructuredData: any = {
   ]
 };
 
-if (faqItems.length > 0) {
+const faqPayload = [
+  ...(post.data.faq ?? []),
+  ...(faqItems ?? [])
+];
+
+if (faqPayload.length > 0) {
   articleStructuredData["@graph"].push({
     "@type": "FAQPage",
-    "mainEntity": faqItems.map(item => ({
+    "mainEntity": faqPayload.map(item => ({
       "@type": "Question",
       "name": item.question,
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": item.answer
+        "text": item.answer.replace(/<[^>]+>/g, "").trim()
       }
     }))
   });

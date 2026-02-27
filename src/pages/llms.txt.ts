@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { buildPostUrl, getBlogPosts } from "@/utils/blog";
 import { withBase } from "@/utils/paths";
+import { AUTHOR_PROFILE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/site.config";
 import { cleanPostTitle } from "@/utils/title";
 
 export const GET: APIRoute = async ({ site, url }) => {
@@ -8,19 +9,23 @@ export const GET: APIRoute = async ({ site, url }) => {
   const base = site ? site.toString().replace(/\/$/, "") : `${url.origin}${withBase("")}`.replace(/\/$/, "");
 
   const lines: string[] = [
-    "# 小梅子 / Jacob Mei Labs",
+    `# ${SITE_TITLE}`,
     "",
-    "Site: jacobmei.com",
-    "Description: 站在單向鏡後方觀看世界應對加速科技的方式。",
+    `> ${SITE_DESCRIPTION}`,
+    "",
+    "## Metadata",
+    `- **Site**: ${SITE_URL}`,
+    `- **Author**: ${AUTHOR_PROFILE.name}`,
+    `- **Email**: ${AUTHOR_PROFILE.email}`,
+    `- **License**: CC BY-NC 4.0`,
+    `- **Language**: zh-TW`,
     "",
     "## Key URLs",
-    `${base}${withBase("")}`,
-    `${base}${withBase("blog/")}`,
-    `${base}${withBase("tags/")}`,
-    `${base}${withBase("search/")}`,
-    `${base}${withBase("rss.xml")}`,
-    `${base}${withBase("sitemap-index.xml")}`,
-    `${base}${withBase("content-index.json")}`,
+    `- [Home](${base}${withBase("")})`,
+    `- [Blog Archives](${base}${withBase("blog/")})`,
+    `- [Categories & Tags](${base}${withBase("tags/")})`,
+    `- [Search](${base}${withBase("search/")})`,
+    `- [RSS Feed](${base}${withBase("rss.xml")})`,
     "",
     "## Recent Posts"
   ];

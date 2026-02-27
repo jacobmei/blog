@@ -1,5 +1,5 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from "@/site.config";
+import { AUTHOR_PROFILE, SITE_DESCRIPTION, SITE_TITLE } from "@/site.config";
 import { withBase } from "@/utils/paths";
 
 const year = new Date().getFullYear();
@@ -16,6 +16,7 @@ const links = [
     <div class="footer-meta-row">
       <p class="footer-links">
         {links.map((item) => <a href={item.href}>{item.label}</a>)}
+        <a href={`mailto:${AUTHOR_PROFILE.email}`}>聯繫我</a>
       </p>
       <p class="footer-license">
         本站文章皆採

@@ -10,6 +10,8 @@ export const AUTHOR_PROFILE = {
     description: "站在單向鏡後方觀看世界應對加速科技的方式。專注於電子支付、數位金融、Web3 簽名與個人知識管理。",
     jobTitle: "Tech & Fintech Executive",
     url: SITE_URL,
+    email: "sitedirector@gmail.com",
+    contactUrl: "/contact/", // 預留聯繫頁面路徑
     image: "images/author-avatar.png", // 預留頭像路徑
     sameAs: [
         "https://github.com/jacobmei",

@@ -276,7 +276,10 @@ const articleStructuredData: any = {
         "@id": `${SITE_URL}/#organization`
       },
       mainEntityOfPage: pageURL,
-      image: coverURL ? [coverURL] : undefined
+      image: coverURL ? [coverURL] : undefined,
+      keywords: semanticTagsCurrent.join(", "),
+      wordCount: (post.body ?? "").length,
+      articleSection: post.data.category ?? "Blog"
     }
   ]
 };

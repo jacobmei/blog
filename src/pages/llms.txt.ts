@@ -30,8 +30,14 @@ export const GET: APIRoute = async ({ site, url }) => {
     "## Recent Posts"
   ];
 
-  for (const post of posts.slice(0, 80)) {
-    lines.push(`- ${cleanPostTitle(post.data.title)} | ${base}${buildPostUrl(post)}`);
+  for (const post of posts.slice(0, 50)) {
+    lines.push(`- [${cleanPostTitle(post.data.title)}](${base}${buildPostUrl(post)}): ${post.data.description}`);
+  }
+
+  lines.push("", "## Explore by Topics");
+  const topics = Array.from(new Set(posts.flatMap(p => p.data.tags))).slice(0, 10);
+  for (const t of topics) {
+    lines.push(`- [${t}](${base}${withBase(`tags/?topic=${encodeURIComponent(t)}`)})`);
   }
 
   return new Response(lines.join("\n"), {

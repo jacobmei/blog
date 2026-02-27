@@ -1,0 +1,34 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { AUTHOR_PROFILE } from "@/site.config";
+---
+
+<BaseLayout title="聯絡我 / Contact" description="聯繫梅驊 (Jacob Mei) 的方式。">
+  <article class="article-layout">
+    <div class="article-main">
+      <h1 class="section-title">聯絡我</h1>
+      
+      <div class="article-content">
+        <p>如果您有任何關於數位金融、電子支付或 Web3 的討論與合作，歡迎透過以下方式聯繫：</p>
+        
+        <ul style="list-style: none; padding: 0; margin-top: 2rem;">
+          <li style="margin-bottom: 1.5rem;">
+            <strong>📧 電子郵件：</strong><br />
+            <a href={`mailto:${AUTHOR_PROFILE.email}`} style="font-size: 1.2rem; color: var(--color-primary);">{AUTHOR_PROFILE.email}</a>
+          </li>
+          
+          <li style="margin-bottom: 1.5rem;">
+            <strong>🔗 社交平台：</strong><br />
+            {AUTHOR_PROFILE.sameAs.map((url) => (
+              <a href={url} target="_blank" rel="noopener noreferrer" style="display: block; margin-top: 0.5rem; color: var(--color-text-dim);">{url}</a>
+            ))}
+          </li>
+        </ul>
+        
+        <p style="margin-top: 3rem; color: var(--color-text-dim); font-size: 0.9rem;">
+          * 為了保證溝通效率，請在郵件中註明您的身份與來意。
+        </p>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

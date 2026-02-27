@@ -25,10 +25,10 @@ export const tagCatalog: TagCatalogItem[] = [
     description: "DAO、審議工具、社群決策、制度設計與公共治理。"
   },
   {
-    key: "公共網路",
-    title: "公共網路",
-    icon: "🌐",
-    description: "公共議題、公民網路、政策脈絡、社群實作與基礎設施。"
+    key: "網路與社群",
+    title: "網路與社群",
+    icon: "🕸️",
+    description: "專題觀察、網路國家、數位社群實作、去中心化架構與基礎設施。"
   },
   {
     key: "AI與科技",

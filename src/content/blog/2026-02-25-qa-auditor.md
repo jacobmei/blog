@@ -8,6 +8,7 @@ tags:
   - Antigravity
   - Auditor
   - governance
+  - 科技金融
 author: jacobmei
 featured: false
 cover: ./assets/2026-02-24-qa_auditor_01.jpg

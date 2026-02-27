@@ -13,10 +13,10 @@ export const tagCatalog: TagCatalogItem[] = [
     description: "鏈上資產、收藏、鑄造、交易與錢包生態。"
   },
   {
-    key: "數位藝術",
-    title: "數位藝術",
-    icon: "🎨",
-    description: "生成藝術、展覽策展、藝術評論與收藏脈絡。"
+    key: "運動健康",
+    title: "運動健康",
+    icon: "🏃‍♂️",
+    description: "棒球、各類運動紀錄、身心健康與生活習慣的平衡觀察。"
   },
   {
     key: "治理與民主",

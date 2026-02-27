@@ -13,6 +13,7 @@ author: jacobmei
 featured: false
 cover: ./assets/2026-01-19-01.jpg
 shortCode: te7n5t
+category: 旅遊
 ---
 
 # 華欣・曼谷五日遊｜海風、夜市與城市慢調

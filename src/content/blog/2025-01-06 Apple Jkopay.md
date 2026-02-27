@@ -11,6 +11,7 @@ tags:
 author: jacobmei
 featured: false
 cover: ./assets/2025-01-06.jpg
+category: 經營與管理
 ---
 ## 支援Apple全服務，綁定街口享回饋
 

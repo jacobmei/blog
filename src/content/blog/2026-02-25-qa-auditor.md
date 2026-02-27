@@ -12,6 +12,7 @@ tags:
 author: jacobmei
 featured: false
 cover: ./assets/2026-02-24-qa_auditor_01.jpg
+category: 網路與社群
 ---
 之前寫了一篇 [從「隔日 Bug」到安穩入睡：如何用一套 QA 體系馴服 AI 開發](https://jacobmei.blogspot.com/2026/02/bug-qa-ai.html)，提到可以在 AI Agent 或是小龍蝦環境中加上 QA Auditor Skill，這是一個特殊扮演角色。
 

@@ -9,6 +9,7 @@ tags:
 author: jacobmei
 featured: false
 cover: ./assets/2025-08-09.jpg
+category: 生活隨筆
 ---
 昨天晚上教會舉辦了一場很特別的父親節活動，父女精心時刻，也是我和女兒第一次一起跳一支舞～
 

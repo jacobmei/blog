@@ -12,6 +12,7 @@ import { getWeb3PublicConfig } from "@/utils/web3Config";
 import { resolveEnsProfile } from "@/utils/ens";
 import { SITE_URL } from "@/site.config";
 import Web3TipJar from "@/components/Web3TipJar.astro";
+import { getMilestoneByDate } from "@/data/authorBio";
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts({
@@ -348,6 +349,7 @@ if (faqPayload.length > 0) {
             {post.data.draft && !import.meta.env.PROD && " · 草稿"}
           </p>
         </div>
+
         {post.data.contentHash && <details
           class:list={{
             "signature-disclosure": true,
@@ -421,7 +423,13 @@ if (faqPayload.length > 0) {
             </div>
           </div>
         </details>}
-        {post.data.author && <p class="article-author">作者：{post.data.author}</p>}
+        {post.data.author && (
+          <p class="article-author">
+            作者：{post.data.author}
+            {classifiedCurrent.topics.length > 0 && ` ｜ 主題：${classifiedCurrent.topics.join('・')}`}
+            {post.data.category ? ` · 分類：${post.data.category}` : (classifiedCurrent.topics[0] ? ` · 分類：${classifiedCurrent.topics[0]}` : "")}
+          </p>
+        )}
         {post.data.lead && <p class="article-lead">{post.data.lead}</p>}
 
         {classifiedCurrent.topics.length > 0 && (
@@ -456,6 +464,19 @@ if (faqPayload.length > 0) {
       <div class="article-prose">
         <Content />
       </div>
+
+      {(() => {
+        const milestone = getMilestoneByDate(getEffectiveDate(post));
+        const authorRaw = post.data.author || "Jacobmei";
+        const authorName = authorRaw.toLowerCase() === "jacobmei" ? "Jacobmei" : authorRaw;
+        return milestone ? (
+          <div aria-label="職涯時空印記" style="margin-top: 3.5rem; margin-bottom: 2rem; padding-top: 1.2rem; border-top: 1px dashed #e0c4d0; opacity: 0.65;">
+            <span style="font-size: 0.8rem; color: #888888;">
+              作者 {authorName}：{milestone.description}
+            </span>
+          </div>
+        ) : null;
+      })()}
 
       <nav class="article-pagination" aria-label="文章導覽" data-pagefind-ignore>
         <div>

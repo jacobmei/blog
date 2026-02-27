@@ -41,5 +41,11 @@ export const tagCatalog: TagCatalogItem[] = [
     title: "信仰",
     icon: "✝️",
     description: "基督信仰、靈修默想、教會生活與信仰規跡的生命觀察。"
+  },
+  {
+    key: "隨筆",
+    title: "隨筆",
+    icon: "📝",
+    description: "生活雜感、紀錄與未分類的隨手筆記。"
   }
 ];

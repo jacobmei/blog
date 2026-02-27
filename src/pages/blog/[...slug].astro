@@ -433,7 +433,7 @@ if (faqItems.length > 0) {
         <Content />
       </div>
 
-      <nav class="article-pagination" aria-label="文章導覽">
+      <nav class="article-pagination" aria-label="文章導覽" data-pagefind-ignore>
         <div>
           <small>較新文章</small>
           {newerPost ? (
@@ -453,7 +453,7 @@ if (faqItems.length > 0) {
       </nav>
 
       {relatedPosts.length > 0 && (
-        <section class="related-posts" aria-label="相關文章">
+        <section class="related-posts" aria-label="相關文章" data-pagefind-ignore>
           <h2>相關文章</h2>
           <ul class="post-list-compact">
             {relatedPosts.map((item) => (
@@ -471,7 +471,7 @@ if (faqItems.length > 0) {
       </p>
     </div>
 
-    <aside class="article-sidebar" aria-label="文章目錄與分享">
+    <aside class="article-sidebar" aria-label="文章目錄與分享" data-pagefind-ignore>
       <div class="toc-card">
         {tocHeadings.length > 0 && (
           <>

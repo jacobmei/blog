@@ -307,7 +307,7 @@ export function classifyPostTags(input: PostTagInput): ClassifiedTags {
   }
 
   if (topics.length === 0) {
-    topics.push("公共網路");
+    topics.push("隨筆");
   }
 
   const uniqueTopics = uniqueStrings(topics).filter((topic) => TOPIC_KEYS.has(topic));

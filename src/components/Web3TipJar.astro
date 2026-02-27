@@ -26,7 +26,7 @@ const defaultQrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(default
 ---
 
 <details class="tip-jar-disclosure toc-share-card">
-  <summary class="toc-share-btn tip-jar-summary">抖內抖泥</summary>
+  <summary class="toc-share-btn tip-jar-summary">贊助小梅子</summary>
   <section class="tip-jar" aria-label="打賞">
     <p class="tip-jar-line tip-ens-row">
       <span class="tip-ens-text">
@@ -63,16 +63,16 @@ const defaultQrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(default
         data-tip-chain-id={String(chainId)}
         data-tip-ntd={String(tipAmountNtd)}
         data-tip-default-eth={fallbackTipAmountEthText}
-        data-tip-default-label={`用以太幣抖內（約 NT$${tipAmountNtd}）`}
-        data-tip-fallback-label={`改用錢包連結抖內（約 NT$${tipAmountNtd}）`}
+        data-tip-default-label={`用以太幣贊助（約 NT$${tipAmountNtd}）`}
+        data-tip-fallback-label={`改用錢包連結贊助（約 NT$${tipAmountNtd}）`}
       >
-        用以太幣抖內（約 NT$100）
+        用以太幣贊助（約 NT$100）
       </button>
       <p class="tip-pay-feedback" data-tip-pay-feedback aria-live="polite" hidden></p>
     </div>
 
     <div class="tip-fallback" data-tip-fallback hidden>
-      <p class="tip-qr-caption">掃碼抖內</p>
+      <p class="tip-qr-caption">掃碼贊助</p>
       <a class="tip-qr-link" data-tip-fallback-link href={defaultPaymentURI} aria-label="打開錢包付款請求">
         <img
           data-tip-fallback-qr
@@ -195,8 +195,8 @@ const defaultQrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(default
     if (!(payButton instanceof HTMLButtonElement)) return;
 
     const mode = payButton.dataset.mode || "wallet";
-    const defaultLabel = payButton.dataset.defaultLabel || "用以太幣抖內（約 NT$100）";
-    const fallbackLabel = payButton.dataset.fallbackLabel || "改用錢包連結抖內（約 NT$100）";
+    const defaultLabel = payButton.dataset.defaultLabel || "用以太幣贊助（約 NT$100）";
+    const fallbackLabel = payButton.dataset.fallbackLabel || "改用錢包連結贊助（約 NT$100）";
     setFeedback("");
 
     if (mode === "fallback") {

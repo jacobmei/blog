@@ -146,7 +146,7 @@ const siteStructuredData = {
         <span id="reading-progress-bar"></span>
       </div>
     )}
-    <Header />
+    <Header data-pagefind-ignore />
     <main id="main-content" class="container page-shell">
       <slot />
     </main>
@@ -165,7 +165,7 @@ const siteStructuredData = {
         已進入沉浸閱讀，可點選下方按鈕結束
       </p>
     )}
-    <Footer />
+    <Footer data-pagefind-ignore />
     <script is:inline define:vars={{ isArticle, searchPath: withBase("search/") }}>
       window.mbTrack = (name, props = {}) => {
         if (typeof window.plausible !== "function") return;

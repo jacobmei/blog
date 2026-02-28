@@ -180,7 +180,7 @@ category: 生活隨筆
 
 **Q：編年式讀經電子書還可以免費下載嗎**
 
-**A： 目前已經做了兩本編年式讀經，都可以在 Google Play 平台免費閱讀**
+**A： 目前已經做了三本編年式讀經，都可以在 Google Play 平台免費閱讀**
 
 - [輕鬆讀完一遍聖經: 編年式讀經 靈修 part1](https://play.google.com/store/books/details/Jacob_Mei_%E8%BC%95%E9%AC%86%E8%AE%80%E5%AE%8C%E4%B8%80%E9%81%8D%E8%81%96%E7%B6%93?id=BbmtEQAAQBAJ)
 - [輕鬆讀完一遍聖經: 編年式讀經 靈修 part2](https://play.google.com/store/books/details/jacob_mei_%E8%BC%95%E9%AC%86%E8%AE%80%E5%AE%8C%E4%B8%80%E9%81%8D%E8%81%96%E7%B6%93?id=lTK4EQAAQBAJ)
@@ -189,6 +189,7 @@ category: 生活隨筆
 
 - [輕鬆讀完一遍聖經: 編年式讀經 靈修 part1](https://drive.google.com/file/d/1zhrCSrp6YGLAJ5-EKvCbhiY1oWCWqOy4/view?usp=drive_link)
 - [輕鬆讀完一遍聖經: 編年式讀經 靈修 part2](https://drive.google.com/file/d/1H6-0p9PQMS160Ensl9e2E6EXMGukGMYY/view?usp=drive_link)
+- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part3](https://drive.google.com/file/d/1mm3SGjQnFKW-2C-oy-M8o2rBtqiuljCI/view?usp=drive_link)
 
 **Q：編年式讀經聽說也有 Podcast ?**
 

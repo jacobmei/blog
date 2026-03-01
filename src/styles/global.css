@@ -3162,3 +3162,32 @@
   margin-right: 0.75rem;
   font-size: 1.2rem;
 }
+
+/* Footer Contact Address - Muted for AI/SEO focus */
+.footer-contact {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed color-mix(in oklab, var(--color-muted) 15%, transparent);
+  font-style: normal;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--color-muted);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.footer-contact:hover {
+  opacity: 0.9;
+}
+
+.footer-contact strong {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.footer-contact a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in oklab, var(--color-muted) 30%, transparent);
+}

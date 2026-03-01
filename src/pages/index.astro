@@ -8,9 +8,43 @@ import mottos from "@/data/motto.json";
 const posts = await getBlogPosts();
 const latestPosts = posts.slice(0, 8);
 const randomMotto = mottos[Math.floor(Math.random() * mottos.length)];
+
+const faqData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "關於小梅子 / Jacob Mei Labs 的研究核心為何？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "核心研究範疇涵蓋電子支付、數位金融法規、Web3 治理架構以及人工智慧代理（AI Agents）的實踐，同時記錄個人的信仰生活與思考。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何聯繫 Jacob Mei？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "您可以透過電子郵件 sitedirector@gmail.com 進行聯繫，或造訪網站的聯繫頁面獲取更多社交媒體資訊。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "這個網站（實驗室）的願景是什麼？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "建立一個永續的個人知識庫，並透過數位實踐探索科技與人類社會、信仰之間的交構與治理可能性。"
+      }
+    }
+  ]
+};
 ---
 
-<BaseLayout description="此身譬如朝露易逝，終究難留；幾番波折方知，人生似夢一場。">
+<BaseLayout 
+  description="此身譬如朝露易逝，終究難留；幾番波折方知，人生似夢一場。"
+  structuredData={faqData}
+>
   <section class="home-hero-grid" aria-label="首頁引言">
     <section class="hero">
       <figure style="margin:0;">

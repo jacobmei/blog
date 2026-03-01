@@ -1,15 +1,15 @@
 ---
-title: 生活旅遊雜事
-description: 喜樂的心乃是良藥
-pubDate:
+title: "{{title}}"
+description: 請在此輸入 1-2 句話的文章摘要，這會顯示在列表與社交媒體預覽中。
+pubDate: "{{date:YYYY-MM-DD}} {{time:HH:mm}}"
+author: jacobmei
+category: 生活隨筆
 tags:
   - 旅遊
   - 美食
-author: jacobmei
+draft: false
 featured: false
-cover: ./assets/2026-01-19-01.jpg
 ---
-
 # 華欣・曼谷五日遊｜海風、夜市與城市慢調
 
 ## 1/18（日）台北 → 曼谷 → 華欣
@@ -27,7 +27,10 @@ cover: ./assets/2026-01-19-01.jpg
 
 
 ---
-## 泰國旅遊 QA
+## 泰國旅遊 Q&A
+
+**Q: 如果遇到 AEO 檢測問題該怎麼辦？**
+**A:** 我們已經在系統底層自動轉換了 FAQPage JSON-LD，只要像這樣寫 **Q:** 與 **A:** 的格式，系統就會自動幫您生成 AI 讀得懂的結構化問答資料。
 
 **Q：泰國哪裡換匯最划算？**
 **A：** 泰國路邊有很多合法的換匯店，我覺得攜帶美鈔去泰國是比較方便的，一方面面額比台幣大，就不用帶這麼多紙鈔，而且美金的匯率稍微好一點。

@@ -14,7 +14,7 @@ Allow: /
 
 Sitemap: ${sitemapURL}
 # Machine-readable entry points
-AI-Index: ${llmsURL}
+LLMS-txt: ${llmsURL}
 Content-Index: ${contentIndexURL}
 `;
 

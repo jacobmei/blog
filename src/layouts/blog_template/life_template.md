@@ -1,7 +1,7 @@
 ---
 title: "{{title}}"
 description: 請在此輸入 1-2 句話的文章摘要，這會顯示在列表與社交媒體預覽中。
-pubDate: "{{date:YYYY-MM-DD}} {{time:HH:mm}}"
+pubDate: "{{date:YYYY-MM-DD}} {{time:HH:mm}}+08:00"
 author: jacobmei
 category: 生活隨筆
 tags:

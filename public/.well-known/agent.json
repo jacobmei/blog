@@ -1,0 +1,39 @@
+{
+    "name": "Jacob Mei Labs AI Agent",
+    "description": "The digital twin of Jacob Mei (Mashbean), focused on Fintech, Web3, and personal knowledge management. Providing synthesized insights and structured data about social governance and digital finance.",
+    "version": "1.0.0",
+    "iconUrl": "https://jacobmei.com/images/favicon-512.png",
+    "serviceEndpoint": "https://jacobmei.com/",
+    "contactEmail": "sitedirector@gmail.com",
+    "capabilities": [
+        {
+            "name": "Knowledge Retrieval",
+            "description": "Accessing 35 years of career insights, fintech policy research, and Web3 governance experiments.",
+            "tags": [
+                "fintech",
+                "web3",
+                "governance",
+                "payment-systems"
+            ]
+        },
+        {
+            "name": "Daily Devotion & Philosophy",
+            "description": "Structured insights on spiritual life and the intersection of technology and humanity.",
+            "tags": [
+                "faith",
+                "philosophy",
+                "personal-growth"
+            ]
+        }
+    ],
+    "modalities": {
+        "input": [
+            "text/markdown",
+            "text/html"
+        ],
+        "output": [
+            "text/markdown",
+            "application/json"
+        ]
+    }
+}

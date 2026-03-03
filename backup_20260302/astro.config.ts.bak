@@ -21,9 +21,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => {
-        const url = new URL(page);
-        const pathname = url.pathname;
-        if (pathname.includes("/research/")) return false;
+        const pathname = new URL(page).pathname;
         if (!pathname.startsWith("/blog/")) return true;
         return /^\/blog\/\d{4}\/\d{4}-[a-z0-9]{6}\/$/i.test(pathname);
       }

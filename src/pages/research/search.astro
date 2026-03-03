@@ -1,0 +1,244 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/utils/paths";
+
+const pagefindScriptUrl = withBase("pagefind/pagefind-ui.js");
+const pagefindStyleUrl = withBase("pagefind/pagefind-ui.css");
+const fallbackIndexUrl = withBase("research/search-index.json");
+---
+
+<BaseLayout title="研究搜尋" description="搜尋研究室內的所有文稿與資料。" noindex={true}>
+  <h1 class="section-title">研究搜尋</h1>
+  <p class="search-intro">專屬於研究文稿的私密搜尋，快速定位研究脈絡。</p>
+
+  <section class="search-panel" aria-label="研究室搜尋">
+    <div id="search-state-stack" class="search-state-stack" aria-live="polite">
+      <p class="search-state" data-state="loading" hidden>研究索引載入中...</p>
+      <p class="search-state" data-state="idle" hidden>請輸入關鍵字開始研究搜尋。</p>
+      <p class="search-state" data-state="empty" hidden>找不到相關研究文稿。</p>
+      <p class="search-state search-state-error" data-state="error" hidden>搜尋系統暫時不可用。</p>
+    </div>
+    <div id="pagefind-search"></div>
+
+    <!-- Fallback Search for Dev Mode / Pagefind Failure -->
+    <div id="search-fallback" class="search-fallback" hidden>
+      <form id="research-search-form" class="search-form" role="search">
+        <label for="research-search-input">研究關鍵字</label>
+        <div class="search-form-row">
+          <input
+            id="research-search-input"
+            type="search"
+            inputmode="search"
+            autocomplete="off"
+            placeholder="輸入關鍵字..."
+          />
+          <button type="submit" class="nav-link">搜尋</button>
+        </div>
+      </form>
+      <p id="research-search-count" class="search-result-count"></p>
+      <ul id="research-search-results" class="search-results"></ul>
+    </div>
+  </section>
+  
+  <p class="search-graph-cta">
+    <a class="search-graph-cta-link" href={withBase("research/tags-graph/")}>進入研究文稿關聯圖</a>
+  </p>
+</BaseLayout>
+
+<script is:inline define:vars={{ pagefindScriptUrl, pagefindStyleUrl, fallbackIndexUrl }}>
+  const query = new URLSearchParams(window.location.search).get("q") ?? "";
+  const fallbackRoot = document.querySelector("#search-fallback");
+  const fallbackForm = document.querySelector("#research-search-form");
+  const fallbackInput = document.querySelector("#research-search-input");
+  const fallbackResults = document.querySelector("#research-search-results");
+  const fallbackCount = document.querySelector("#research-search-count");
+  const stateNodes = Array.from(document.querySelectorAll(".search-state"));
+
+  const setSearchState = (nextState) => {
+    stateNodes.forEach((node) => {
+      if (!(node instanceof HTMLElement)) return;
+      node.hidden = node.dataset.state !== nextState;
+    });
+  };
+
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      const tag = document.createElement("script");
+      tag.src = src;
+      tag.async = true;
+      tag.onload = () => resolve(true);
+      tag.onerror = () => reject(new Error(`Unable to load ${src}`));
+      document.head.appendChild(tag);
+    });
+
+  const loadStylesheet = (href) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  };
+
+  const normalize = (value) => value.toLocaleLowerCase("zh-TW").normalize("NFKC").trim();
+  const tokenize = (value) => normalize(value).split(/\s+/).filter(Boolean);
+  const escapeHTML = (value) =>
+    value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const highlight = (value, tokens) => {
+    const safe = escapeHTML(value ?? "");
+    if (!tokens.length) return safe;
+    const pattern = tokens
+      .filter((token) => token.length >= 1) // 支援單字高亮
+      .map((token) => escapeRegExp(token))
+      .join("|");
+    if (!pattern) return safe;
+    return safe.replace(new RegExp(`(${pattern})`, "gi"), "<mark>$1</mark>");
+  };
+
+  const scoreDoc = (doc, tokens) => {
+    const titleText = normalize(doc.title ?? "");
+    const descText = normalize(doc.description ?? "");
+    const bodyText = normalize(doc.content ?? "");
+    
+    // 嚴格多詞匹配模式 (AND Filter)
+    const matchesAll = tokens.every(token => 
+      titleText.includes(token) || descText.includes(token) || bodyText.includes(token)
+    );
+    if (!matchesAll) return 0;
+
+    let score = 0;
+    for (const token of tokens) {
+      if (titleText.includes(token)) score += 6;
+      if (descText.includes(token)) score += 2;
+      if (bodyText.includes(token)) score += 1;
+    }
+    return score;
+  };
+
+  const detectHitZones = (doc, tokens) => {
+    const zones = [];
+    const titleText = normalize(doc.title ?? "");
+    const descText = normalize(doc.description ?? "");
+    const bodyText = normalize(doc.content ?? "");
+    if (tokens.some((token) => titleText.includes(token))) zones.push("標題");
+    if (tokens.some((token) => descText.includes(token))) zones.push("摘要");
+    if (tokens.some((token) => bodyText.includes(token))) zones.push("內文");
+    return zones;
+  };
+
+  const runFallbackSearch = async () => {
+    fallbackRoot.hidden = false;
+    setSearchState("loading");
+    try {
+      const res = await fetch(fallbackIndexUrl);
+      const docs = await res.json();
+      
+      const search = (q) => {
+        const tokens = tokenize(q);
+        if (tokens.length === 0) {
+          setSearchState("idle");
+          fallbackResults.innerHTML = "";
+          fallbackCount.textContent = "";
+          return;
+        }
+
+        const ranked = docs
+          .map((doc) => ({ doc, score: scoreDoc(doc, tokens) }))
+          .filter((item) => item.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .map((item) => item.doc);
+
+        if (ranked.length === 0) {
+          setSearchState("empty");
+        } else {
+          setSearchState("ready");
+          fallbackCount.textContent = `${ranked.length} 筆研究結果`;
+          fallbackResults.innerHTML = ranked.map(item => {
+            const hitZones = detectHitZones(item, tokens);
+            return `
+              <li class="search-result-item">
+                <div class="search-result-top">
+                  <a class="search-result-link" href="${item.url}">${highlight(item.title, tokens)}</a>
+                </div>
+                ${hitZones.length > 0 ? `<p class="search-hit-zone">命中：${hitZones.map(z => `<span>${z}</span>`).join("")}</p>` : ""}
+                <p class="search-result-snippet">${highlight(item.description || "", tokens)}</p>
+              </li>
+            `;
+          }).join("");
+        }
+      };
+
+      fallbackForm.addEventListener("submit", e => { e.preventDefault(); search(fallbackInput.value); });
+      fallbackInput.addEventListener("input", () => search(fallbackInput.value));
+      
+      if (query) {
+        fallbackInput.value = query;
+        search(query);
+      } else {
+        setSearchState("idle");
+      }
+    } catch (e) {
+      setSearchState("error");
+      console.error(e);
+    }
+  };
+
+  (async () => {
+    setSearchState("loading");
+    try {
+      loadStylesheet(pagefindStyleUrl);
+      await loadScript(pagefindScriptUrl);
+      
+      if (!window.PagefindUI) throw new Error("UI Unavailable");
+
+      const ui = new window.PagefindUI({
+        element: "#pagefind-search",
+        showSubResults: true,
+        showImages: false,
+        resetStyles: false,
+        filter: { type: "research" },
+        translations: { placeholder: "搜尋研究文稿..." },
+      });
+
+      if (query) await ui.triggerSearch(query);
+      setSearchState("ready");
+    } catch (error) {
+      console.warn("[research-search] switching to fallback:", error);
+      await runFallbackSearch();
+    }
+  })();
+</script>
+
+<style>
+  .search-panel {
+    background: #f0f4f8; /* 研究室專用偏藍背景 */
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid #d0d7de;
+    min-height: 200px;
+  }
+  .search-intro { color: #57606a; }
+  .search-state-stack { margin-bottom: 1rem; }
+  .search-state { font-size: 0.9rem; color: #57606a; }
+  
+  /* 補齊搜尋結果樣式 */
+  .search-results { list-style: none; padding: 0; margin: 1rem 0; }
+  .search-result-item { padding: 1rem; border-bottom: 1px solid #d0d7de; }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-link { font-weight: bold; color: #0969da; text-decoration: none; font-size: 1.1rem; }
+  .search-result-link:hover { text-decoration: underline; }
+  .search-result-snippet { font-size: 0.85rem; color: #57606a; margin-top: 0.25rem; }
+  .search-result-count { font-size: 0.8rem; color: #57606a; margin-bottom: 0.5rem; }
+
+  .search-graph-cta { text-align: center; margin-top: 2rem; }
+  .search-graph-cta-link { color: #0969da; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+  
+  :global(.pagefind-ui__search-input) { background: #fff !important; }
+  :global(.pagefind-ui__result-link) { color: #0969da !important; }
+</style>

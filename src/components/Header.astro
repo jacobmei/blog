@@ -4,12 +4,23 @@ import { withBase } from "@/utils/paths";
 import Web3IdentityCard from "@/components/Web3IdentityCard.astro";
 
 const pathname = Astro.url.pathname;
-const links = [
+const isResearch = pathname.startsWith(withBase("research/"));
+
+const mainLinks = [
   { href: withBase("about/"), label: "關於" },
   { href: withBase("blog/"), label: "文章" },
   { href: withBase("tags/"), label: "標籤" },
   { href: withBase("search/"), label: "搜尋" }
 ];
+
+const researchLinks = [
+  { href: withBase(""), label: "主站" },
+  { href: withBase("research/"), label: "研究目錄" },
+  { href: withBase("research/tags-graph/"), label: "研究圖譜" },
+  { href: withBase("research/search/"), label: "研究搜尋" },
+];
+
+const links = isResearch ? researchLinks : mainLinks;
 const socialLinks = [
   {
     href: "https://www.facebook.com/jacob.mei",

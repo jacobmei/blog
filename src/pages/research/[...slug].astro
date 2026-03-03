@@ -1,0 +1,121 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getResearchPosts, getEffectiveDate } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { withBase } from "@/utils/paths";
+import { cleanPostTitle } from "@/utils/title";
+
+export async function getStaticPaths() {
+  const posts = await getResearchPosts({
+    includeDrafts: !import.meta.env.PROD,
+    includeFuture: !import.meta.env.PROD
+  });
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const postTitle = cleanPostTitle(post.data.title);
+
+const tocHeadings = headings.filter((item) => item.depth === 2 || item.depth === 3);
+
+const readingMinutes = (() => {
+  const plain = (post.body ?? "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1 ");
+  const latinWords = (plain.match(/[A-Za-z0-9_]+/g) ?? []).length;
+  const cjkChars = (plain.match(/[\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u30FF]/g) ?? []).length;
+  const mixedWordCount = latinWords + cjkChars / 2;
+  return Math.max(1, Math.round(mixedWordCount / 220));
+})();
+---
+
+<BaseLayout
+  title={postTitle}
+  description={post.data.description}
+  noindex={true}
+>
+  <article class="article-layout" data-pagefind-body data-pagefind-filter="type:research">
+    <div class="article-main">
+      <header class="article-header">
+        <span class="research-badge">研究專用 (隱藏區塊)</span>
+        <h1 class="article-title">{postTitle}</h1>
+        <div class="article-meta-row">
+          <p class="article-meta">
+            研究日期：
+            <time datetime={getEffectiveDate(post).toISOString()}>{formatDate(getEffectiveDate(post))}</time>
+            {" · 約 "}
+            {readingMinutes}
+            {" 分鐘閱讀"}
+            {post.data.draft && " · 草稿"}
+          </p>
+        </div>
+
+        {post.data.tags.length > 0 && (
+          <ul class="tag-list" aria-label="研究標籤">
+            {post.data.tags.map((tag) => (
+              <li class="tag-list-item">
+                <span class="tag-list-static">
+                  {tag}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      <div class="article-prose">
+        <Content />
+      </div>
+
+      <p class="article-back-link">
+        <a href={withBase("research/tags-graph/")}>← 回研究標籤圖</a>
+      </p>
+    </div>
+
+    <aside class="article-sidebar" aria-label="文章目錄">
+      <div class="toc-card">
+        {tocHeadings.length > 0 && (
+          <>
+            <h2>目錄</h2>
+            <ol class="toc-list">
+              {tocHeadings.map((item) => (
+                <li class:list={{ "toc-item": true, "toc-item-depth-3": item.depth === 3 }}>
+                  <a href={`#${item.slug}`}>{item.text}</a>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
+      </div>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  .research-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+  }
+  .tag-list-static {
+    font-size: 0.85rem;
+    color: #888;
+    background: #f9f9f9;
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid #eee;
+  }
+</style>

@@ -11,6 +11,7 @@ export const GET: APIRoute = ({ site }) => {
 
   const body = `User-agent: *
 Allow: /
+Disallow: /research/
 
 Sitemap: ${sitemapURL}
 # Machine-readable entry points

@@ -2,12 +2,13 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { withBase } from "@/utils/paths";
 
 export type BlogEntry = CollectionEntry<"blog">;
+export type ResearchEntry = CollectionEntry<"research">;
 
 /**
  * 取得文章的有效發布日期。
  * 優先順序：Frontmatter pubDate > 檔名開頭日期 (YYYY-MM-DD) > 目前日期。
  */
-export function getEffectiveDate(post: BlogEntry): Date {
+export function getEffectiveDate(post: BlogEntry | ResearchEntry): Date {
   if (post.data.pubDate) {
     return post.data.pubDate;
   }
@@ -47,6 +48,25 @@ export async function getBlogPosts(options: GetBlogPostsOptions = {}): Promise<B
       const aFeatured = a.data.featured ? 1 : 0;
       const bFeatured = b.data.featured ? 1 : 0;
       if (bFeatured !== aFeatured) return bFeatured - aFeatured;
+      return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
+    });
+}
+
+export async function getResearchPosts(options: GetBlogPostsOptions = {}): Promise<ResearchEntry[]> {
+  const includeDrafts = options.includeDrafts ?? !import.meta.env.PROD;
+  const includeFuture = options.includeFuture ?? !import.meta.env.PROD;
+  const now = Date.now();
+
+  const posts = await getCollection("research");
+
+  return posts
+    .filter((post) => {
+      const effectiveDate = getEffectiveDate(post);
+      if (!includeDrafts && post.data.draft) return false;
+      if (!includeFuture && effectiveDate.getTime() > now) return false;
+      return true;
+    })
+    .sort((a, b) => {
       return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
     });
 }
@@ -128,4 +148,8 @@ export function getPostPathCandidates(post: BlogEntry): string[] {
 
 export function buildPostUrl(post: BlogEntry): string {
   return withBase(`blog/${getPostCanonicalPathSegment(post)}/`);
+}
+
+export function buildResearchPostUrl(post: ResearchEntry): string {
+  return withBase(`research/${post.id}/`);
 }

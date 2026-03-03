@@ -10,7 +10,7 @@ tags:
   - 靈修
   - 耶和華沙瑪
 draft: false
-featured: true
+featured: false
 cover: ./assets/2026-03-01.jpg
 ---
 ## 當代局勢與聖經歷史的共鳴

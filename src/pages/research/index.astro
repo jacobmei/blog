@@ -1,0 +1,117 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildResearchPostUrl, getResearchPosts, getEffectiveDate } from "@/utils/blog";
+import { formatDate } from "@/utils/date";
+import { classifyPostTags } from "@/utils/blogTags";
+import { cleanPostTitle } from "@/utils/title";
+import { researchTagCatalog } from "@/data/researchTagCatalog";
+
+const posts = await getResearchPosts();
+const yearMap = new Map<number, typeof posts>();
+
+for (const post of posts) {
+  const year = getEffectiveDate(post).getFullYear();
+  const bucket = yearMap.get(year);
+  if (bucket) {
+    bucket.push(post);
+  } else {
+    yearMap.set(year, [post]);
+  }
+}
+
+const yearSections = Array.from(yearMap.entries())
+  .map(([year, yearPosts]) => ({
+    year,
+    posts: yearPosts,
+    count: yearPosts.length,
+  }))
+  .sort((a, b) => b.year - a.year);
+
+const topicByPostId = new Map<string, string[]>();
+for (const post of posts) {
+  const classified = classifyPostTags({
+    title: cleanPostTitle(post.data.title),
+    description: post.data.description,
+    body: post.body,
+    tags: post.data.tags,
+    category: post.data.category,
+    catalog: researchTagCatalog,
+  });
+  topicByPostId.set(post.id, classified.topics);
+}
+
+// Map topic keys to titles for display
+const topicTitleMap = new Map(researchTagCatalog.map(t => [t.key, t.title]));
+---
+
+<BaseLayout title="研究文稿目錄" description="研究室專屬文稿列表，按日期排序。" noindex={true}>
+  <h1 class="section-title">研究文稿目錄</h1>
+  <p>目前共有 {posts.length} 篇研究文稿，僅供內部閱覽。</p>
+
+  <div data-pagefind-filter="type:research">
+    {
+      posts.length === 0 ? (
+        <p class="empty-state">目前還沒有研究文稿。</p>
+      ) : (
+        <>
+          <div class="archive-accordion-list" aria-label="年份文稿收合列表">
+            {yearSections.map((section, index) => (
+              <details class="archive-accordion" open={index === 0}>
+                <summary class="archive-accordion-summary">
+                  <span class="archive-accordion-title">
+                    <span class="tag-chip-icon" aria-hidden="true">
+                      🗓️
+                    </span>
+                    {section.year} 年
+                  </span>
+                  <span class="archive-accordion-count" data-count data-total={section.count}>
+                    {section.count} 篇
+                  </span>
+                </summary>
+                <div class="archive-accordion-body">
+                  <div class="archive-accordion-body-inner">
+                    <ul class="archive-list">
+                      {section.posts.map((post) => {
+                        const topicKeys = topicByPostId.get(post.id) ?? [];
+                        const topicTitles = topicKeys.map(k => topicTitleMap.get(k) || k);
+                        return (
+                          <li class="archive-item">
+                            <time class="archive-date" datetime={getEffectiveDate(post).toISOString()}>
+                              {formatDate(getEffectiveDate(post))}
+                            </time>
+                            <div class="archive-main">
+                              <a class="archive-link" href={buildResearchPostUrl(post)}>
+                                {cleanPostTitle(post.data.title)}
+                              </a>
+                              <p class="archive-meta">
+                                <span class="archive-meta-topics">分類：{topicTitles.join("・")}</span>
+                              </p>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            ))}
+          </div>
+        </>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  const track = (name, props = {}) => {
+    if (typeof window.mbTrack === "function") window.mbTrack(name, props);
+  };
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const link = target.closest(".archive-link");
+    if (!(link instanceof HTMLAnchorElement)) return;
+    track("Research Archive Click", { source: "research_archive" });
+  });
+</script>

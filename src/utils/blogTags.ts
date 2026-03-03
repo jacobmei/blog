@@ -1,10 +1,13 @@
 import { tagCatalog, type TagCatalogItem } from "@/data/tagCatalog";
+import { researchTagCatalog } from "@/data/researchTagCatalog";
 
 export interface PostTagInput {
   title: string;
   description?: string;
   body?: string;
   tags?: string[];
+  category?: string; // 新增：明確的分類類別
+  catalog?: TagCatalogItem[]; // 新增：可選的目錄
 }
 
 export interface ClassifiedTags {
@@ -16,6 +19,7 @@ export interface ClassifiedTags {
 }
 
 const TOPIC_KEYS = new Set(tagCatalog.map((item) => item.key));
+const RESEARCH_TOPIC_KEYS = new Set(researchTagCatalog.map((item) => item.key));
 
 const IGNORE_TAGS = new Set([
   "matters",
@@ -59,6 +63,15 @@ const TOPIC_ALIASES: Record<string, string> = {
   "親子": "運動健康",
   "飲食": "運動健康"
 };
+
+// 研究專屬主題提示
+const RESEARCH_TOPIC_HINTS = [
+  { topic: "church-history", regex: /歷史|創堂|赵世光|趙世光|寇世遠|鄭昌國|周神助|傳承|堂慶|70周年/i },
+  { topic: "governance", regex: /治理|章程|董事|執事|管理|會議|決策|組織/i },
+  { topic: "mission", regex: /宣教|福音|傳道|植堂|大使命|使命/i },
+  { topic: "spirituality", regex: /聖靈|更新|禱告|靈修|默想|恩典/i },
+  { topic: "biography", regex: /見證|自傳|人物|採訪|訪談|訪問/i }
+];
 
 const TOPIC_HINTS: Array<{ topic: string; regex: RegExp }> = [
   { topic: "運動健康", regex: /運動|健康|棒球|體育|身心|健康|親子|飲食/i },
@@ -156,7 +169,38 @@ const TOKEN_STOPWORDS = new Set([
   "服務",
   "工具",
   "內文",
-  "專欄"
+  "專欄",
+  "裡面",
+  "其實",
+  "是說",
+  "我的意思是說",
+  "換句話說",
+  "就是說",
+  "我覺得",
+  "比如說",
+  "然後",
+  "但是",
+  "這樣",
+  "時候",
+  "的時候",
+  "的話",
+  "大家",
+  "非常",
+  "這些",
+  "那麼",
+  "這一個",
+  "那一個",
+  "一件事情",
+  "一件",
+  "事情",
+  "很多",
+  "一直",
+  "知道",
+  "看到",
+  "逐字稿整理",
+  "逐字稿",
+  "應該",
+  "當然"
 ]);
 
 const GENERIC_KEYWORD_PENALTY: Record<string, number> = {
@@ -266,11 +310,20 @@ export function classifyPostTags(input: PostTagInput): ClassifiedTags {
   const keywordStore = new Map<string, { label: string; score: number }>();
   const metaTags: string[] = [];
 
+  const useResearch = input.catalog === researchTagCatalog;
+  const currentTopicKeys = input.catalog ? new Set(input.catalog.map(i => i.key)) : TOPIC_KEYS;
+  const currentHints = useResearch ? RESEARCH_TOPIC_HINTS : TOPIC_HINTS;
+
+  // 優先處理明確的分類 (Category)
+  if (input.category && currentTopicKeys.has(input.category)) {
+    topics.push(input.category);
+  }
+
   for (let i = 0; i < rawTags.length; i += 1) {
     const raw = rawTags[i];
     const norm = normalizedTags[i];
 
-    if (TOPIC_KEYS.has(raw)) {
+    if (currentTopicKeys.has(raw)) {
       topics.push(raw);
       continue;
     }
@@ -281,7 +334,7 @@ export function classifyPostTags(input: PostTagInput): ClassifiedTags {
     }
 
     const aliasTopic = TOPIC_ALIASES[norm];
-    if (aliasTopic) {
+    if (aliasTopic && currentTopicKeys.has(aliasTopic)) {
       topics.push(aliasTopic);
     }
 
@@ -297,15 +350,15 @@ export function classifyPostTags(input: PostTagInput): ClassifiedTags {
   collectTerms(descriptionText, 2.8, keywordStore);
   collectTerms(bodyText, 1.1, keywordStore);
 
-  for (const hint of TOPIC_HINTS) {
+  for (const hint of currentHints) {
     if (hint.regex.test(text)) topics.push(hint.topic);
   }
 
   if (topics.length === 0) {
-    topics.push("隨筆");
+    topics.push(useResearch ? "church-history" : "隨筆");
   }
 
-  const uniqueTopics = uniqueStrings(topics).filter((topic) => TOPIC_KEYS.has(topic));
+  const uniqueTopics = uniqueStrings(topics).filter((topic) => currentTopicKeys.has(topic));
 
   const scoredKeywords = Array.from(keywordStore.entries())
     .map(([norm, value]) => {

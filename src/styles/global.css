@@ -1382,10 +1382,20 @@
     margin: 0 0 1rem;
   }
 
+  .article-prose h1,
   .article-prose h2,
   .article-prose h3 {
     margin-top: 1.7rem;
     scroll-margin-top: 5.1rem;
+  }
+
+  .article-prose h1 {
+    margin-bottom: 0.8rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
 
   .article-prose h2 {

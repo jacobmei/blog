@@ -114,6 +114,8 @@ GitHub Issue 的 Checkbox 批次勾，關閉一鍵搞定，體驗和爽度差很
 
 IssueOps 原本是工程圈跑自動化流程的技術，搬過來用之後，GitHub Issue 從「通知存檔區」變成了「動態控制面板」。
 
+> 本質上這是一個單人工具。搜尋品質完全依賴 Brave + Tavily 的結果再讓 Gemini 打分，但 Gemini 的 prompt 是固定的、評分標準是自己定的，各位若拿去用，可以自己修改 config.yaml 等相關邏輯（fuzzy filter 的規則、分數門檻 1.1、權重公式），主要是想透過 GitHub Issues + Actions 這個組合解決「不想養伺服器又想有 UI」的問題 XD
+
 這套最讓我滿意的一點是：**整個設計站在 GitHub 這個巨人的肩膀上** ，免費、穩定、全平台、有官方 App，這些都不用自己搞，哈哈
 
 厭倦在搜尋結果裡翻頁的朋友，試試這個方向吧。

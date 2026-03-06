@@ -12,3 +12,8 @@ scripts/__pycache__
 
 # Obsidian 個人設定（不納入版本控制）
 .obsidian
+
+# --- 🤖 AI Extension Isolation ---
+.roo/
+.cline/
+.vscode/

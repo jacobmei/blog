@@ -1,3 +1,5 @@
 {
-    "workbench.colorTheme": "Default Light Modern"
+    "workbench.colorTheme": "Solarized Light",
+    "editor.fontSize": 16,
+    "window.zoomLevel": 1
 }

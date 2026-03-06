@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/jacobmei/Markdown-notes/.agent/skills/expert_prompter/**)"
+    ]
+  }
+}

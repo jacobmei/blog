@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Solarized Light",
+		"window.zoomLevel": 1
+	}
+}

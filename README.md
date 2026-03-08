@@ -1,3 +1,13 @@
+---
+title: README
+description:
+pubDate: 2026-03-07 18:25+08:00
+author: jacobmei
+category: 生活隨筆
+tags:
+draft: false
+featured: false
+---
 # 小梅子的家
 
 實在受不了 Blogger 多年未改的 HTML/WYSIWYG 的架構，這種方式在十幾年前可能又好用又流行，但現在實在越來越難維護，所以就決定來搬家了 XD

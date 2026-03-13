@@ -347,6 +347,26 @@ const fallbackIndexUrl = withBase("search-index.json");
         }
       }, 0);
 
+      const hasCJK = (s) => /[\u4e00-\u9fff\u3400-\u4dbf]/.test(s);
+
+      const filterCJKResults = (keyword) => {
+        if (!keyword || !hasCJK(keyword)) return;
+        const nq = normalize(keyword);
+        const results = searchRoot.querySelectorAll(".pagefind-ui__result");
+        let visibleCount = 0;
+        results.forEach((el) => {
+          const text = normalize(el.textContent ?? "");
+          const match = text.includes(nq);
+          el.style.display = match ? "" : "none";
+          if (match) visibleCount++;
+        });
+        const msg = searchRoot.querySelector(".pagefind-ui__message");
+        if (msg) {
+          if (visibleCount === 0) msg.textContent = "找不到符合的結果";
+          else msg.textContent = `${visibleCount} 筆結果`;
+        }
+      };
+
       const syncPagefindState = () => {
         if (currentSearchMode !== "pagefind") return;
         const input = document.querySelector(".pagefind-ui__search-input");
@@ -355,7 +375,8 @@ const fallbackIndexUrl = withBase("search-index.json");
           setSearchState("idle");
           return;
         }
-        const resultCount = document.querySelectorAll(".pagefind-ui__result").length;
+        filterCJKResults(keyword);
+        const resultCount = searchRoot.querySelectorAll('.pagefind-ui__result:not([style*="display: none"])').length;
         const isSearching = Boolean(document.querySelector(".pagefind-ui__message"));
         if (resultCount > 0) {
           setSearchState("ready");

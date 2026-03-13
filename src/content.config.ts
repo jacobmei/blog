@@ -29,7 +29,15 @@ const blog = defineCollection({
     faq: z.array(z.object({
       question: z.string(),
       answer: z.string()
-    })).default([])
+    })).default([]),
+    howto: z.object({
+      name: z.string(),
+      description: z.string().optional(),
+      steps: z.array(z.object({
+        name: z.string(),
+        text: z.string()
+      }))
+    }).nullish()
   })
 });
 

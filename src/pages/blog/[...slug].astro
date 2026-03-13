@@ -303,6 +303,20 @@ if (faqPayload.length > 0) {
     }))
   });
 }
+
+if (post.data.howto) {
+  articleStructuredData["@graph"].push({
+    "@type": "HowTo",
+    "name": post.data.howto.name,
+    ...(post.data.howto.description ? { "description": post.data.howto.description } : {}),
+    "step": post.data.howto.steps.map((step, i) => ({
+      "@type": "HowToStep",
+      "position": i + 1,
+      "name": step.name,
+      "text": step.text
+    }))
+  });
+}
 ---
 
 <BaseLayout

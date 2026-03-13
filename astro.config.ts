@@ -26,6 +26,14 @@ export default defineConfig({
         if (pathname.includes("/research/")) return false;
         if (!pathname.startsWith("/blog/")) return true;
         return /^\/blog\/\d{4}\/\d{4}-[a-z0-9]{6}\/$/i.test(pathname);
+      },
+      serialize(item) {
+        const blogMatch = item.url.match(/\/blog\/(\d{4})\/(\d{2})(\d{2})-/);
+        if (blogMatch) {
+          const [, year, month, day] = blogMatch;
+          item.lastmod = `${year}-${month}-${day}`;
+        }
+        return item;
       }
     })
   ],

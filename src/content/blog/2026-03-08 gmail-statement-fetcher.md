@@ -12,6 +12,20 @@ tags:
 draft: false
 featured: false
 cover: ./assets/2026-03-08.jpg
+howto:
+  name: 用 gmail-statement-fetcher 自動下載 Gmail 銀行對帳單
+  description: 設定 Python 工具定期自動從 Gmail 擷取銀行、信用卡對帳單 PDF，支援 IMAP 和 OAuth 2.0 認證，並自動整理檔名
+  steps:
+    - name: 下載專案
+      text: 執行 git clone https://github.com/notoriouslab/gmail-statement-fetcher.git，進入專案目錄
+    - name: 設定銀行規則
+      text: 複製 config.example.json 為 config.json，填入各銀行寄件人 email 與主旨關鍵字
+    - name: 設定 Gmail 認證
+      text: 複製 .env.example 為 .env，選擇 IMAP 應用程式密碼或 OAuth 2.0 其中一種認證方式
+    - name: 執行工具
+      text: 執行 python3 fetcher.py，對帳單 PDF 將自動下載至 ./downloads/ 資料夾，檔名含機構名稱與年月
+    - name: 設定每日自動排程
+      text: 使用 crontab 加入定時排程：0 9 * * * cd /path/to/gmail-statement-fetcher && python3 fetcher.py
 ---
 ## 我的痛點與動機
 

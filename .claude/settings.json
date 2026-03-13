@@ -1,7 +1,37 @@
 {
   "permissions": {
     "allow": [
-      "Read(//Users/jacobmei/Markdown-notes/.agent/skills/expert_prompter/**)"
+      "Read(//Users/jacobmei/Markdown-notes/.agent/skills/expert_prompter/**)",
+      "Bash(npm run:*)",
+      "Bash(gh api:*)",
+      "Read(//tmp/geo-seo-claude/**)",
+      "Read(//private/tmp/geo-seo-claude/**)",
+      "Bash(bash install.sh)",
+      "Skill(geo-audit)",
+      "Skill(geo-audit:*)",
+      "WebFetch(domain:jacobmei.com)",
+      "Bash(gh repo:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(1 gh:*)",
+      "Bash(npm install:*)",
+      "Bash(chub update:*)",
+      "Bash(chub search:*)",
+      "Bash(chub list:*)",
+      "Bash(grep -v \"^\\\\s*$\")",
+      "Bash(chub get:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(grep -l \"1xo3tz\\\\|0305\" /Users/jacobmei/Blog/src/content/blog/*.md)",
+      "Bash(ls /Users/jacobmei/Blog/src/content/blog/*2026-03-05*)",
+      "Bash(ls /Users/jacobmei/Blog/src/content/blog/*0305*)",
+      "Bash(tr '>' '>\\\\n')",
+      "Bash(xargs -I{} head -5 {})",
+      "Bash(npx pagefind:*)",
+      "Bash(npx astro:*)",
+      "Bash(echo \"EXIT: $?\")"
+    ],
+    "additionalDirectories": [
+      "/Users/jacobmei/Blog/src/pages/research"
     ]
   }
 }

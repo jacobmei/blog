@@ -21,7 +21,7 @@ const items = posts.map((post) => {
     description: post.data.description,
     body: post.body,
     tags: post.data.tags,
-    category: post.data.category,
+    category: post.data.category ?? undefined,
     catalog: researchTagCatalog,
   });
   return {

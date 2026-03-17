@@ -24,6 +24,7 @@ export default defineConfig({
         const url = new URL(page);
         const pathname = url.pathname;
         if (pathname.includes("/research/")) return false;
+        if (/^\/tags\/.+/.test(pathname)) return false;
         if (!pathname.startsWith("/blog/")) return true;
         return /^\/blog\/\d{4}\/\d{4}-[a-z0-9]{6}\/$/i.test(pathname);
       },

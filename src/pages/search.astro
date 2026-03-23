@@ -107,6 +107,14 @@ import { withBase } from "@/utils/paths";
     return (cp >= 0x4e00 && cp <= 0x9fff) || (cp >= 0x3400 && cp <= 0x4dbf);
   };
 
+  const STOP_BIGRAMS = new Set([
+    "可以","一個","這個","所以","沒有","不過","自己","我們","因為","有一",
+    "不是","了一","其實","就是","什麼","的是","還是","是一","使用","透過",
+    "可能","這樣","都是","這是","他們","比較","已經","雖然","應該","需要",
+    "上的","目前","還有","也是","中的","不會","怎麼","來的","你的","只是",
+    "在這","到了","對於","是在","而且","我的","了這","他的","但是",
+  ]);
+
   const queryBigrams = (text: string): string[] => {
     const normalized = normalize(text);
     const segments = normalized.split(/\s+/).filter(Boolean);
@@ -122,7 +130,8 @@ import { withBase } from "@/utils/paths";
         tokens.push(chars[0]);
       } else {
         for (let i = 0; i < chars.length - 1; i++) {
-          tokens.push(chars[i] + chars[i + 1]);
+          const bigram = chars[i] + chars[i + 1];
+          if (!STOP_BIGRAMS.has(bigram)) tokens.push(bigram);
         }
       }
     }

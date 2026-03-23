@@ -26,10 +26,10 @@ def main():
         docs = json.load(f)
 
     for doc in docs:
-        doc["title_bigrams"] = bigram_field(doc.get("title", ""))
-        doc["desc_bigrams"] = bigram_field(doc.get("description", ""))
-        doc["content_bigrams"] = bigram_field(doc.get("content", ""))
-        doc["tags_bigrams"] = bigram_field(" ".join(doc.get("tags", [])))
+        doc["title_bigram"] = bigram_field(doc.get("title", ""))
+        doc["desc_bigram"] = bigram_field(doc.get("description", ""))
+        doc["content_bigram"] = bigram_field(doc.get("content", ""))
+        doc["tags_bigram"] = bigram_field(" ".join(doc.get("tags", [])))
 
     with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(docs, f, ensure_ascii=False)

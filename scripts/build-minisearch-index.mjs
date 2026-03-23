@@ -12,11 +12,11 @@ const docs = JSON.parse(readFileSync(INPUT, "utf-8"));
 
 const miniSearch = new MiniSearch({
   idField: "id",
-  fields: ["title_bigrams", "desc_bigrams", "content_bigrams", "tags_bigrams"],
+  fields: ["title_bigram", "desc_bigram", "content_bigram", "tags_bigram"],
   storeFields: ["title", "description", "url", "pubDate", "tags", "topics"],
   tokenize: (text) => text.split(/\s+/).filter(Boolean),
   searchOptions: {
-    boost: { title_bigrams: 6, tags_bigrams: 4, desc_bigrams: 2, content_bigrams: 1 },
+    boost: { title_bigram: 6, tags_bigram: 4, desc_bigram: 2, content_bigram: 1 },
     prefix: true,
   },
 });

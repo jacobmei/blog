@@ -125,8 +125,7 @@ import { withBase } from "@/utils/paths";
     "已經","可能","應該","需要","比較","目前","真的","還有",
     "只是","一個","一些","一下","有一","了一","是一","的一",
     // 動作虛化
-    "使用","透過","覺得","知道","開始","看到","起來","出來",
-    "就可","也可","是可","是很","算是",
+    "覺得","起來","出來","就可","也可","是可","是很","算是",
     // 助詞組合（X的）
     "上的","中的","來的","面的","樣的","關的","趣的","多的",
     "大的","好的","單的","類的","子的","人的","本的","要的",
@@ -135,24 +134,29 @@ import { withBase } from "@/utils/paths";
   const queryBigrams = (text: string): string[] => {
     const normalized = normalize(text);
     const segments = normalized.split(/\s+/).filter(Boolean);
-    const tokens: string[] = [];
+    const allTokens: string[] = [];
+    const filtered: string[] = [];
     for (const seg of segments) {
       const chars = [...seg];
       const hasCJK = chars.some((ch) => isCJK(ch));
       if (!hasCJK) {
-        tokens.push(seg);
+        allTokens.push(seg);
+        filtered.push(seg);
         continue;
       }
       if (chars.length === 1) {
-        tokens.push(chars[0]);
+        allTokens.push(chars[0]);
+        filtered.push(chars[0]);
       } else {
         for (let i = 0; i < chars.length - 1; i++) {
           const bigram = chars[i] + chars[i + 1];
-          if (!STOP_BIGRAMS.has(bigram)) tokens.push(bigram);
+          allTokens.push(bigram);
+          if (!STOP_BIGRAMS.has(bigram)) filtered.push(bigram);
         }
       }
     }
-    return tokens;
+    // If filtering removed everything, return unfiltered to avoid empty results
+    return filtered.length > 0 ? filtered : allTokens;
   };
 
   const detectHitZones = (doc: any, tokens: string[]) => {
@@ -311,11 +315,11 @@ import { withBase } from "@/utils/paths";
 
       const miniSearch = MiniSearch.loadJSON(JSON.stringify(indexData), {
         idField: "id",
-        fields: ["title_bigrams", "desc_bigrams", "content_bigrams", "tags_bigrams"],
+        fields: ["title_bigram", "desc_bigram", "content_bigram", "tags_bigram"],
         storeFields: ["title", "description", "url", "pubDate", "tags", "topics"],
         tokenize: (text: string) => text.split(/\s+/).filter(Boolean),
         searchOptions: {
-          boost: { title_bigrams: 6, tags_bigrams: 4, desc_bigrams: 2, content_bigrams: 1 },
+          boost: { title_bigram: 6, tags_bigram: 4, desc_bigram: 2, content_bigram: 1 },
           prefix: true,
         },
       });

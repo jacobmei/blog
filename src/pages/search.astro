@@ -1,16 +1,18 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { withBase } from "@/utils/paths";
-
-const minisearchIndexUrl = withBase("search-minisearch.json");
-const fallbackIndexUrl = withBase("search-index.json");
 ---
 
 <BaseLayout title="搜尋" description="搜尋站內文章與頁面內容。">
   <h1 class="section-title">搜尋</h1>
   <p class="search-intro">快速查找全站文章與頁面內容。</p>
 
-  <section class="search-panel" aria-label="站內搜尋">
+  <section
+    class="search-panel"
+    aria-label="站內搜尋"
+    data-minisearch-url={withBase("search-minisearch.json")}
+    data-fallback-url={withBase("search-index.json")}
+  >
     <div id="search-state-stack" class="search-state-stack" aria-live="polite">
       <p class="search-state" data-state="loading" hidden>搜尋索引載入中...</p>
       <p class="search-state" data-state="idle" hidden>請輸入關鍵字開始搜尋。</p>
@@ -42,37 +44,43 @@ const fallbackIndexUrl = withBase("search-index.json");
   </p>
 </BaseLayout>
 
-<script is:inline define:vars={{ minisearchIndexUrl, fallbackIndexUrl }}>
-  const track = (name, props = {}) => {
-    if (typeof window.mbTrack === "function") window.mbTrack(name, props);
+<script>
+  import MiniSearch from "minisearch";
+
+  const panel = document.querySelector(".search-panel") as HTMLElement;
+  const minisearchIndexUrl = panel.dataset.minisearchUrl!;
+  const fallbackIndexUrl = panel.dataset.fallbackUrl!;
+
+  const track = (name: string, props: Record<string, string> = {}) => {
+    if (typeof (window as any).mbTrack === "function") (window as any).mbTrack(name, props);
   };
 
   const query = new URLSearchParams(window.location.search).get("q") ?? "";
   const form = document.querySelector("#site-search-form");
-  const input = document.querySelector("#site-search-input");
-  const resultsList = document.querySelector("#site-search-results");
+  const input = document.querySelector("#site-search-input") as HTMLInputElement | null;
+  const resultsList = document.querySelector("#site-search-results")!;
   const countEl = document.querySelector("#site-search-count");
   const stateNodes = Array.from(document.querySelectorAll(".search-state"));
   let currentMode = "minisearch";
 
-  const setSearchState = (nextState) => {
+  const setSearchState = (nextState: string) => {
     stateNodes.forEach((node) => {
       if (!(node instanceof HTMLElement)) return;
       node.hidden = node.dataset.state !== nextState;
     });
   };
 
-  const normalize = (value) => value.toLocaleLowerCase("zh-TW").normalize("NFKC").trim();
-  const escapeHTML = (value) =>
+  const normalize = (value: string) => value.toLocaleLowerCase("zh-TW").normalize("NFKC").trim();
+  const escapeHTML = (value: string) =>
     value
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
-  const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-  const highlight = (value, tokens) => {
+  const highlight = (value: string, tokens: string[]) => {
     const safe = escapeHTML(value ?? "");
     if (!tokens.length) return safe;
     const pattern = tokens
@@ -83,7 +91,7 @@ const fallbackIndexUrl = withBase("search-index.json");
     return safe.replace(new RegExp(`(${pattern})`, "gi"), "<mark>$1</mark>");
   };
 
-  const formatDate = (raw) => {
+  const formatDate = (raw: string | undefined) => {
     if (!raw) return "";
     const date = new Date(raw);
     if (Number.isNaN(date.getTime())) return "";
@@ -94,28 +102,15 @@ const fallbackIndexUrl = withBase("search-index.json");
     }).format(date);
   };
 
-  const detectHitZones = (doc, tokens) => {
-    const zones = [];
-    const titleText = normalize(doc.title ?? "");
-    const descText = normalize(doc.description ?? "");
-    const bodyText = normalize(doc.content ?? "");
-    const tagText = normalize((doc.tags ?? []).join(" "));
-    if (tokens.some((t) => titleText.includes(t))) zones.push("標題");
-    if (tokens.some((t) => descText.includes(t))) zones.push("摘要");
-    if (tokens.some((t) => bodyText.includes(t))) zones.push("內文");
-    if (tokens.some((t) => tagText.includes(t))) zones.push("標籤");
-    return zones;
-  };
-
-  const isCJK = (ch) => {
-    const cp = ch.codePointAt(0);
+  const isCJK = (ch: string) => {
+    const cp = ch.codePointAt(0)!;
     return (cp >= 0x4e00 && cp <= 0x9fff) || (cp >= 0x3400 && cp <= 0x4dbf);
   };
 
-  const queryBigrams = (text) => {
+  const queryBigrams = (text: string): string[] => {
     const normalized = normalize(text);
     const segments = normalized.split(/\s+/).filter(Boolean);
-    const tokens = [];
+    const tokens: string[] = [];
     for (const seg of segments) {
       const chars = [...seg];
       const hasCJK = chars.some((ch) => isCJK(ch));
@@ -134,9 +129,22 @@ const fallbackIndexUrl = withBase("search-index.json");
     return tokens;
   };
 
-  const renderResults = (items, q) => {
+  const detectHitZones = (doc: any, tokens: string[]) => {
+    const zones: string[] = [];
+    const titleText = normalize(doc.title ?? "");
+    const descText = normalize(doc.description ?? "");
+    const bodyText = normalize(doc.content ?? "");
+    const tagText = normalize((doc.tags ?? []).join(" "));
+    if (tokens.some((t) => titleText.includes(t))) zones.push("標題");
+    if (tokens.some((t) => descText.includes(t))) zones.push("摘要");
+    if (tokens.some((t) => bodyText.includes(t))) zones.push("內文");
+    if (tokens.some((t) => tagText.includes(t))) zones.push("標籤");
+    return zones;
+  };
+
+  const renderResults = (items: any[], q: string) => {
     resultsList.innerHTML = "";
-    const tokens = normalize(q).split(/\s+/).filter(Boolean);
+    const tokens = queryBigrams(q);
 
     if (!q.trim()) {
       setSearchState("idle");
@@ -156,7 +164,7 @@ const fallbackIndexUrl = withBase("search-index.json");
       const dateLabel = formatDate(item.pubDate);
       const topics = Array.isArray(item.topics) ? item.topics.slice(0, 3) : [];
       const tags = Array.isArray(item.tags)
-        ? item.tags.filter((tag) => !topics.includes(tag)).slice(0, 4)
+        ? item.tags.filter((tag: string) => !topics.includes(tag)).slice(0, 4)
         : [];
       const hitZones = detectHitZones(item, tokens);
       const metaParts = ["文章", dateLabel].filter(Boolean);
@@ -169,15 +177,15 @@ const fallbackIndexUrl = withBase("search-index.json");
         </div>
         ${
           hitZones.length > 0
-            ? `<p class="search-hit-zone">命中：${hitZones.map((zone) => `<span>${zone}</span>`).join("")}</p>`
+            ? `<p class="search-hit-zone">命中：${hitZones.map((zone: string) => `<span>${zone}</span>`).join("")}</p>`
             : ""
         }
         <p class="search-result-snippet">${highlight(item.description ?? "", tokens)}</p>
         ${
           topics.length > 0 || tags.length > 0
             ? `<ul class="search-result-tags">
-                ${topics.map((tag) => `<li class="search-result-tag-topic">${highlight(tag, tokens)}</li>`).join("")}
-                ${tags.map((tag) => `<li class="search-result-tag-keyword">${highlight(tag, tokens)}</li>`).join("")}
+                ${topics.map((tag: string) => `<li class="search-result-tag-topic">${highlight(tag, tokens)}</li>`).join("")}
+                ${tags.map((tag: string) => `<li class="search-result-tag-keyword">${highlight(tag, tokens)}</li>`).join("")}
               </ul>`
             : ""
         }
@@ -187,7 +195,7 @@ const fallbackIndexUrl = withBase("search-index.json");
   };
 
   /* ── Fallback: raw JSON search (no MiniSearch) ── */
-  const scoreDoc = (doc, tokens) => {
+  const scoreDoc = (doc: any, tokens: string[]) => {
     const titleText = normalize(doc.title ?? "");
     const descText = normalize(doc.description ?? "");
     const bodyText = normalize(doc.content ?? "");
@@ -204,7 +212,7 @@ const fallbackIndexUrl = withBase("search-index.json");
 
   const runFallbackSearch = async () => {
     currentMode = "fallback";
-    let docs = [];
+    let docs: any[] = [];
     try {
       const res = await fetch(fallbackIndexUrl, { headers: { accept: "application/json" } });
       if (!res.ok) throw new Error(`Load failed: ${res.status}`);
@@ -215,8 +223,8 @@ const fallbackIndexUrl = withBase("search-index.json");
       return;
     }
 
-    const doSearch = (q) => {
-      const tokens = normalize(q).split(/\s+/).filter(Boolean);
+    const doSearch = (q: string) => {
+      const tokens = queryBigrams(q);
       if (tokens.length === 0) {
         renderResults([], "");
         return;
@@ -236,7 +244,7 @@ const fallbackIndexUrl = withBase("search-index.json");
   };
 
   /* ── Bind search form events ── */
-  const bindSearchEvents = (searchFn) => {
+  const bindSearchEvents = (searchFn: (q: string) => void) => {
     form?.addEventListener("submit", (event) => {
       event.preventDefault();
       const q = input?.value.trim() ?? "";
@@ -267,10 +275,7 @@ const fallbackIndexUrl = withBase("search-index.json");
     setSearchState("loading");
 
     try {
-      const [{ default: MiniSearch }, res] = await Promise.all([
-        import("https://cdn.jsdelivr.net/npm/minisearch@7/dist/es/index.min.js"),
-        fetch(minisearchIndexUrl),
-      ]);
+      const res = await fetch(minisearchIndexUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const indexData = await res.json();
 
@@ -278,14 +283,14 @@ const fallbackIndexUrl = withBase("search-index.json");
         idField: "id",
         fields: ["title_bigrams", "desc_bigrams", "content_bigrams", "tags_bigrams"],
         storeFields: ["title", "description", "url", "pubDate", "tags", "topics"],
-        tokenize: (text) => text.split(/\s+/).filter(Boolean),
+        tokenize: (text: string) => text.split(/\s+/).filter(Boolean),
         searchOptions: {
           boost: { title_bigrams: 6, tags_bigrams: 4, desc_bigrams: 2, content_bigrams: 1 },
           prefix: true,
         },
       });
 
-      const doSearch = (q) => {
+      const doSearch = (q: string) => {
         const trimmed = q.trim();
         if (!trimmed) {
           renderResults([], "");

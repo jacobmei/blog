@@ -1,6 +1,6 @@
 ---
 title: 繁體中文搜尋預處理工具 trad-zh-search 開源了
-description: 我把在 Meilisearch 上踩了很煩的繁體中文分詞坑，提取成一個搜尋引擎無關的 Python 套件。CKIP 分詞 + bigram 索引 + 可選用領域字典，pip install 就能用。這篇記錄為什麼要做這個工具、它解決了什麼問題、以及我在過程中學到的幾件事。
+description: 我把在 Meilisearch 上踩了很煩的繁體中文分詞坑，提取成一個搜尋引擎無關的 Python 套件。CKIP 分詞 + bigram 索引 + 可選用領域字典，pip install 就能用。如果你在用任何搜尋引擎做繁中索引，這個經驗與套件可能對你有用
 pubDate: 2026-03-23 16:00+08:00
 author: jacobmei
 category: AI與科技
@@ -28,7 +28,7 @@ cover: ./assets/2026-03-23.jpg
 
 這問題已經很多年了，但一直沒有一個好的解決方案。你可以自己在前端做分詞處理、可以自己在後端加欄位、可以自己建字典 …… 但每個專案都在重新造輪子。
 
-所以我把這幾個月的實戰經驗整理了一下，拆成一個獨立的 Python 套件：[trad-zh-search](https://github.com/notoriouslab/trad-zh-search)，結果好像也是在造輪子 XD
+所以我把這幾個月的實戰經驗整理了一下，拆成一個獨立的 Python 套件：[trad-zh-search](https://github.com/notoriouslab/trad-zh-search)，結果好像也是在造輪子 XD，但如果你在<font color="#ff0000">用任何搜尋引擎做繁中索引，這個經驗與套件可能對你有用</font>。
 
 ---
 

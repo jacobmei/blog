@@ -229,11 +229,15 @@ import { withBase } from "@/utils/paths";
         renderResults([], "");
         return;
       }
-      const ranked = docs
+      const scored = docs
         .map((doc) => ({ doc, score: scoreDoc(doc, tokens) }))
         .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 80)
+        .sort((a, b) => b.score - a.score);
+      const topScore = scored[0]?.score ?? 0;
+      const cutoff = topScore * 0.02;
+      const ranked = scored
+        .filter((item) => item.score >= cutoff)
+        .slice(0, 30)
         .map((item) => item.doc);
       renderResults(ranked, q);
     };
@@ -297,7 +301,10 @@ import { withBase } from "@/utils/paths";
           return;
         }
         const bigrams = queryBigrams(trimmed);
-        const results = miniSearch.search(bigrams.join(" "), { limit: 80 });
+        const raw = miniSearch.search(bigrams.join(" "), { limit: 200 });
+        const topScore = raw[0]?.score ?? 0;
+        const cutoff = topScore * 0.02;
+        const results = raw.filter((r) => r.score >= cutoff).slice(0, 30);
         renderResults(results, trimmed);
       };
 

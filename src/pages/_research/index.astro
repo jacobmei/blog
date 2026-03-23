@@ -48,7 +48,7 @@ const topicTitleMap = new Map(researchTagCatalog.map(t => [t.key, t.title]));
   <h1 class="section-title">研究文稿目錄</h1>
   <p>目前共有 {posts.length} 篇研究文稿，僅供內部閱覽。</p>
 
-  <div data-pagefind-filter="type:research">
+  <div>
     {
       posts.length === 0 ? (
         <p class="empty-state">目前還沒有研究文稿。</p>

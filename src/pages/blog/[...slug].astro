@@ -492,7 +492,7 @@ if (post.data.howto) {
         ) : null;
       })()}
 
-      <nav class="article-pagination" aria-label="文章導覽" data-pagefind-ignore>
+      <nav class="article-pagination" aria-label="文章導覽">
         <div>
           <small>較新文章</small>
           {newerPost ? (
@@ -512,7 +512,7 @@ if (post.data.howto) {
       </nav>
 
       {relatedPosts.length > 0 && (
-        <section class="related-posts" aria-label="相關文章" data-pagefind-ignore>
+        <section class="related-posts" aria-label="相關文章">
           <h2>相關文章</h2>
           <ul class="post-list-compact">
             {relatedPosts.map((item) => (
@@ -530,7 +530,7 @@ if (post.data.howto) {
       </p>
     </div>
 
-    <aside class="article-sidebar" aria-label="文章目錄與分享" data-pagefind-ignore>
+    <aside class="article-sidebar" aria-label="文章目錄與分享">
       <div class="toc-card">
         {tocHeadings.length > 0 && (
           <>

@@ -1,9 +1,4 @@
-import { access } from "node:fs/promises";
-import { constants } from "node:fs";
-import { join } from "node:path";
 import { spawn } from "node:child_process";
-
-const pagefindBin = join(process.cwd(), "node_modules", ".bin", "pagefind");
 
 const run = (cmd, args) =>
   new Promise((resolve, reject) => {
@@ -13,11 +8,10 @@ const run = (cmd, args) =>
   });
 
 try {
-  await access(pagefindBin, constants.X_OK);
-  await run(pagefindBin, ["--site", "dist", "--glob", "**/*.html"]);
-  console.log("[search] Pagefind index generated.");
-} catch {
-  console.log(
-    "[search] Pagefind is not installed in this environment. Using JSON fallback search index only."
-  );
+  await run("python3", ["scripts/tokenize-search-index.py"]);
+  await run("node", ["scripts/build-minisearch-index.mjs"]);
+  console.log("[search] Search index build complete.");
+} catch (err) {
+  console.warn("[search] Index build failed:", err.message);
+  console.warn("[search] Falling back to raw search-index.json (no bigrams).");
 }

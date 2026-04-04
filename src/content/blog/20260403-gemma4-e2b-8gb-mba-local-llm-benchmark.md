@@ -22,12 +22,12 @@ Google 在 2026/04/02 發佈了 Gemma 4 開源模型家族，首次採用 Apache
 
 ## 測試環境
 
-| 項目 | 規格 |
-|------|------|
-| 機器 | MacBook Air M2, 8GB unified memory |
-| Ollama | v0.20.0（含 MLX 後端） |
-| 測試應用 | Logos 知識引擎（Meilisearch 搜尋 + LLM 彙整） |
-| 測試題目 | 「童女懷孕的聖經見解」（固定題目，方便跨模型比較） |
+| 項目     | 規格                                  |
+| ------ | ----------------------------------- |
+| 機器     | MacBook Air M2, 8GB unified memory  |
+| Ollama | v0.20.0（含 MLX 後端）                   |
+| 測試應用   | Logos 知識引擎（Meilisearch 搜尋 + LLM 彙整） |
+| 測試題目   | 「童女懷孕的聖經見解」（固定題目，方便跨模型比較）           |
 
 ## Gemma 4 模型家族
 

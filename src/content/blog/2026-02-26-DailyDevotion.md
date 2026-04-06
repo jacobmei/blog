@@ -9,7 +9,7 @@ tags:
   - AI
   - Gemini
 author: jacobmei
-featured: true
+featured: false
 cover: ./assets/2026-02-26DailyDevotion.jpg
 category: 生活隨筆
 ---

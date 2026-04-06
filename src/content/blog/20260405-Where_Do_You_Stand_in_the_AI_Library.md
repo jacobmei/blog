@@ -10,7 +10,7 @@ tags:
   - Markdown
   - obsidian
 draft: false
-featured: false
+featured: true
 cover: ./assets/20260405.jpg
 ---
 # Where Do You Stand in the AI Library?

@@ -1,5 +1,5 @@
 ---
-title: 繁體中文專用 Obsidian 語意搜尋插件 Valut Search
+title: 繁體中文專用 Obsidian 語意搜尋插件 Vault Search
 description: Vault Search：完全本地方案、中文友善的 Obsidian 語意搜尋插件。不需要雲端服務，8GB 筆電就能跑。
 pubDate: 2026-04-04 20:00+08:00
 draft: false
@@ -14,7 +14,7 @@ featured: true
 cover: ./assets/20260404-vault-search.png
 ---
 
-# 開源 Obsidian 語意搜尋插件 Valut Search :)
+# 開源 Obsidian 語意搜尋插件 Vault Search :)
 
 我在 Obsidian 裡累積了幾十年前累積到現在的上千篇筆記，有時候明明記得某個想法，但就是搜不到，因為關鍵字完全想不起來，只記得大致的情境和內容。
 
@@ -42,7 +42,7 @@ RAG 和語意搜尋的好處是：它們**跟你的內容協作**，幫你重新
 
 這兩個思維並不衝突，我同時也有另一個自動化分析文章的工作流，但我最後總是喜歡自己動手來一遍，這會幫助我有更深刻領受。
 
-所以 Valut Search 就是這樣的一個工具，它幫助你越來越淬煉自己的思維，用你自己的經驗 + AI 帶來的新知識。
+所以 Vault Search 就是這樣的一個工具，它幫助你越來越淬煉自己的思維，用你自己的經驗 + AI 帶來的新知識。
 
 ## 幾個我覺得做得不錯的設計或堅持？
 

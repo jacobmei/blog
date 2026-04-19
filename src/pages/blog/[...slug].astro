@@ -114,6 +114,9 @@ const pageURL = canonicalURL ??
   (Astro.site ? new URL(buildPostUrl(post), Astro.site).toString() : buildPostUrl(post));
 const canonicalPostURL = Astro.site ? new URL(buildPostUrl(post), Astro.site).toString() : buildPostUrl(post);
 const effectiveCanonicalURL = isLegacyPath ? canonicalPostURL : canonicalURL;
+const markdownURL = isLegacyPath
+  ? undefined
+  : canonicalPostURL.replace(/\/$/, ".md");
 
 const coverURL = coverSrc
   ? /^https?:\/\//.test(coverSrc)
@@ -327,6 +330,7 @@ if (post.data.howto) {
   ogType="article"
   structuredData={isLegacyPath ? null : articleStructuredData}
   isArticle={!isLegacyPath}
+  markdownURL={markdownURL}
   noindex={false}
 >
   {

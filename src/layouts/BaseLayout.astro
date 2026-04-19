@@ -14,6 +14,7 @@ interface Props {
   noindex?: boolean;
   structuredData?: Record<string, unknown> | null;
   isArticle?: boolean;
+  markdownURL?: string;
 }
 
 const {
@@ -24,7 +25,8 @@ const {
   ogType = "website",
   noindex = false,
   structuredData = null,
-  isArticle = false
+  isArticle = false,
+  markdownURL
 } = Astro.props as Props;
 
 const tabTitle = SITE_TITLE;
@@ -161,6 +163,9 @@ const siteStructuredData = {
     
     <!-- AI Discovery / AEO -->
     <link rel="llms-txt" href={withBase("llms.txt")} />
+    {markdownURL && (
+      <link rel="alternate" type="text/markdown" href={markdownURL} title="Markdown source" />
+    )}
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

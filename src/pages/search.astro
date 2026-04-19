@@ -331,7 +331,7 @@ import { withBase } from "@/utils/paths";
           return;
         }
         const bigrams = queryBigrams(trimmed);
-        const raw = miniSearch.search(bigrams.join(" "), { limit: 200 });
+        const raw = miniSearch.search(bigrams.join(" "));
         const topScore = raw[0]?.score ?? 0;
         const cutoff = topScore * 0.02;
         const results = raw.filter((r) => r.score >= cutoff).slice(0, 30);

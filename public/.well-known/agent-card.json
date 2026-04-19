@@ -1,0 +1,46 @@
+{
+  "name": "Jacob Mei Blog",
+  "description": "小梅子 / Jacob Mei Labs 個人 blog 的代理卡片，提供 AI 代理發現與讀取內容的協議。",
+  "version": "1.0.0",
+  "url": "https://jacobmei.com",
+  "provider": {
+    "organization": "Jacob Mei",
+    "url": "https://jacobmei.com"
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/markdown", "application/json"],
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "read-blog-post",
+      "name": "Read Blog Post as Markdown",
+      "description": "抓取單篇文章的 markdown 原始內容（含 frontmatter）。附加 .md 於文章 URL 即可。",
+      "tags": ["content", "markdown", "blog"],
+      "examples": [
+        "GET https://jacobmei.com/blog/2026/0415-abcdef.md"
+      ]
+    },
+    {
+      "id": "list-posts",
+      "name": "List All Posts",
+      "description": "取得所有文章的結構化索引（URL、標題、摘要、主題、近期內文片段）。",
+      "tags": ["index", "search"],
+      "examples": [
+        "GET https://jacobmei.com/content-index.json"
+      ]
+    },
+    {
+      "id": "site-overview",
+      "name": "Site Overview for LLMs",
+      "description": "以 llms.txt 格式回傳站點導覽、近期文章與主題分類。",
+      "tags": ["overview", "llms.txt"],
+      "examples": [
+        "GET https://jacobmei.com/llms.txt"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Jacob Mei Blog",
+  "description": "Jacob Mei 的個人 blog（zh-TW，繁體中文），提供 markdown 鏡像、content index 與 llms.txt 供 AI 代理讀取。",
+  "version": "1.0.0",
+  "homepage": "https://jacobmei.com",
+  "transport": {
+    "type": "static-resources"
+  },
+  "capabilities": ["resources"],
+  "resources": [
+    {
+      "name": "content-index",
+      "description": "所有文章的結構化索引（JSON），含 url、pubDate、topics、摘要內文。",
+      "uri": "https://jacobmei.com/content-index.json",
+      "mimeType": "application/json"
+    },
+    {
+      "name": "llms",
+      "description": "站點導覽與近期文章列表（llms.txt 格式）。",
+      "uri": "https://jacobmei.com/llms.txt",
+      "mimeType": "text/plain"
+    },
+    {
+      "name": "sitemap",
+      "description": "完整 sitemap index（XML）。",
+      "uri": "https://jacobmei.com/sitemap-index.xml",
+      "mimeType": "application/xml"
+    },
+    {
+      "name": "feed",
+      "description": "RSS feed，含最新文章。",
+      "uri": "https://jacobmei.com/rss.xml",
+      "mimeType": "application/rss+xml"
+    }
+  ],
+  "conventions": {
+    "markdownMirror": "Append '.md' to any /blog/YYYY/MMDD-shortcode URL to fetch the markdown source (e.g. /blog/2026/0415-abc123.md)."
+  }
+}

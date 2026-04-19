@@ -13,6 +13,31 @@ export const GET: APIRoute = ({ site }) => {
 Allow: /
 Disallow: /research/
 
+# Major AI crawlers — explicitly welcomed
+User-agent: GPTBot
+Allow: /
+Disallow: /research/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /research/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /research/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /research/
+
+User-agent: CCBot
+Allow: /
+Disallow: /research/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /research/
+
 Sitemap: ${sitemapURL}
 # Machine-readable entry points
 LLMS-txt: ${llmsURL}

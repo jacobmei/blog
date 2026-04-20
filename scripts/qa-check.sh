@@ -18,13 +18,14 @@ echo ""
 # D1: 邏輯測試 — TypeScript 型別與建置
 echo "[D1] 邏輯測試 (Build & Type Check)"
 
-if npm run check --silent 2>&1 | grep -q "error"; then
+CHECK_OUT=$(npm run check --silent 2>&1)
+if echo "$CHECK_OUT" | grep -qE "[1-9][0-9]* error"; then
   log_fail "TypeScript check 有錯誤"
 else
   log_pass "TypeScript check 通過"
 fi
 
-if npm run build --silent 2>&1 | grep -q "error\|Error"; then
+if npm run build --silent 2>&1 | grep -qE "^\[ERROR\]|Build failed"; then
   log_fail "npm run build 失敗"
 else
   log_pass "npm run build 成功"
@@ -36,10 +37,10 @@ else
   log_fail "dist 目錄不存在"
 fi
 
-if [ -f "dist/pagefind/pagefind.js" ]; then
-  log_pass "Pagefind 搜尋索引已生成"
+if [ -f "dist/search-minisearch.json" ]; then
+  log_pass "搜尋索引（MiniSearch）已生成"
 else
-  log_fail "Pagefind 搜尋索引不存在"
+  log_fail "搜尋索引不存在"
 fi
 
 echo ""

@@ -7,7 +7,11 @@ import mottos from "@/data/motto.json";
 
 const posts = await getBlogPosts();
 const latestPosts = posts.slice(0, 8);
-const randomMotto = mottos[Math.floor(Math.random() * mottos.length)];
+const todaySeed = [...new Date().toISOString().slice(0, 10)].reduce(
+  (sum, ch) => sum + ch.charCodeAt(0),
+  0,
+);
+const randomMotto = mottos[todaySeed % mottos.length];
 
 const faqData = {
   "@context": "https://schema.org",

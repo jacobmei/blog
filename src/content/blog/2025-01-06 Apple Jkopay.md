@@ -1,7 +1,7 @@
 ---
 title: 街口支付 x Apple 正式合作！台灣支付新里程碑
 description: 街口支付正式成為台灣Apple支付合作夥伴！App Store、Apple Music、iCloud+、TV+全支援，這是我2022年來街口後，歷經兩年技術對接Apple的成果！台灣年輕團隊證明：我們能和國際巨頭並肩作戰🇹🇼
-pubDate:
+pubDate: 2025-01-06 00:00+08:00
 tags:
   - 科技金融
   - 街口支付

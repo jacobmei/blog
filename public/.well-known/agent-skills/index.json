@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agentskills.io/schema/v0.2.0/index.json",
+  "version": "0.2.0",
+  "site": {
+    "name": "Jacob Mei Blog",
+    "url": "https://jacobmei.com",
+    "language": "zh-TW"
+  },
+  "skills": [
+    {
+      "name": "read-blog-post",
+      "type": "http",
+      "description": "抓取單篇文章的 markdown 原始內容（含 frontmatter）。附加 .md 於文章 URL 即可。",
+      "url": "https://jacobmei.com/.well-known/agent-skills/read-blog-post.md",
+      "sha256": "c2cf55c94a0dfe000f22660e7cb15df85eacffb852fdd7973eb54ce32d75bc36"
+    },
+    {
+      "name": "list-posts",
+      "type": "http",
+      "description": "取得所有文章的結構化索引（URL、標題、摘要、主題、近期內文片段）。",
+      "url": "https://jacobmei.com/.well-known/agent-skills/list-posts.md",
+      "sha256": "3330edb322178d5ea34951e917a7926ea5949853f5adfdb9349eebd8ba4d03bd"
+    },
+    {
+      "name": "site-overview",
+      "type": "http",
+      "description": "以 llms.txt 格式回傳站點導覽、近期文章與主題分類。",
+      "url": "https://jacobmei.com/.well-known/agent-skills/site-overview.md",
+      "sha256": "b6dc85bfd4f5ededcdac12471e7b012085b5e8deecc46951280dfe6d9006cdf8"
+    }
+  ]
+}

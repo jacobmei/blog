@@ -1,0 +1,58 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://jacobmei.com/content-index.json",
+      "service-desc": [
+        {
+          "href": "https://jacobmei.com/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "title": "MCP Server Card（列出此 blog 的所有可讀資源）"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://jacobmei.com/llms.txt",
+          "type": "text/plain",
+          "title": "站點導覽與 AI 代理使用說明（llms.txt）"
+        }
+      ]
+    },
+    {
+      "anchor": "https://jacobmei.com/llms.txt",
+      "service-desc": [
+        {
+          "href": "https://llmstxt.org/",
+          "type": "text/html",
+          "title": "llms.txt 標準規格"
+        }
+      ]
+    },
+    {
+      "anchor": "https://jacobmei.com/rss.xml",
+      "service-desc": [
+        {
+          "href": "https://www.rssboard.org/rss-specification",
+          "type": "text/html",
+          "title": "RSS 2.0 規格"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://jacobmei.com/",
+          "type": "text/html",
+          "title": "Blog 首頁"
+        }
+      ]
+    },
+    {
+      "anchor": "https://jacobmei.com/sitemap-index.xml",
+      "service-desc": [
+        {
+          "href": "https://www.sitemaps.org/protocol.html",
+          "type": "text/html",
+          "title": "Sitemaps XML 協定"
+        }
+      ]
+    }
+  ]
+}

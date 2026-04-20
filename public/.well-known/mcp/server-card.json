@@ -4,13 +4,11 @@
     "name": "jacobmei-blog",
     "version": "1.1.0"
   },
-  "name": "Jacob Mei Blog",
-  "description": "Jacob Mei 的個人 blog（zh-TW，繁體中文），提供 markdown 鏡像、content index 與 llms.txt 供 AI 代理讀取。",
-  "version": "1.1.0",
+  "description": "Jacob Mei 的個人 blog（zh-TW，繁體中文）MCP 靜態資源伺服器。AI 代理可透過列表中的 URI 直接抓取 markdown、content index、llms.txt 與 RSS。",
   "homepage": "https://jacobmei.com",
   "transport": {
     "type": "static-resources",
-    "description": "Static HTTP resources; no RPC endpoint. AI agents fetch listed URIs directly."
+    "description": "Static HTTP resources; no RPC endpoint. AI agents fetch listed URIs directly with Accept: text/markdown (via Cloudflare Worker negotiation) or application/json."
   },
   "capabilities": {
     "resources": {
@@ -45,6 +43,7 @@
     }
   ],
   "conventions": {
-    "markdownMirror": "Append '.md' to any /blog/YYYY/MMDD-shortcode URL to fetch the markdown source (e.g. /blog/2026/0415-abc123.md)."
+    "markdownMirror": "Append '.md' to any /blog/YYYY/MMDD-shortcode URL to fetch the markdown source (e.g. /blog/2026/0415-abc123.md).",
+    "contentNegotiation": "Send 'Accept: text/markdown' to any page URL; Cloudflare Worker will return the .md mirror."
   }
 }

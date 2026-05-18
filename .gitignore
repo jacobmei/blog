@@ -17,3 +17,5 @@ scripts/__pycache__
 .roo/
 .cline/
 .vscode/
+.claude-memory
+opencode.json

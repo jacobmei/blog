@@ -11,7 +11,7 @@ tags:
   - iOS
   - browser
 draft: false
-featured: true
+featured: false
 cover: ./assets/20260421-02.jpg
 ---
 # Rescuing EXIF GPS from iPhone 17 HEIC, in a browser-only app

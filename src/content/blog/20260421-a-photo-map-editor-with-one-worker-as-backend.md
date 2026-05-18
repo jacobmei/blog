@@ -11,7 +11,7 @@ tags:
   - Leaflet
   - serverless
 draft: false
-featured: true
+featured: false
 cover: ./assets/20260421-03.jpg
 ---
 # A photo-map editor with no database, no login, and one Cloudflare Worker

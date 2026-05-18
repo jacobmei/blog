@@ -1,6 +1,6 @@
 ---
-title: 繁體中文專用 Obsidian 語意搜尋插件 Vault Search
-description: Vault Search：完全本地方案、中文友善的 Obsidian 語意搜尋插件。不需要雲端服務，8GB 筆電就能跑。
+title: 繁體中文專用 Obsidian 語意搜尋插件 Vault Curate
+description: Vault Search：完全本地方案、中文友善的 Obsidian 語意搜尋插件。不需要雲端服務，8GB 筆電就能跑。已改名為 Vault Curate ~
 pubDate: 2026-04-04 20:00+08:00
 draft: false
 tags:
@@ -10,11 +10,11 @@ tags:
   - 開源
 author: jacobmei
 category: AI與科技
-featured: true
+featured: false
 cover: ./assets/20260404-vault-search.png
 ---
 
-# 開源 Obsidian 語意搜尋插件 Vault Search :)
+# 開源 Obsidian 語意搜尋插件 Vault Curate :)
 
 我在 Obsidian 裡累積了幾十年前累積到現在的上千篇筆記，有時候明明記得某個想法，但就是搜不到，因為關鍵字完全想不起來，只記得大致的情境和內容。
 
@@ -22,7 +22,7 @@ Obsidian 內建搜尋是關鍵字比對，打「財務」不會找到標題叫�
 
 所以我因為懶，又自己寫了一個 Obsidian 的 Plugin XD 
 
-## Vault Search 做什麼
+## Vault Curate 做什麼
 
 **用你想表達的「意思」搜尋筆記，不只是關鍵字。**
 
@@ -70,23 +70,13 @@ RAG 和語意搜尋的好處是：它們**跟你的內容協作**，幫你重新
 
 ## 安裝
 
-需要 [Ollama](https://ollama.com/) 和 Obsidian 桌面版。
-
-```bash
-ollama pull qwen3-embedding:0.6b  # embedding 模型
-ollama pull qwen3:1.7b             # description 生成（選配）
-```
-
-等 Obsidian 的社群 第三方外掛程式審核通過，就可以直接安裝。
-
-透過 [BRAT](https://github.com/TfTHacker/obsidian42-brat) 安裝：加入 `notoriouslab/vault-search`。
-
-或手動下載：[GitHub Releases](https://github.com/notoriouslab/vault-search/releases)
+Obsidian 的社群 第三方外掛程式通過囉 :)
+可以直接安裝。
 
 ## 開源
 
 MIT 授權，歡迎使用、回饋、貢獻，給我星星啊 XD
 
-GitHub：[notoriouslab/vault-search](https://github.com/notoriouslab/vault-search)
+GitHub：https://github.com/notoriouslab/vault-curate
 
 ---

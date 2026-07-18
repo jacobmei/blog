@@ -12,7 +12,7 @@ tags:
   - browser
 draft: false
 featured: false
-cover: ./assets/20260421-02.jpg
+cover: ./assets/20260415-09.jpg
 ---
 # Rescuing EXIF GPS from iPhone 17 HEIC, in a browser-only app
 
@@ -22,7 +22,7 @@ One of the features she relies on is auto-placement: drop twenty photos and each
 
 Then she upgraded to an iPhone 17, and every photo she dropped piled up at the map center.
 
-![White-stone lake trail — five spots auto-placed from EXIF GPS](./assets/20260421-01.jpg)
+![White-stone lake trail — five spots auto-placed from EXIF GPS](./assets/20260415-02.jpg)
 
 ## The diagnosis
 
@@ -71,7 +71,7 @@ return parseWithExifReader(buf, ExifReader);
 
 Two things I like about this. First, the main bundle doesn't move — ExifReader lives in its own ~34 KB gzip chunk that only downloads when needed. A user on an older iPhone, on Android, or on a desktop dragging JPEGs pays zero cost for a problem they don't have. Second, the fallback is bounded: it only fires when exifr produced _nothing_ — no GPS, no metadata — which is the specific failure mode we're trying to rescue. A normal photo that just happens to lack GPS still short-circuits after a single pass.
 
-![London museum trip — spots auto-placed from HEIC EXIF across multiple venues](./assets/20260421-02.jpg)
+![London museum trip — spots auto-placed from HEIC EXIF across multiple venues](./assets/20260415-09.jpg)
 
 ## Four hardening doors
 

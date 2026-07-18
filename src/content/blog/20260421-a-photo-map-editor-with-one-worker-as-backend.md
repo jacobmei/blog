@@ -12,7 +12,7 @@ tags:
   - serverless
 draft: false
 featured: false
-cover: ./assets/20260421-03.jpg
+cover: ./assets/20260415-04.jpg
 ---
 # A photo-map editor with no database, no login, and one Cloudflare Worker
 
@@ -22,7 +22,7 @@ Somewhere along the way I noticed I hadn't written any backend code. I still hav
 
 That accidental constraint is what made the project actually fun to work on. Below are five things I expected to need a server for and didn't, plus the bugs I hit along the way. Most of them involve iOS Safari doing something unpleasant.
 
-![A finished export — Baishihu Lake trail, five photo spots, one route](./assets/20260421-03.jpg)
+![A finished export — Baishihu Lake trail, five photo spots, one route](./assets/20260415-04.jpg)
 
 ## 1. Exporting the map as a PNG — the iOS Safari trap
 
@@ -66,7 +66,7 @@ The fix wasn't clever: eleven guards across `ExportWizard.tsx`, `RouteEditor.tsx
 
 ## 3. Sharing a project that includes photos
 
-![Export wizard — ratio, filter, border, share destination](./assets/20260421-04.jpg)
+![Export wizard — ratio, filter, border, share destination](./assets/20260415-03.jpg)
 
 A project is a JSON blob: spots, routes, photo blobs (as base64), map state. Small project with no photos fits fine in a URL hash if you're willing to stare at a 2 KB URL. Big project with 20 photos at 2 MB each: 40 MB of payload, not going anywhere near a URL.
 
@@ -107,4 +107,4 @@ The no-server constraint also forced me to learn a pile of things I wouldn't hav
 
 Source is on GitHub under GPL-3.0: [github.com/notoriouslab/trailpaint](https://github.com/notoriouslab/trailpaint). The hybrid capture lives in `online/src/map/ExportButton.tsx`, the share compression in `online/src/core/utils/shareLink.ts`, and the Worker in `cloudflare/share.worker.js` if you want to poke at any of it. Always curious what I got wrong — I'm sure iOS has a few booby traps I haven't tripped yet.
 
-![Base-layer switching — satellite, contour, protomaps, and historical overlays are all Leaflet tile layers](./assets/20260421-05.jpg)
+![Base-layer switching — satellite, contour, protomaps, and historical overlays are all Leaflet tile layers](./assets/20260415-07.jpg)

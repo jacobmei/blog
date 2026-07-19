@@ -13,6 +13,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/2026-03-23.jpg
+shortCode: "ygw9rr"
 ---
 # 繁體中文搜尋預處理工具 trad-zh-search 開源了
 

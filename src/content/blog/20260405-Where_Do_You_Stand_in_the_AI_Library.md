@@ -12,6 +12,7 @@ tags:
 draft: false
 featured: true
 cover: ./assets/20260405.jpg
+shortCode: "3zsgf5"
 ---
 # Where Do You Stand in the AI Library?
 

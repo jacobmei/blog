@@ -12,6 +12,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/2026-03-01.jpg
+shortCode: "1gxhah"
 ---
 ## 當代局勢與聖經歷史的共鳴
 

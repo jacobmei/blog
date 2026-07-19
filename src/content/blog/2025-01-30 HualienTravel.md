@@ -11,6 +11,7 @@ author: jacobmei
 featured: false
 cover: ./assets/2025-01-30-01.jpg
 category: 旅遊
+shortCode: "1t3bra"
 ---
 ## 璽賓行旅住宿+必吃林記蔥油餅
 

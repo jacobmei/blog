@@ -16,6 +16,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/20260406.jpg
+shortCode: "159csv"
 ---
 # 用 Persona 壓測 LLM 的政治與信仰立場：一個非正式的 Benchmark
 

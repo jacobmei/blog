@@ -26,6 +26,7 @@ howto:
       text: 執行 python3 fetcher.py，對帳單 PDF 將自動下載至 ./downloads/ 資料夾，檔名含機構名稱與年月
     - name: 設定每日自動排程
       text: 使用 crontab 加入定時排程：0 9 * * * cd /path/to/gmail-statement-fetcher && python3 fetcher.py
+shortCode: "1w7eml"
 ---
 ## 我的痛點與動機
 

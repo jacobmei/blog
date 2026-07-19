@@ -13,6 +13,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/20260415-09.jpg
+shortCode: "2yh1pu"
 ---
 # Rescuing EXIF GPS from iPhone 17 HEIC, in a browser-only app
 

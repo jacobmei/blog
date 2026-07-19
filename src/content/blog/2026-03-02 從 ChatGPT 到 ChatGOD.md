@@ -10,6 +10,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/2026-03-02.jpg
+shortCode: "1xeq05"
 ---
 AI 越來越貼近生活使用，很多人都知道——要有好的輸出，就要選對模型，給足夠的上下文，讓它在龐大的資料上推論。
 

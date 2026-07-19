@@ -12,6 +12,7 @@ author: jacobmei
 category: AI與科技
 featured: false
 cover: ./assets/20260403.jpg
+shortCode: "r7qy3y"
 ---
 
 # Gemma 4 在 8GB MacBook Air 上的 RAG 實測

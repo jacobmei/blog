@@ -13,6 +13,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/20260415-04.jpg
+shortCode: "49ofw6"
 ---
 # A photo-map editor with no database, no login, and one Cloudflare Worker
 

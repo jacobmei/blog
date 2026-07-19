@@ -10,6 +10,7 @@ tags:
   - 聖經
 draft: false
 featured: false
+shortCode: doe7dw
 ---
 
 # 繁體中文全文搜尋引擎實戰筆記（四）：從 Meilisearch 翻到 SQLite，Hit@1 從 39% 到 64%

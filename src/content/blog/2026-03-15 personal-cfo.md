@@ -14,6 +14,7 @@ tags:
 source: https://github.com/notoriouslab/personal-cfo
 source_path: ""
 cover: ./assets/2026-03-16-00.jpg
+shortCode: "57xyy6"
 ---
 
 # 知道自己的退休計畫在軌道上嗎？

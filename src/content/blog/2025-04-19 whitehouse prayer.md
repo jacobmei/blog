@@ -9,6 +9,7 @@ author: jacobmei
 featured: false
 cover: ./assets/2025-04-19.jpg
 category: 生活隨筆
+shortCode: "1utid9"
 ---
 ### 白宮復活節禱告：從屬靈復興，定睛神的手中
 

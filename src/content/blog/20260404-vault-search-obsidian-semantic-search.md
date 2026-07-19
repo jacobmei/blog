@@ -12,6 +12,7 @@ author: jacobmei
 category: AI與科技
 featured: false
 cover: ./assets/20260404-vault-search.png
+shortCode: "n6nst4"
 ---
 
 # 開源 Obsidian 語意搜尋插件 Vault Curate :)

@@ -10,6 +10,7 @@ author: jacobmei
 featured: false
 cover: ./assets/2025-09-10.jpg
 category: 生活隨筆
+shortCode: "1oizmx"
 ---
 ### 職場禱告會：成為神手中的高手新手
 

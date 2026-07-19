@@ -11,6 +11,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/2026-03-06.jpg
+shortCode: "1xo3tz"
 ---
 # GitHub 也能當 UI？用 IssueOps 建個人情報站
 

@@ -12,6 +12,7 @@ author: jacobmei
 featured: false
 cover: ./assets/2026-02-26DailyDevotion.jpg
 category: 生活隨筆
+shortCode: "obfaa5"
 ---
 教會在推動「編年式讀經」計畫，我覺得能夠用有系統的方式重新認識聖經當中的人事時地物，是很有意思的，不過編年式讀經要在跨越不同經卷中找出關聯性，不是件簡單的事，中文相關資源也很少，因此之前採用了 AI 的協助，陸續做了幾本免費下載的電子書和 Podcast。
 

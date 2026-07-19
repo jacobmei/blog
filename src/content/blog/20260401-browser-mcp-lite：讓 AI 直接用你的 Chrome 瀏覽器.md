@@ -10,6 +10,7 @@ tags:
 draft: false
 featured: false
 cover: ./assets/20260401.jpg
+shortCode: "iwuu2t"
 ---
 
 # browser-mcp-lite 開源：讓 AI 助手直接看見你真實的 Chrome 瀏覽器

@@ -13,6 +13,7 @@ author: jacobmei
 category: AI與科技
 featured: true
 cover: ./assets/20260518-vaultcurate.jpg
+shortCode: "1g8vmf"
 ---
 
 # Vault Curate：工具幫你看見，不幫你思考

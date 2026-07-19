@@ -14,6 +14,7 @@ tags:
 source: https://github.com/notoriouslab/doc-cleaner
 source_path: ""
 cover: ./assets/2026-03-13-doc-cleaner.jpg
+shortCode: "17vt5s"
 ---
 
 # 文件整理超費神，然後越來越龐雜 XD

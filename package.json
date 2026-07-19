@@ -11,6 +11,8 @@
     "start": "astro dev",
     "build": "astro build",
     "postbuild": "node scripts/postbuild-search.mjs",
+    "verify:dist": "node scripts/verify-dist.mjs",
+    "pin:shortcodes": "node scripts/pin-shortcodes.mjs",
     "tokenize": "python3 scripts/tokenize-search-index.py",
     "preview": "astro preview",
     "check": "astro check",
@@ -52,6 +54,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.18.0",
+    "github-slugger": "^2.0.0",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3"

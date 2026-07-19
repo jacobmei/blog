@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -52,6 +52,21 @@ jobs:
 
       - name: Build Astro
         run: npm run build
+
+      - name: Verify dist integrity (死鏈與缺圖硬閘門)
+        run: node scripts/verify-dist.mjs
+
+      - name: Pin shortCodes for new posts (自動釘網址)
+        run: |
+          node scripts/pin-shortcodes.mjs
+          if ! git diff --quiet -- src/content/blog; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/content/blog
+            git commit -m "chore(blog): 自動回填新文章 shortCode [skip ci]"
+            git pull --rebase origin main || true
+            git push origin HEAD:main || echo "::warning::shortCode 回填 push 失敗，下次部署會再試"
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

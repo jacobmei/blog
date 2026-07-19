@@ -91,6 +91,12 @@ else
   log_fail "首頁 index.html 不存在"
 fi
 
+if node scripts/verify-dist.mjs; then
+  log_pass "dist 完整性（無內部死鏈、無缺失資產）"
+else
+  log_fail "dist 完整性驗證未通過（死鏈或缺圖，見上方輸出）"
+fi
+
 echo ""
 
 # 結果

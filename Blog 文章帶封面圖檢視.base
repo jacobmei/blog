@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.folder == "src/content/blog"
+formulas:
+  摘要: |
+    [
+      description.slice(0, 15), 
+      description.slice(15, 30), 
+      description.slice(30, 45) + "..."
+    ]
+views:
+  - type: cards
+    name: 表格
+    order:
+      - file.name
+      - description
+      - file.tags
+      - formula.摘要
+    sort:
+      - property: file.name
+        direction: DESC
+    cardSize: 150
+    image: note.cover
+    imageAspectRatio: 0.95
+    rowHeight: medium

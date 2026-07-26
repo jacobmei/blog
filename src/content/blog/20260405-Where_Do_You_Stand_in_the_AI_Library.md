@@ -10,7 +10,7 @@ tags:
   - Markdown
   - obsidian
 draft: false
-featured: true
+featured: false
 cover: ./assets/20260405.jpg
 shortCode: 3zsgf5
 ---

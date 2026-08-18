@@ -2,6 +2,7 @@
 title: Notoriouslab Github 開源專案總覽
 description: notoriouslab 旗下 12 個開源專案的一頁總覽：中文文本處理與搜尋、AI 協作工具、個人財務自動化、家庭健康紀錄、生態地圖。每個專案解決什麼問題、適合誰用，這篇會隨改版持續更新。
 pubDate: 2026-07-26 19:40+08:00
+updatedDate: 2026-08-18 17:33+08:00
 tags:
   - 開源
   - side-project

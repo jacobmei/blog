@@ -79,4 +79,4 @@
 
 3. 簽名權限管理
 - `WEB3_SIGNER_PRIVATE_KEY` 僅可放在本機/CI secret，不能進版控。
-- 建議逐步轉向 delegated signer（例如 `signer.mashbean.eth`）降低主錢包暴露面。
+- 建議逐步轉向 delegated signer（例如 `signer.jacobmei.eth`）降低主錢包暴露面。

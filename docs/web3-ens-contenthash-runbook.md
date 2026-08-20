@@ -5,7 +5,7 @@
 - 寫入交易資訊到 `/Users/mashbean/Codex/docs/web3-ipfs-releases.json`。
 
 ## 參數
-- `--name <ens-name>`：預設讀 `PUBLIC_TIP_ENS_NAME`（如 `mashbean.eth`）。
+- `--name <ens-name>`：預設讀 `PUBLIC_TIP_ENS_NAME`（如 `jacobmei.eth`）。
 - 二選一：
   - `--ipns <ipns-name>`
   - `--cid <ipfs-cid>`
@@ -19,7 +19,7 @@ npm run web3:ens:contenthash:dry
 ```bash
 export PUBLIC_WEB3_RPC_URL="https://mainnet.infura.io/v3/<key>"
 export PUBLIC_WEB3_CHAIN_ID=1
-npm run web3:ens:contenthash -- --dry-run --name mashbean.eth --ipns <ipns-name>
+npm run web3:ens:contenthash -- --dry-run --name jacobmei.eth --ipns <ipns-name>
 ```
 
 ## Live（送交易）
@@ -27,7 +27,7 @@ npm run web3:ens:contenthash -- --dry-run --name mashbean.eth --ipns <ipns-name>
 export PUBLIC_WEB3_RPC_URL="https://mainnet.infura.io/v3/<key>"
 export PUBLIC_WEB3_CHAIN_ID=1
 export WEB3_SIGNER_PRIVATE_KEY="0x<private-key>"
-npm run web3:ens:contenthash -- --name mashbean.eth --ipns <ipns-name>
+npm run web3:ens:contenthash -- --name jacobmei.eth --ipns <ipns-name>
 ```
 
 ## 成功條件

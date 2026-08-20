@@ -14,7 +14,7 @@ npm run web3:healthcheck
 可選參數：
 ```bash
 node scripts/web3-healthcheck.mjs --release-id <id>
-node scripts/web3-healthcheck.mjs --name mashbean.eth --gateway https://gateway.pinata.cloud/ipfs/
+node scripts/web3-healthcheck.mjs --name jacobmei.eth --gateway https://gateway.pinata.cloud/ipfs/
 node scripts/web3-healthcheck.mjs --no-eth-limo
 ```
 
@@ -31,7 +31,7 @@ node scripts/web3-rollback-release.mjs --to-cid <cid>
 
 正式回滾（live）：
 ```bash
-node scripts/web3-rollback-release.mjs --live --to-release-id <release-id> --ipns-key self --name mashbean.eth
+node scripts/web3-rollback-release.mjs --live --to-release-id <release-id> --ipns-key self --name jacobmei.eth
 ```
 
 說明：

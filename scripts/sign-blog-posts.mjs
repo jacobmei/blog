@@ -5,7 +5,7 @@ import fg from "fast-glob";
 import matter from "gray-matter";
 import { ethers } from "ethers";
 
-const SIGNATURE_VERSION = "mashbean.article.v1";
+const SIGNATURE_VERSION = "jacobmei.article.v1";
 const BLOG_DIR = path.resolve("src/content/blog");
 
 const normalizeBody = (body) => body.replace(/\r\n/g, "\n").trim();

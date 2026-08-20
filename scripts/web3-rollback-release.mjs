@@ -10,7 +10,7 @@ const parseArgs = () => {
     toReleaseId: "",
     toCid: "",
     ipnsKey: "self",
-    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "mashbean.eth",
+    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "jacobmei.eth",
     dryRun: true
   };
 

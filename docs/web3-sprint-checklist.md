@@ -21,7 +21,7 @@ npm run build
 - 完成定義：本地與 CI 都能成功讀取設定；缺值時能看懂錯誤。
 
 ### S1-02 打賞元件（EIP-681 + QR + Copy）
-- [x] 新增打賞元件：顯示 `mashbean.eth`、解析後地址、付款按鈕。
+- [x] 新增打賞元件：顯示 `jacobmei.eth`、解析後地址、付款按鈕。
 - [x] 產生 EIP-681 付款連結（含 chainId）。
 - [x] 支援 QR code 與一鍵複製地址。
 - [x] 將元件嵌入文章頁版型。
@@ -62,7 +62,7 @@ npm run check
 
 ### S1-05 離線簽名腳本與前端驗簽
 - [x] 新增腳本：對文章生成簽名並回填 metadata。
-- [x] 文章頁加入驗簽流程，通過顯示 `Verified by mashbean.eth`。
+- [x] 文章頁加入驗簽流程，通過顯示 `Verified by jacobmei.eth`。
 - [x] 內容被篡改時，驗簽結果必須失敗。
 - [x] 支援未簽名文章的降級顯示。
 - Owner:
@@ -127,13 +127,13 @@ npm run web3:ipns:update:dry
 - Estimate: 1.0 day
 - 驗收命令:
 ```bash
-npm run web3:ens:contenthash -- --dry-run --name mashbean.eth --ipns <ipns-name>
-npm run web3:ens:contenthash -- --name mashbean.eth --ipns <ipns-name>
+npm run web3:ens:contenthash -- --dry-run --name jacobmei.eth --ipns <ipns-name>
+npm run web3:ens:contenthash -- --name jacobmei.eth --ipns <ipns-name>
 ```
-- 完成定義：`mashbean.eth` contenthash 與發布紀錄一致。
+- 完成定義：`jacobmei.eth` contenthash 與發布紀錄一致。
 
 ### S2-04 .eth.limo 可用性驗證
-- [x] 驗證 `https://mashbean.eth.limo` 可存取首頁與至少 1 篇文章（已提供檢查腳本）。
+- [x] 驗證 `https://jacobmei.eth.limo` 可存取首頁與至少 1 篇文章（已提供檢查腳本）。
 - [ ] 驗證手機與桌面瀏覽器的可讀性。
 - [ ] 確認快取延遲窗口，記錄切版生效時間。
 - Owner:
@@ -177,7 +177,7 @@ npm run build
 - [x] ENS verified 僅在 forward/reverse 通過時顯示。
 - [x] 已簽名文章可驗證，篡改必失敗。
 - [ ] 每次部署都有 CID，且 IPNS 指向最新版本。
-- [ ] `mashbean.eth.limo` 可穩定訪問最新站點。
+- [ ] `jacobmei.eth.limo` 可穩定訪問最新站點。
 
 ## 建議 issue labels
 - `web3`

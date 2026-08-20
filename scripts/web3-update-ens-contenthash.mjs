@@ -46,7 +46,7 @@ const toHex = (bytes) => `0x${Buffer.from(bytes).toString("hex")}`;
 const parseArgs = () => {
   const args = process.argv.slice(2);
   const options = {
-    name: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "mashbean.eth",
+    name: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "jacobmei.eth",
     cid: "",
     ipns: "",
     dryRun: false,

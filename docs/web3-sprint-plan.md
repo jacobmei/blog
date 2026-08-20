@@ -11,7 +11,7 @@
 ## Sprint 1（7 天）：站內功能可用
 
 ### Day 1：專案基線與環境變數
-- 任務：定義 `PUBLIC_TIP_ENS_NAME=mashbean.eth`、RPC、`chainId`、簽名用私鑰來源（本機/CI secret）。
+- 任務：定義 `PUBLIC_TIP_ENS_NAME=jacobmei.eth`、RPC、`chainId`、簽名用私鑰來源（本機/CI secret）。
 - 驗收：本地與 CI 都可讀取設定，缺值會報明確錯誤。
 
 ### Day 2-3：打賞元件
@@ -41,11 +41,11 @@
 - 驗收：IPNS 名稱可解析到新內容，舊版仍可用 CID 存取。
 
 ### Day 5：ENS contenthash 綁定
-- 任務：把 `mashbean.eth` contenthash 指到 IPNS（或先 IPFS 再切 IPNS）。
+- 任務：把 `jacobmei.eth` contenthash 指到 IPNS（或先 IPFS 再切 IPNS）。
 - 驗收：contenthash 更新成功，可從 gateway 正常讀取。
 
 ### Day 6：`.eth.limo` 驗證
-- 任務：確認 `https://mashbean.eth.limo` 可讀到當前版本。
+- 任務：確認 `https://jacobmei.eth.limo` 可讀到當前版本。
 - 驗收：桌機與手機皆可載入；更新流程後網址不需改。
 
 ### Day 7：監控與回滾
@@ -57,7 +57,7 @@
 2. ENS verified 只在 forward/reverse 通過時顯示。
 3. 已簽名文章可驗證，篡改必失敗。
 4. 每次部署有 CID，可用 IPNS 指到最新。
-5. `mashbean.eth.limo` 可穩定訪問最新站點。
+5. `jacobmei.eth.limo` 可穩定訪問最新站點。
 
 ## 里程碑建議
 - 里程碑 A（Sprint 1 結束）：站內 Web3 功能可用。

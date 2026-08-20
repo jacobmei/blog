@@ -2,7 +2,7 @@
 const parseArgs = () => {
   const args = process.argv.slice(2);
   const options = {
-    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "mashbean.eth",
+    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "jacobmei.eth",
     articlePath: "/blog/",
     dryRun: false
   };

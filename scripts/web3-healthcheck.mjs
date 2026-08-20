@@ -16,7 +16,7 @@ const parseArgs = () => {
   const options = {
     recordPath: "docs/web3-ipfs-releases.json",
     releaseId: "",
-    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "mashbean.eth",
+    ensName: process.env.PUBLIC_TIP_ENS_NAME?.trim() || "jacobmei.eth",
     gatewayBase: "https://gateway.pinata.cloud/ipfs/",
     checkEthLimo: true
   };

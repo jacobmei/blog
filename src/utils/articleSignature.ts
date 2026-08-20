@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-export const ARTICLE_SIGNATURE_VERSION = "mashbean.article.v1";
+export const ARTICLE_SIGNATURE_VERSION = "jacobmei.article.v1";
 
 export interface ArticleSignatureMetadata {
   contentHash?: string;

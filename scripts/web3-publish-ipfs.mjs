@@ -163,7 +163,7 @@ const main = async () => {
   const releaseId = new Date().toISOString().replace(/[:.]/g, "-");
   const gitSha = await getGitSha();
   const distDigest = await computeDistDigest(entries);
-  const pinName = options.pinName || `mashbean-blog-${releaseId}`;
+  const pinName = options.pinName || `jacobmei-blog-${releaseId}`;
 
   const baseRecord = {
     releaseId,

@@ -22,7 +22,7 @@ Measure the four success metrics with minimum overhead:
 
 ## Setup (GitHub Pages + Actions)
 Set repository variables in GitHub:
-1. `PUBLIC_PLAUSIBLE_DOMAIN` = `mashbean.net`
+1. `PUBLIC_PLAUSIBLE_DOMAIN` = `jacobmei.com`
 2. (Optional) `PUBLIC_PLAUSIBLE_SCRIPT_SRC` = custom script host
 
 Path:

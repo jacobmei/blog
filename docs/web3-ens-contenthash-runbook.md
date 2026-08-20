@@ -2,7 +2,7 @@
 
 ## 目的
 - 更新 ENS `contenthash`，指向最新 `IPNS`（或暫時直指 `IPFS` CID）。
-- 寫入交易資訊到 `/Users/mashbean/Codex/docs/web3-ipfs-releases.json`。
+- 寫入交易資訊到 `/Users/jacobmei/Blog/docs/web3-ipfs-releases.json`。
 
 ## 參數
 - `--name <ens-name>`：預設讀 `PUBLIC_TIP_ENS_NAME`（如 `jacobmei.eth`）。

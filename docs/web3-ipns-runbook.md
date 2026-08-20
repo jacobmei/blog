@@ -2,7 +2,7 @@
 
 ## 目的
 - 將 IPNS 名稱更新到最新 CID。
-- 把 IPNS 名稱與 CID 寫回 `/Users/mashbean/Codex/docs/web3-ipfs-releases.json`。
+- 把 IPNS 名稱與 CID 寫回 `/Users/jacobmei/Blog/docs/web3-ipfs-releases.json`。
 
 ## 前置條件
 - 本機已安裝並可使用 `ipfs` CLI。

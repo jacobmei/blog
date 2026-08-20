@@ -1,7 +1,7 @@
 # Web3 Sprint Checklist
 
 ## 使用方式
-- 這份文件把 `/Users/mashbean/Codex/docs/web3-sprint-plan.md` 拆成可執行清單。
+- 這份文件把 `/Users/jacobmei/Blog/docs/web3-sprint-plan.md` 拆成可執行清單。
 - 每個任務可直接轉成 1 張 issue。
 - 建議欄位：`Owner`、`Estimate`、`Target`、`Status`。
 

@@ -11,8 +11,8 @@
 - 簽名私鑰改採 `WEB3_SIGNER_PRIVATE_KEY`（本機 `.env.local` / CI secret）。
 
 2. 打賞元件（文章頁已上線）
-- 新增：`/Users/mashbean/Codex/src/components/Web3TipJar.astro`
-- 文章頁整合：`/Users/mashbean/Codex/src/pages/blog/[...slug].astro`
+- 新增：`/Users/jacobmei/Blog/src/components/Web3TipJar.astro`
+- 文章頁整合：`/Users/jacobmei/Blog/src/pages/blog/[...slug].astro`
 - 功能：
   - ENS 名稱展示與解析地址
   - EIP-681 付款連結（0.001 / 0.01 ETH）
@@ -20,7 +20,7 @@
   - 一鍵複製地址
 
 3. ENS 驗證與 Anti-spoofing
-- 新增：`/Users/mashbean/Codex/src/utils/ens.ts`
+- 新增：`/Users/jacobmei/Blog/src/utils/ens.ts`
 - 驗證流程：
   - forward: `name -> address`
   - reverse: `address -> primary name`
@@ -33,7 +33,7 @@
   - `signature`
   - `signer`
   - `signatureVersion`
-- 新增：`/Users/mashbean/Codex/src/utils/articleSignature.ts`
+- 新增：`/Users/jacobmei/Blog/src/utils/articleSignature.ts`
 - 文章頁顯示狀態：
   - `已簽名`
   - `未簽名`
@@ -41,7 +41,7 @@
 - 新增可展開簽名細節面板（簽署地址、恢復地址、ENS 狀態、contentHash、signatureVersion）。
 
 5. 離線簽名腳本
-- 新增：`/Users/mashbean/Codex/scripts/sign-blog-posts.mjs`
+- 新增：`/Users/jacobmei/Blog/scripts/sign-blog-posts.mjs`
 - 指令：
   - `npm run sign:posts`
   - `npm run sign:posts -- --dry-run`
@@ -49,8 +49,8 @@
   - `npm run sign:posts:check`
 
 6. 規格與文件
-- 新增：`/Users/mashbean/Codex/docs/web3-signature-spec.md`
-- 新增：`/Users/mashbean/Codex/docs/web3-delegated-signing-runbook.md`
+- 新增：`/Users/jacobmei/Blog/docs/web3-signature-spec.md`
+- 新增：`/Users/jacobmei/Blog/docs/web3-delegated-signing-runbook.md`
 - 更新 README（Web3 env 與簽名流程）
 
 ## 驗收結果

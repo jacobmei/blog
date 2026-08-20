@@ -24,7 +24,7 @@ npm run web3:ipfs:publish
 ```
 
 ## 輸出與紀錄
-- 正式發布後，會寫入 `/Users/mashbean/Codex/docs/web3-ipfs-releases.json`。
+- 正式發布後，會寫入 `/Users/jacobmei/Blog/docs/web3-ipfs-releases.json`。
 - 每筆紀錄包含：
   - `releaseId`
   - `gitSha`

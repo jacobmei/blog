@@ -1,13 +1,13 @@
 # Astro Migration Audit
 
 Date: 2026-02-21  
-Repo: /Users/mashbean/Codex
+Repo: /Users/jacobmei/Blog
 
 ## 1. Current Jekyll Facts
 
 - Jekyll theme is `minima` (theme-provided layouts are implicit).
 - `_config.yml` includes:
-  - `url: https://mashbean.net`
+  - `url: https://jacobmei.com`
   - `baseurl: ""`
   - `timezone: Asia/Taipei`
   - `permalink: /:year/:month/:day/:title/`

@@ -9,7 +9,7 @@ tags:
 author: jacobmei
 category: AI與科技
 draft: false
-featured: true
+featured: false
 cover: https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6a63620bedb2b7813b107216_c4fdec0d.png
 shortCode: ctx3lr
 ---

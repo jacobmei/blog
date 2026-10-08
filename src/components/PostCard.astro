@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { buildPostUrl, getEffectiveDate } from "@/utils/blog";
+import { buildPostUrl, getDisplayDate } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { withBase } from "@/utils/paths";
 import { cleanPostTitle } from "@/utils/title";
@@ -60,20 +60,11 @@ const readingMinutes = (() => {
     )}
   </a>
   <p class="post-card-meta">
-    <time datetime={getEffectiveDate(post).toISOString()}>{formatDate(getEffectiveDate(post))}</time>
+    <time datetime={getDisplayDate(post).toISOString()}>{formatDate(getDisplayDate(post))}</time>
     {" · 約 "}
     {readingMinutes}
     {" 分鐘"}
     {!minimal && post.data.category && <>{" · "}{post.data.category}</>}
-    {!minimal &&
-      post.data.updatedDate && (
-        <>
-          {" · 更新 "}
-          <time datetime={post.data.updatedDate.toISOString()}>
-            {formatDate(post.data.updatedDate)}
-          </time>
-        </>
-      )}
   </p>
   <h2 class="post-card-title">
     {post.data.featured && <span class="post-card-featured-badge" aria-label="置頂文章">📌</span>}

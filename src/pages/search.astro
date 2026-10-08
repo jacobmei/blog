@@ -191,7 +191,7 @@ import { withBase } from "@/utils/paths";
     if (countEl) countEl.textContent = `${items.length} 筆結果`;
 
     for (const item of items) {
-      const dateLabel = formatDate(item.pubDate);
+      const dateLabel = formatDate(item.displayDate ?? item.pubDate);
       const topics = Array.isArray(item.topics) ? item.topics.slice(0, 3) : [];
       const tags = Array.isArray(item.tags)
         ? item.tags.filter((tag: string) => !topics.includes(tag)).slice(0, 4)
@@ -316,7 +316,7 @@ import { withBase } from "@/utils/paths";
       const miniSearch = MiniSearch.loadJSON(JSON.stringify(indexData), {
         idField: "id",
         fields: ["title_bigram", "desc_bigram", "content_bigram", "tags_bigram"],
-        storeFields: ["title", "description", "url", "pubDate", "tags", "topics"],
+        storeFields: ["title", "description", "url", "pubDate", "displayDate", "tags", "topics"],
         tokenize: (text: string) => text.split(/\s+/).filter(Boolean),
         searchOptions: {
           boost: { title_bigram: 6, tags_bigram: 4, desc_bigram: 2, content_bigram: 1 },

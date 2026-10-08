@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildPostUrl, getBlogPosts, getEffectiveDate } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getDisplayDate, getEffectiveDate } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { classifyPostTags } from "@/utils/blogTags";
 import { cleanPostTitle } from "@/utils/title";
@@ -84,8 +84,8 @@ for (const post of posts) {
                       const topics = topicByPostId.get(post.id) ?? ["公共網路"];
                       return (
                         <li class="archive-item">
-                          <time class="archive-date" datetime={getEffectiveDate(post).toISOString()}>
-                            {formatDate(getEffectiveDate(post))}
+                          <time class="archive-date" datetime={getDisplayDate(post).toISOString()}>
+                            {formatDate(getDisplayDate(post))}
                           </time>
                           <div class="archive-main">
                             <a class="archive-link" href={buildPostUrl(post)}>

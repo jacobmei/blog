@@ -25,6 +25,11 @@ export function getEffectiveDate(post: BlogEntry | ResearchEntry): Date {
   return new Date();
 }
 
+/** 列表顯示用日期：有更新日期用更新日期，否則用發布日期。 */
+export function getDisplayDate(post: BlogEntry): Date {
+  return post.data.updatedDate ?? getEffectiveDate(post);
+}
+
 interface GetBlogPostsOptions {
   includeDrafts?: boolean;
   includeFuture?: boolean;

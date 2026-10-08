@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildPostUrl, getBlogPosts, getEffectiveDate, getPostCanonicalPathSegment, getPostPathCandidates } from "@/utils/blog";
+import { buildPostUrl, getBlogPosts, getDisplayDate, getEffectiveDate, getPostCanonicalPathSegment, getPostPathCandidates } from "@/utils/blog";
 import { formatDate } from "@/utils/date";
 import { withBase } from "@/utils/paths";
 import { cleanPostTitle } from "@/utils/title";
@@ -522,7 +522,7 @@ if (post.data.howto) {
             {relatedPosts.map((item) => (
               <li class="post-list-compact-item">
                 <a class="post-list-compact-link" href={buildPostUrl(item)}>{cleanPostTitle(item.data.title)}</a>
-                <small class="post-list-compact-date">({formatDate(getEffectiveDate(item))})</small>
+                <small class="post-list-compact-date">({formatDate(getDisplayDate(item))})</small>
               </li>
             ))}
           </ul>

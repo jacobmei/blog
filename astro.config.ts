@@ -19,9 +19,9 @@ export default defineConfig({
     format: "directory"
   },
   redirects: {
-    "/blog/2026/0130-bg-2060e8b9/": "/blog/2026/0106-bg-87205a2e/",
-    "/blog/2026/0130-2060e8b9/": "/blog/2026/0106-bg-87205a2e/",
-    "/blog/2026-01-30-2060e8b9/": "/blog/2026/0106-bg-87205a2e/"
+    "/blog/2026/0130-bg-2060e8b9/": "/blog/2026/0105-bg-87205a2e/",
+    "/blog/2026/0130-2060e8b9/": "/blog/2026/0105-bg-87205a2e/",
+    "/blog/2026-01-30-2060e8b9/": "/blog/2026/0105-bg-87205a2e/"
   },
   integrations: [
     sitemap({

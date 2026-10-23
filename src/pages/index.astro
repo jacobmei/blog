@@ -1,12 +1,19 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import { getBlogPosts } from "@/utils/blog";
+import { getBlogPosts, getDisplayDate } from "@/utils/blog";
 import { withBase } from "@/utils/paths";
 import mottos from "@/data/motto.json";
 
 const posts = await getBlogPosts();
-const latestPosts = posts.slice(0, 8);
+// 首頁依卡片顯示的日期排（有更新日期的文章會浮上來），其他列表維持發布順序
+const latestPosts = [...posts]
+  .sort((a, b) => {
+    const featuredDiff = Number(!!b.data.featured) - Number(!!a.data.featured);
+    if (featuredDiff !== 0) return featuredDiff;
+    return getDisplayDate(b).getTime() - getDisplayDate(a).getTime();
+  })
+  .slice(0, 8);
 const todaySeed = [...new Date().toISOString().slice(0, 10)].reduce(
   (sum, ch) => sum + ch.charCodeAt(0),
   0,

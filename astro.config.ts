@@ -18,6 +18,11 @@ export default defineConfig({
   build: {
     format: "directory"
   },
+  redirects: {
+    "/blog/2026/0130-bg-2060e8b9/": "/blog/2026/0106-bg-87205a2e/",
+    "/blog/2026/0130-2060e8b9/": "/blog/2026/0106-bg-87205a2e/",
+    "/blog/2026-01-30-2060e8b9/": "/blog/2026/0106-bg-87205a2e/"
+  },
   integrations: [
     sitemap({
       filter: (page) => {
@@ -27,7 +32,7 @@ export default defineConfig({
         if (pathname.includes("/partials/")) return false;
         if (/^\/tags\/.+/.test(pathname)) return false;
         if (!pathname.startsWith("/blog/")) return true;
-        return /^\/blog\/\d{4}\/\d{4}-[a-z0-9]{6}\/$/i.test(pathname);
+        return /^\/blog\/\d{4}\/\d{4}-([a-z0-9]{6,7}|bg-[0-9a-f]{8})\/$/i.test(pathname);
       },
       serialize(item) {
         const blogMatch = item.url.match(/\/blog\/(\d{4})\/(\d{2})(\d{2})-/);

@@ -13,8 +13,9 @@ featured: false
 cover: ./assets/2026-02-26DailyDevotion.jpg
 category: 生活隨筆
 shortCode: "obfaa5"
+updatedDate: 2026-10-23 10:00+08:00
 ---
-教會在推動「編年式讀經」計畫，我覺得能夠用有系統的方式重新認識聖經當中的人事時地物，是很有意思的，不過編年式讀經要在跨越不同經卷中找出關聯性，不是件簡單的事，中文相關資源也很少，因此之前採用了 AI 的協助，陸續做了幾本免費下載的電子書和 Podcast。
+教會在推動「編年式讀經」計畫，我覺得能夠用有系統的方式重新認識聖經當中的人事時地物，是很有意思的，不過編年式讀經要在跨越不同經卷中找出關聯性，不是件簡單的事，中文相關資源也很少，因此之前採用了 AI 的協助，陸續做了四冊免費下載的電子書和 Podcast，現在也整理成[四冊合一的電子書](/blog/2026/0106-bg-87205a2e/)了。
 
 最近有一些網友對於如何使用 AI 製作這些內容很有興趣，所以我想將我製作的方式做個紀錄，有興趣的朋友就可以自己製作每日靈修的輔助教材，也歡迎可以一起討論 :)
 
@@ -181,17 +182,12 @@ shortCode: "obfaa5"
 
 **Q：編年式讀經電子書可以免費下載嗎**
 
-**A： 目前已經做了三本編年式讀經，都可以在 Google Play 平台免費閱讀**
+**A：可以！四冊已經全部完成，並整理成一本「四冊合一」的 PDF，從《創世記》讀到《啟示錄》**
 
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part1](https://play.google.com/store/books/details/Jacob_Mei_%E8%BC%95%E9%AC%86%E8%AE%80%E5%AE%8C%E4%B8%80%E9%81%8D%E8%81%96%E7%B6%93?id=BbmtEQAAQBAJ)
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part2](https://play.google.com/store/books/details/jacob_mei_%E8%BC%95%E9%AC%86%E8%AE%80%E5%AE%8C%E4%B8%80%E9%81%8D%E8%81%96%E7%B6%93?id=lTK4EQAAQBAJ)
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part3](https://books.google.com.tw/books/about?id=wkXFEQAAQBAJ&redir_esc=y)
+- [輕鬆讀完一遍聖經：編年式讀經靈修計畫 四冊合輯 PDF（Google Drive）](https://drive.google.com/file/d/1QPswWSL3JmXH0zh7Gr3FKDTDlLYeHhPZ/view?usp=sharing)
+- [Google 圖書（第一冊）](https://play.google.com/store/books/details?id=BbmtEQAAQBAJ)：其他冊正在陸續更新，之後可在「繼續瀏覽系列叢書」找到
 
-**也可以在透過我的 Google Drive 下載**
-
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part1](https://drive.google.com/file/d/1zhrCSrp6YGLAJ5-EKvCbhiY1oWCWqOy4/view?usp=drive_link)
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part2](https://drive.google.com/file/d/1H6-0p9PQMS160Ensl9e2E6EXMGukGMYY/view?usp=drive_link)
-- [輕鬆讀完一遍聖經: 編年式讀經 靈修 part3](https://drive.google.com/file/d/1mm3SGjQnFKW-2C-oy-M8o2rBtqiuljCI/view?usp=drive_link)
+更完整的介紹可以看這篇：[編年式讀經電子書 全四冊合一 免費下載（PDF）](/blog/2026/0106-bg-87205a2e/)
 
 **Q：編年式讀經聽說也有 Podcast ?**
 

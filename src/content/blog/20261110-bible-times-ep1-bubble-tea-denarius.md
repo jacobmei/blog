@@ -12,6 +12,7 @@ draft: false
 featured: false
 cover: ./assets/20261110-bible-times-ep1-bubble-tea-denarius.png
 coverAlt: 一杯珍奶，在耶穌時代能買什麼？穿越聖經時代 EP1
+shortCode: "1r0fnu"
 ---
 
 > 這篇也有影片版：[一杯珍奶，在耶穌時代能買什麼？｜穿越聖經時代 EP1](https://youtu.be/Qn4j-CvI-rY)（[穿越聖經時代 播放清單](https://www.youtube.com/playlist?list=PLbeYmaJdz79U)，每週二更新）

@@ -40,8 +40,7 @@ Blog/
 │   ├── skills/qa_auditor/ ← QA Auditor SKILL 定義
 │   └── workflows/startup/ ← Startup workflow
 ├── .github/workflows/     ← CI/CD
-│   ├── deploy.yml         ← 主站部署 (push to main → jacobmei.com)
-│   └── deploy.project-site.yml
+│   └── deploy.yml         ← 主站部署 (push to main → jacobmei.com)
 ├── astro.config.ts        ← Astro 設定（sitemap filter、markdown plugin）
 ├── CLAUDE.md              ← Claude Code 指令與工程規則
 └── dist/                  ← 建置產出（gitignore）

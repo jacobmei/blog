@@ -28,6 +28,23 @@ for (const file of fs.readdirSync(BLOG_DIR)) {
   if (!Number.isNaN(date.getTime())) updatedDates.set(shortCode, date.toISOString());
 }
 
+// 內文開頭與標題相同的 h1 拿掉，其餘 h1 降為 h2：版型已輸出文章標題的 h1
+const hastText = (node: any): string =>
+  node.type === "text" ? node.value : (node.children ?? []).map(hastText).join("");
+const norm = (s: string) => s.replace(/[\s`*_"'“”‘’]+/g, "");
+function rehypeSingleH1() {
+  return (tree: any, file: any) => {
+    const title = norm(String(file.data?.astro?.frontmatter?.title ?? ""));
+    const first = tree.children.findIndex((n: any) => n.type === "element");
+    if (first >= 0 && tree.children[first].tagName === "h1" && norm(hastText(tree.children[first])) === title) {
+      tree.children.splice(first, 1);
+    }
+    for (const node of tree.children) {
+      if (node.type === "element" && node.tagName === "h1") node.tagName = "h2";
+    }
+  };
+}
+
 export default defineConfig({
   site,
   base: normalizedBase,
@@ -67,7 +84,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkFlexibleMarkers],
-    rehypePlugins: [rehypeRaw],
+    rehypePlugins: [rehypeRaw, rehypeSingleH1],
     shikiConfig: {
       theme: "github-dark",
       wrap: true

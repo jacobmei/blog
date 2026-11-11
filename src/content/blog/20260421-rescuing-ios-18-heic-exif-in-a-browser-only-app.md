@@ -1,4 +1,5 @@
 ---
+lang: en
 title: Rescuing EXIF GPS from iPhone 17 HEIC, in a browser-only app
 description: "A bug report from my wife: \"the photos won't land on the map.\" The culprit turned out to be two extra compatible-brand tags in how iPhone 17 writes the HEIC `ftyp` box, pushing it past a hard-coded 50-byte sanity check in exifr. Here's how I patched around it without shipping a heavier parser to every user."
 pubDate: 2026-04-21 22:00+08:00

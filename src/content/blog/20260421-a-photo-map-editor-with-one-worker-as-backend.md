@@ -1,4 +1,5 @@
 ---
+lang: en
 title: A photo-map editor with no database, no login, and one Cloudflare Worker
 description: Five things I thought would need a server — PNG export, pixel-coordinate maps, photo-carrying share URLs, EXIF, geocoding — and the browser-side answers that let me keep the Worker down to ~370 lines.
 pubDate: 2026-04-21 23:00+08:00

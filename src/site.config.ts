@@ -6,18 +6,20 @@ export const SITE_URL = "https://jacobmei.com";
 
 export const AUTHOR_PROFILE = {
     name: "小梅子 (Jacob Mei)",
-    alternateName: "Mashbean",
     description: "站在單向鏡後方觀看世界應對加速科技的方式。專注於電子支付、數位金融、Web3 簽名與個人知識管理。",
     jobTitle: "Tech & Fintech Executive",
     url: SITE_URL,
     email: "sitedirector@gmail.com",
     contactUrl: "/contact/", // 預留聯繫頁面路徑
-    image: "images/author-avatar.png", // 預留頭像路徑
+    image: "images/author-avatar.png",
     sameAs: [
         "https://github.com/jacobmei",
-        "https://twitter.com/jacobmei" // 範例，可再調整
+        "https://x.com/macdog",
+        "https://www.threads.net/@macdog",
+        "https://www.linkedin.com/in/jacobmei/",
+        "https://www.facebook.com/jacob.mei"
     ],
-    knowsAbout: ["Fintech", "Electronic Payment", "Astro", "AI Agents", "Knowledge Management"]
+    knowsAbout: ["Open Source Tools", "Local LLM", "Traditional Chinese Search", "Obsidian", "AI Agents", "Fintech", "Electronic Payment"]
 };
 
 export const DEFAULT_AUTHOR = AUTHOR_PROFILE.name;

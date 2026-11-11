@@ -19,3 +19,5 @@ scripts/__pycache__
 .vscode/
 .claude-memory
 opencode.json
+*.rej
+*.orig

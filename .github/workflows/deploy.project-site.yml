@@ -18,7 +18,7 @@ jobs:
     env:
       SITE_URL: "https://username.github.io"
       BASE_PATH: "/repo-name"
-      PUBLIC_TIP_ENS_NAME: "mashbean.eth"
+      PUBLIC_TIP_ENS_NAME: "jacobmei.eth"
       PUBLIC_SIGNER_ENS_NAME: ${{ vars.PUBLIC_SIGNER_ENS_NAME }}
       PUBLIC_WEB3_CHAIN_ID: "1"
       PUBLIC_WEB3_RPC_URL: "https://ethereum.publicnode.com"

@@ -13,6 +13,7 @@ draft: false
 featured: false
 cover: ./assets/2026-11-12-daily-devotional-en-cover.jpg
 coverAlt: Three watercolour plants beside the title "How a daily one-minute devotional video gets made, automatically"
+shortCode: "18kbgo"
 ---
 
 > Watch one: [One Minute of Daily Strength, November 2](https://www.youtube.com/shorts/SJAVWffar80) ([November playlist](https://www.youtube.com/playlist?list=PLOdL7Tk4xq5M), a new one every day). The videos are in Mandarin. 中文版：[每日得力一分鐘是怎麼每天自動做出來的](/blog/2026/1112-1jv4g2/)

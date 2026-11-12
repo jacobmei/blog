@@ -12,6 +12,7 @@ draft: false
 featured: false
 cover: ./assets/2026-10-30-daily-devotional-cover.jpg
 coverAlt: 每日得力一分鐘十二月的清單代表圖：聖誕紅水彩與書名
+shortCode: "1jv4g2"
 ---
 
 > 每日得力一分鐘影片：[每日得力一分鐘11月2號](https://www.youtube.com/shorts/SJAVWffar80)（[每日得力一分鐘11月 播放清單](https://www.youtube.com/playlist?list=PLOdL7Tk4xq5M)，每天更新）

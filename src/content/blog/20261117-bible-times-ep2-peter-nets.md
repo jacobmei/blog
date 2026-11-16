@@ -12,6 +12,7 @@ draft: false
 featured: false
 cover: ./assets/20261117-bible-times-ep2-peter-nets.jpg
 coverAlt: 彼得是窮漁夫？他放下的比你想的多，穿越聖經時代 EP2
+shortCode: "t4g9d2"
 ---
 
 > 這篇也有影片版：[你以為彼得是個窮漁夫？他放下的比你想像的多！｜穿越聖經時代 EP2](https://youtu.be/LjCb9Le6Vps)（[穿越聖經時代 播放清單](https://www.youtube.com/playlist?list=PLbeYmaJdz79U)，每週二更新）

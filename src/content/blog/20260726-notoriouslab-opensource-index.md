@@ -29,7 +29,7 @@ cover: ./assets/2026-11-19-notoriouslab-oss-cover.jpg
 coverAlt: notoriouslab 開源專案總覽：十二個專案名稱與一句話用途，中文優先、本地優先、隱私優先
 ---
 
-我的開源專案都放在 [github.com/notoriouslab](https://github.com/notoriouslab)。專案多了之後，發現別人（跟未來的自己）很難一眼看出哪個做什麼，所以寫這篇當總目錄：每個專案一段話講清楚它解決什麼問題、適合誰用，再加一句最新版本的重點。排序大致依 Star 數與下載數，比較多人用的放前面。以後有新專案或大改版，就直接更新這篇。
+我的開源專案都放在 [github.com/notoriouslab](https://github.com/notoriouslab)。專案多了之後，發現別人（跟未來的自己）很難一眼看出哪個做什麼，所以寫這篇當總目錄：每個專案一段話講清楚它解決什麼問題、適合誰用，再加一句最新版本的重點。排序大致依 Star 數與下載數，比較多人用的放前面（trailpaint 與 Script2Film 私心往前排）。以後有新專案或大改版，就直接更新這篇。
 
 這些專案有共同的底色：**中文優先、本地優先、隱私優先**。很多好工具對繁體中文支援很差，很多好服務要你把資料交出去，這兩件事我都不想妥協，所以自己動手。
 
@@ -63,6 +63,26 @@ Obsidian 的混合語意搜尋與 AI 策展插件：BM25 關鍵字、裝置端 W
 
 ![health-workbench 總覽（示範資料）](https://raw.githubusercontent.com/notoriouslab/health-workbench/main/docs/screenshots/overview.png)
 
+## [trailpaint（路小繪）](https://github.com/notoriouslab/trailpaint)
+
+生態地圖｜目前版本：v1.8.4｜GitHub ★ 18｜[官方網站](https://trailpaint.org/)｜[線上直接用](https://trailpaint.org/app/)
+
+把一般的地圖快速變成漂亮的教育性、導覽性生態地圖。適合步道解說、園區導覽、生態教育這類需要「好看又有資訊量」地圖的場景。匯入照片自動依拍攝時間排出路線，底圖有向量地圖與 OpenStreetMap 步道圖。零後端、資料留在瀏覽器、可離線用。
+
+**最新版本**：新的「定點時間軸」故事：地圖停在同一個地點，拉時間軸看這裡不同年代的樣子，每個階段附出處、老地圖與照片，例如[大安森林公園](https://trailpaint.org/stories/taipei-daan-park/)一個街廓的百年。
+
+![trailpaint 編輯器畫面](https://raw.githubusercontent.com/notoriouslab/trailpaint/main/examples/trailpaint-hero.jpg)
+
+## [Script2Film](https://github.com/notoriouslab/script2film)
+
+影片製作｜目前版本：v1.1.0｜[官方網站](https://notoriouslab.github.io/script2film/)
+
+給 AI agent 用的影片／解說片工具組：給它一段想法或一份稿子，Claude Code 這類 agent 照文件一步步做出有旁白、字幕、圖表與主持人的成片。核心流程（本機克隆聲音、逐字對時、27 種程式畫的場景、剪接、出片檢查）都在自己的 Mac 上跑，不用帳號，也不用 API 金鑰；VideoExpress 生成鏡頭、TalkingPhotos 主持人、YouTube 上傳都是選用。原本的 Video Prompt Studio 現在是其中一個工具（[線上版](https://notoriouslab.github.io/script2film/studio.html)）。實際做法見〈[每日得力一分鐘是怎麼每天自動做出來的](/blog/2026/1112-1jv4g2/)〉。
+
+**最新版本**：可以在自己的 Google Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）與 MiniMax Music 3（歌曲或純配樂）；對話可以分給不同角色的聲音，字幕可以把關鍵字變色。
+
+![Script2Film](https://raw.githubusercontent.com/notoriouslab/script2film/main/docs/site/og-zh.jpg)
+
 ## [bu-ketao（不客套）](https://github.com/notoriouslab/bu-ketao)
 
 AI 協作｜GitHub ★ 57
@@ -95,16 +115,6 @@ AI 協作｜GitHub ★ 31
 
 自動從 Gmail 下載銀行對帳單 PDF。規則由 JSON 設定檔驅動，新增銀行不需改程式碼，支援 IMAP 與 OAuth 2.0，內建去重。跟 personal-cfo 是上下游關係：這個負責進料，那個負責分析。
 
-## [trailpaint（路小繪）](https://github.com/notoriouslab/trailpaint)
-
-生態地圖｜目前版本：v1.8.4｜GitHub ★ 18｜[官方網站](https://trailpaint.org/)｜[線上直接用](https://trailpaint.org/app/)
-
-把一般的地圖快速變成漂亮的教育性、導覽性生態地圖。適合步道解說、園區導覽、生態教育這類需要「好看又有資訊量」地圖的場景。匯入照片自動依拍攝時間排出路線，底圖有向量地圖與 OpenStreetMap 步道圖。零後端、資料留在瀏覽器、可離線用。
-
-**最新版本**：新的「定點時間軸」故事：地圖停在同一個地點，拉時間軸看這裡不同年代的樣子，每個階段附出處、老地圖與照片，例如[大安森林公園](https://trailpaint.org/stories/taipei-daan-park/)一個街廓的百年。
-
-![trailpaint 編輯器畫面](https://raw.githubusercontent.com/notoriouslab/trailpaint/main/examples/trailpaint-hero.jpg)
-
 ## [personal-cfo](https://github.com/notoriouslab/personal-cfo)
 
 個人財務｜GitHub ★ 15
@@ -112,16 +122,6 @@ AI 協作｜GitHub ★ 31
 展示非專業投資人如何用確定性運算做退休軌道監控的參考實作：銀行帳單進，財務報表出，資料全部留在本地。Fork 後改 `config.yaml` 就能依自己的情況使用。
 
 ![personal-cfo 退休投影報表](https://raw.githubusercontent.com/notoriouslab/personal-cfo/main/examples/sample_output/2026-03-16-04.png)
-
-## [Script2Film](https://github.com/notoriouslab/script2film)
-
-影片製作｜目前版本：v1.1.0｜[官方網站](https://notoriouslab.github.io/script2film/)
-
-給 AI agent 用的影片／解說片工具組：給它一段想法或一份稿子，Claude Code 這類 agent 照文件一步步做出有旁白、字幕、圖表與主持人的成片。核心流程（本機克隆聲音、逐字對時、27 種程式畫的場景、剪接、出片檢查）都在自己的 Mac 上跑，不用帳號，也不用 API 金鑰；VideoExpress 生成鏡頭、TalkingPhotos 主持人、YouTube 上傳都是選用。原本的 Video Prompt Studio 現在是其中一個工具（[線上版](https://notoriouslab.github.io/script2film/studio.html)）。實際做法見〈[每日得力一分鐘是怎麼每天自動做出來的](/blog/2026/1112-1jv4g2/)〉。
-
-**最新版本**：可以在自己的 Google Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）與 MiniMax Music 3（歌曲或純配樂）；對話可以分給不同角色的聲音，字幕可以把關鍵字變色。
-
-![Script2Film](https://raw.githubusercontent.com/notoriouslab/script2film/main/docs/site/og-zh.jpg)
 
 ## [wenji（文集）](https://github.com/notoriouslab/wenji)
 

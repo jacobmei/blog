@@ -30,6 +30,7 @@ shortCode: "1jv4g2"
 > - 旁白可以分給好幾個角色的聲音，做成對話；字幕照聲音逐字對時，重點字可以變色，中文旁白也能只上英文字幕給外國觀眾看；最後一句講完畫面會多停一秒，表情收完才結束。
 > - VideoExpress 生成的小影片、TalkingPhotos 的主持人、Concat 組裝、YouTube 上傳都是選用的，需要才接。
 > - 有 Google Colab 帳號的話，也可以在自己的 Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）和 MiniMax Music 3（有歌詞的歌曲或純配樂），一樣是選用。H3 的授權不涵蓋美國、歐盟、英國、南韓。
+> - 實際怎麼用，可以看這支教學片：[不用真人拍攝，不訂閱影片平台：用開源工具做一支解說片](https://youtu.be/eGVDHhHt-Qo)（MiniMax H3＋Script2Film）。
 > - 想自己做，可以把 [Script2Film 首頁](https://notoriouslab.github.io/script2film/)或 [GitHub](https://github.com/notoriouslab/script2film) 的網址交給你的 AI，請它照著做出第一支片。
 > 
 ## 實作成果摘要

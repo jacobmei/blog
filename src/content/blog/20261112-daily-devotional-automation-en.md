@@ -31,6 +31,7 @@ This year I went back through the devotional writings my mother left behind and,
 > - Narration can be split between several voices for dialogue. Subtitles are timed to the voice word by word, key words can be coloured, and Chinese narration can carry English subtitles only for viewers abroad. After the last word the picture holds for a second, so a face can settle before the film ends.
 > - Generated clips from VideoExpress, a TalkingPhotos host, assembly in Concat and YouTube upload are all optional; plug them in when you need them.
 > - With a Google Colab account you can also run MiniMax H3 (generated shots and a lip-synced host) and MiniMax Music 3 (songs with lyrics, or instrumentals) on your own Colab, also optional. The H3 licence does not cover the US, the EU, the UK or South Korea.
+> - To see it in use, watch the tutorial: [I Made a Night Market Vlog with No Camera: VideoExpress + TalkingPhotos + Script2Film](https://youtu.be/F3uPOo9TJH0).
 > - To build your own, hand the [Script2Film home page](https://notoriouslab.github.io/script2film/en/) or the [GitHub repository](https://github.com/notoriouslab/script2film) to your AI and ask it to make a first film.
 > 
 ## The results so far

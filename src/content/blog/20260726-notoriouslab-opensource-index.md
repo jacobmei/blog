@@ -79,6 +79,8 @@ Obsidian 的混合語意搜尋與 AI 策展插件：BM25 關鍵字、裝置端 W
 
 給 AI agent 用的影片／解說片工具組：給它一段想法或一份稿子，Claude Code 這類 agent 照文件一步步做出有旁白、字幕、圖表與主持人的成片。核心流程（本機克隆聲音、逐字對時、27 種程式畫的場景、剪接、出片檢查）都在自己的 Mac 上跑，不用帳號，也不用 API 金鑰；VideoExpress 生成鏡頭、TalkingPhotos 主持人、YouTube 上傳都是選用。原本的 Video Prompt Studio 現在是其中一個工具（[線上版](https://notoriouslab.github.io/script2film/studio.html)）。實際做法見〈[每日得力一分鐘是怎麼每天自動做出來的](/blog/2026/1112-1jv4g2/)〉。
 
+實際操作可以看教學片：[中文版（MiniMax H3）](https://youtu.be/eGVDHhHt-Qo)、[英文版（VideoExpress＋TalkingPhotos）](https://youtu.be/F3uPOo9TJH0)。
+
 **最新版本**：可以在自己的 Google Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）與 MiniMax Music 3（歌曲或純配樂）；對話可以分給不同角色的聲音，字幕可以把關鍵字變色。
 
 ![Script2Film](https://raw.githubusercontent.com/notoriouslab/script2film/main/docs/site/og-zh.jpg)

@@ -25,7 +25,8 @@ category: AI與科技
 draft: false
 featured: true
 shortCode: osslab
-cover: ./assets/notoriouslab.png
+cover: ./assets/2026-11-19-notoriouslab-oss-cover.jpg
+coverAlt: notoriouslab 開源專案總覽：十二個專案名稱與一句話用途，中文優先、本地優先、隱私優先
 ---
 
 我的開源專案都放在 [github.com/notoriouslab](https://github.com/notoriouslab)。專案多了之後，發現別人（跟未來的自己）很難一眼看出哪個做什麼，所以寫這篇當總目錄：每個專案一段話講清楚它解決什麼問題、適合誰用，再加一句最新版本的重點。排序大致依 Star 數與下載數，比較多人用的放前面。以後有新專案或大改版，就直接更新這篇。

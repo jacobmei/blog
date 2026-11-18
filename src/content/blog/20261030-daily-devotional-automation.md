@@ -27,9 +27,9 @@ shortCode: "1jv4g2"
 > 這篇講的做法，我整理成一套開源工具 [Script2Film](https://notoriouslab.github.io/script2film/)（MIT 授權），給 Claude Code 這類 AI agent 用：給它一段想法或一份稿子，它照步驟做出有旁白、字幕、圖表和主持人的成片。
 > 
 > - 核心流程（克隆聲音、對時間、畫面、字幕、剪接、檢查）都在自己的電腦上跑，不用帳號，也不用 API 金鑰。
+> - 旁白可以分給好幾個角色的聲音，做成對話；字幕照聲音逐字對時，重點字可以變色，中文旁白也能只上英文字幕給外國觀眾看；最後一句講完畫面會多停一秒，表情收完才結束。
 > - VideoExpress 生成的小影片、TalkingPhotos 的主持人、Concat 組裝、YouTube 上傳都是選用的，需要才接。
 > - 有 Google Colab 帳號的話，也可以在自己的 Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）和 MiniMax Music 3（有歌詞的歌曲或純配樂），一樣是選用。H3 的授權不涵蓋美國、歐盟、英國、南韓。
-> - 2026-11-18 更新到 [v1.1.0](https://github.com/notoriouslab/script2film/releases)：對話可以分給不同角色的聲音；燒進畫面的字幕可以把關鍵字變色，中文旁白也能只上英文字幕；最後一句講完，畫面多留一秒讓表情收尾，不會停在嘴還沒合上的那一格。
 > - 想自己做，可以把 [Script2Film 首頁](https://notoriouslab.github.io/script2film/)或 [GitHub](https://github.com/notoriouslab/script2film) 的網址交給你的 AI，請它照著做出第一支片。
 > 
 ## 實作成果摘要
@@ -159,6 +159,7 @@ README 裡最重要的是這幾段：
 | 工具                                                                          | 用途                                     | 費用                       |
 | --------------------------------------------------------------------------- | -------------------------------------- | ------------------------ |
 | [Claude Code](https://claude.com/claude-code)                               | 工作 AI，能操作電腦，整條流程由它串起來                  | 訂閱制                      |
+| [Script2Film](https://notoriouslab.github.io/script2film/)                  | 我把這套流程整理成的開源工具組，AI 照著它的文件做片           | 免費開源                     |
 | [CMUX](https://cmux.com/zh-TW)                                              | 終端機，同時開好幾個 AI 工作視窗                     | 免費開源                     |
 | [VideoExpress.ai](https://paykstrt.com/50942/180754)                        | 生成背景小影片                                | 終身版約 150 美元              |
 | [TalkingPhotos.ai](https://paykstrt.com/52357/180754)                       | 讓照片裡的主持人開口講話                           | 終身版約 80 美元               |

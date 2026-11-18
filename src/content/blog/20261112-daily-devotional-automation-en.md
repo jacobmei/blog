@@ -28,9 +28,9 @@ This year I went back through the devotional writings my mother left behind and,
 > The process in this post is now an open-source toolkit, [Script2Film](https://notoriouslab.github.io/script2film/en/) (MIT License), made for AI agents like Claude Code: give it an idea or a script, and it works through the steps to a finished film with narration, subtitles, charts and a host.
 > 
 > - The core flow (cloned voice, timing, scenes, subtitles, the cut and a final check) runs on your own computer, with no account and no API key.
+> - Narration can be split between several voices for dialogue. Subtitles are timed to the voice word by word, key words can be coloured, and Chinese narration can carry English subtitles only for viewers abroad. After the last word the picture holds for a second, so a face can settle before the film ends.
 > - Generated clips from VideoExpress, a TalkingPhotos host, assembly in Concat and YouTube upload are all optional; plug them in when you need them.
 > - With a Google Colab account you can also run MiniMax H3 (generated shots and a lip-synced host) and MiniMax Music 3 (songs with lyrics, or instrumentals) on your own Colab, also optional. The H3 licence does not cover the US, the EU, the UK or South Korea.
-> - Updated to [v1.1.0](https://github.com/notoriouslab/script2film/releases) on 2026-11-18: dialogue lines can go to different voices; burned subtitles can colour chosen keywords, and Chinese narration can carry English subtitles only; after the last word the picture holds for one more second, so a face can settle instead of freezing mid-word.
 > - To build your own, hand the [Script2Film home page](https://notoriouslab.github.io/script2film/en/) or the [GitHub repository](https://github.com/notoriouslab/script2film) to your AI and ask it to make a first film.
 > 
 ## The results so far
@@ -160,6 +160,7 @@ The word list matters a lot. Chinese has many characters with more than one read
 | Tool | What it is for | Cost |
 | --- | --- | --- |
 | [Claude Code](https://claude.com/claude-code) | The working AI; it can operate the computer and ties the whole pipeline together | Subscription |
+| [Script2Film](https://notoriouslab.github.io/script2film/en/) | The open-source toolkit I turned this pipeline into; the AI follows its docs to make a film | Free, open source |
 | [cmux](https://cmux.com) | A terminal for running several AI sessions side by side | Free, open source |
 | [VideoExpress.ai](https://paykstrt.com/50942/180754) | Generates the background clips | Lifetime plan about US$150 |
 | [TalkingPhotos.ai](https://paykstrt.com/52357/180754) | Makes the host in a photo speak | Lifetime plan about US$80 |

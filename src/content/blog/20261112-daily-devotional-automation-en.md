@@ -22,6 +22,15 @@ This year I went back through the devotional writings my mother left behind and,
 
 ![Frames from three months of finished videos](./assets/2026-11-12-daily-devotional-en-01.jpg)*Same layout all year; the opening plant and the background change every month (frames from the finished videos)*
 
+## I turned this pipeline into an open-source toolkit: Script2Film
+
+> The process in this post is now an open-source toolkit, [Script2Film](https://notoriouslab.github.io/script2film/en/) (MIT License), made for AI agents like Claude Code: give it an idea or a script, and it works through the steps to a finished film with narration, subtitles, charts and a host.
+> 
+> - The core flow (cloned voice, timing, scenes, subtitles, the cut and a final check) runs on your own computer, with no account and no API key.
+> - Generated clips from VideoExpress, a TalkingPhotos host, assembly in Concat and YouTube upload are all optional; plug them in when you need them.
+> - With a Google Colab account you can also run MiniMax H3 (generated shots and a lip-synced host) and MiniMax Music 3 (songs with lyrics, or instrumentals) on your own Colab, also optional. The H3 licence does not cover the US, the EU, the UK or South Korea.
+> - To build your own, hand the [Script2Film home page](https://notoriouslab.github.io/script2film/en/) or the [GitHub repository](https://github.com/notoriouslab/script2film) to your AI and ask it to make a first film.
+> 
 ## The results so far
 
 - One video a day from October 1, 2026 to January 31, 2027: 123 in total, all uploaded or scheduled.

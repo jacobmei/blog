@@ -21,6 +21,15 @@ shortCode: "1jv4g2"
 
 ![每日得力一分鐘三個月的成片畫面](./assets/2026-10-30-daily-devotional-01.jpg)*同一個版型，每個月換一種片頭植物和背景（成片實際畫面）*
 
+## 我把這套流程整理成開源工具 Script2Film
+
+> 這篇講的做法，我整理成一套開源工具 [Script2Film](https://notoriouslab.github.io/script2film/)（MIT 授權），給 Claude Code 這類 AI agent 用：給它一段想法或一份稿子，它照步驟做出有旁白、字幕、圖表和主持人的成片。
+> 
+> - 核心流程（克隆聲音、對時間、畫面、字幕、剪接、檢查）都在自己的電腦上跑，不用帳號，也不用 API 金鑰。
+> - VideoExpress 生成的小影片、TalkingPhotos 的主持人、Concat 組裝、YouTube 上傳都是選用的，需要才接。
+> - 有 Google Colab 帳號的話，也可以在自己的 Colab 上跑 MiniMax H3（生成鏡頭、會對嘴的主持人）和 MiniMax Music 3（有歌詞的歌曲或純配樂），一樣是選用。H3 的授權不涵蓋美國、歐盟、英國、南韓。
+> - 想自己做，可以把 [Script2Film 首頁](https://notoriouslab.github.io/script2film/)或 [GitHub](https://github.com/notoriouslab/script2film) 的網址交給你的 AI，請它照著做出第一支片。
+> 
 ## 實作成果摘要
 
 - 從 2026 年 10 月 1 日到 2027 年 1 月 31 日，每天一支，一共 123 支，全部已經上稿或排定發佈時間。

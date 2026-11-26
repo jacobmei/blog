@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大蒙眷愛的但以理｜每日靈糧試做</title>
+<style>
+:root{
+  --bg:#faf8f4; --panel:#ffffff; --ink:#24221f; --muted:#6d685f; --line:#e6e1d8;
+  --accent:#8a5a2b; --accent-soft:#f3e9dc; --warn-bg:#fff4d6; --warn-ink:#7a5200;
+  --b-book:#f1e4cf; --b-book-ink:#7a4f14; --b-pastor:#dde9f7; --b-pastor-ink:#1f4f86;
+  --b-note:#e2eee6; --b-note-ink:#2f6145; --b-new:#ece3f5; --b-new-ink:#5d3a8a;
+  --shadow:0 1px 3px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1a1917; --panel:#232220; --ink:#ece8e1; --muted:#a59f95; --line:#3a3733;
+    --accent:#e0b27c; --accent-soft:#3a2f23; --warn-bg:#3b3118; --warn-ink:#f2d48a;
+    --b-book:#4a3a22; --b-book-ink:#f2d3a4; --b-pastor:#22364e; --b-pastor-ink:#b9d6f7;
+    --b-note:#233b2d; --b-note-ink:#b6dcc4; --b-new:#352a46; --b-new-ink:#d7c3f0;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.85 "Noto Serif TC","Songti TC","PingFang TC",serif;}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 80px}
+.banner{background:var(--warn-bg);color:var(--warn-ink);font:600 14px/1.5 system-ui,sans-serif;text-align:center;padding:8px 16px}
+header{padding:36px 0 12px}
+.kicker{font:500 14px/1.4 system-ui,sans-serif;color:var(--muted);letter-spacing:.04em}
+h1{font-size:34px;line-height:1.3;margin:6px 0 4px}
+.passage{color:var(--accent);font-weight:600}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:0 -16px;padding:8px 16px;display:flex;gap:6px;overflow-x:auto;font:14px/1 system-ui,sans-serif}
+nav a{color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:999px;white-space:nowrap}
+nav a:hover{background:var(--accent-soft);color:var(--ink)}
+section{padding-top:28px}
+h2{font-size:22px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:4px;height:22px;background:var(--accent);border-radius:2px}
+h3{font-size:19px;margin:28px 0 6px}
+h4{margin:0 0 4px;font-size:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow)}
+.verse{margin:0 0 6px}
+.verse sup{color:var(--accent);font:600 12px system-ui,sans-serif;margin-right:4px}
+.video{aspect-ratio:16/9;border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;text-align:center;color:var(--muted);font:15px/1.6 system-ui,sans-serif;padding:16px;background:var(--panel)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font:14px/1.3 system-ui,sans-serif;text-decoration:none;color:var(--b-pastor-ink);background:var(--b-pastor);padding:7px 12px;border-radius:999px}
+.para{margin:10px 0 4px}
+.para p{margin:4px 0 0}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font:600 12px/1 system-ui,sans-serif;padding:4px 8px;border-radius:6px;white-space:nowrap}
+.o-book{background:var(--b-book);color:var(--b-book-ink)}
+.o-pastor{background:var(--b-pastor);color:var(--b-pastor-ink)}
+.o-note{background:var(--b-note);color:var(--b-note-ink)}
+.o-new{background:var(--b-new);color:var(--b-new-ink)}
+.cite{font:600 11px/1 system-ui,sans-serif;vertical-align:super;margin:0 1px;padding:2px 5px;border:0;border-radius:4px;background:var(--accent-soft);color:var(--accent);cursor:pointer}
+.cite:hover,.cite[aria-expanded=true]{background:var(--accent);color:var(--panel)}
+.tl{list-style:none;margin:18px 0 0;padding:0 0 0 18px;border-left:2px solid var(--line)}
+.ev{position:relative;display:grid;grid-template-columns:118px 1fr;gap:10px;padding:6px 0 14px}
+.ev::before{content:"";position:absolute;left:-25px;top:13px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--muted)}
+.ev.today::before{background:var(--accent);border-color:var(--accent)}
+.ev .yr{font:600 14px/1.9 system-ui,sans-serif;color:var(--muted)}
+.ev.today .yr{color:var(--accent)}
+.ev p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
+@media (max-width:520px){.ev{grid-template-columns:1fr;gap:0}}
+.frame{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);width:100%}
+.frame iframe{display:block;width:100%;height:700px;border:0}
+@media (max-width:620px){.frame iframe{height:520px}}
+.framebar{text-align:right;font:13px system-ui,sans-serif;margin:6px 2px 0}
+.framebar a{color:var(--accent)}
+.tltext{margin-top:10px}
+.chip.alt{background:var(--b-note);color:var(--b-note-ink)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.7;min-width:560px}
+th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+thead th{font:600 13px system-ui,sans-serif;color:var(--muted);background:var(--accent-soft)}
+tbody th{font:600 14px system-ui,sans-serif;white-space:nowrap}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+.summary{margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line);font-size:16px;color:var(--muted)}
+.summary b{color:var(--accent);font:600 13px system-ui,sans-serif;margin-right:8px}
+.vn{display:grid;grid-template-columns:52px 1fr;gap:4px 12px;margin:0}
+.vn dt{font:600 14px/1.9 system-ui,sans-serif;color:var(--accent)}
+.vn dd{margin:0 0 10px;font-size:16px;line-height:1.8}
+.keyv{background:var(--accent-soft);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.keyv .lab{font:600 12px system-ui,sans-serif;color:var(--accent);letter-spacing:.06em}
+.keyv p{margin:6px 0 0;font-size:18px;line-height:1.8}
+.keyv cite{display:block;font:13px system-ui,sans-serif;color:var(--muted);font-style:normal;margin-top:4px}
+.song{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.song .t{font-weight:600} .song .m{font:13px/1.5 system-ui,sans-serif;color:var(--muted);flex-basis:100%}
+.song audio{width:100%;max-width:420px;height:36px}
+#bgm{position:fixed;right:16px;bottom:16px;z-index:30;font:14px system-ui,sans-serif;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg,inherit);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);display:none}
+.yt{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt-note{font:13px/1.6 system-ui,sans-serif;color:var(--muted);margin:8px 0 0}
+.song a{color:var(--accent);font:14px system-ui,sans-serif}
+.views>p{margin:0 0 8px;font-size:16px}
+.essay-title{font-size:24px;margin:10px 0 14px}
+p.essay{margin:0 0 1.1em;font-size:18px;line-height:1.95}
+.essay-refs{margin-top:18px;padding-top:4px;border-top:1px solid var(--line)}
+.essay-refs ul{font:14px/1.7 system-ui,sans-serif;color:var(--muted);padding-left:20px;margin:4px 0 0}
+.fn{color:var(--muted);font-size:14px;margin-top:8px}
+.notes{display:grid;gap:10px;margin-top:6px}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.note p{margin:0;font-size:16px}
+ol.q{padding-left:22px;margin:8px 0 0} ol.q li{margin-bottom:8px}
+.sub{font:600 13px/1.4 system-ui,sans-serif;color:var(--muted);margin:18px 0 6px;display:flex;gap:8px;align-items:center}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+summary{cursor:pointer;font:600 15px system-ui,sans-serif}
+details ul,.srcs{font:14px/1.7 system-ui,sans-serif;padding-left:20px}
+.srcs{list-style:none;padding:0} .srcs li{margin-bottom:6px}
+.srcs a{color:var(--ink)}
+footer{margin-top:40px;color:var(--muted);font:13px/1.6 system-ui,sans-serif;text-align:center}
+#pop{position:absolute;z-index:20;max-width:min(360px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);font:14px/1.6 system-ui,sans-serif;display:none}
+#pop q{display:block;font-family:"Noto Serif TC","Songti TC",serif;font-size:15px;margin:6px 0}
+#pop a{color:var(--accent)}
+</style>
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body><div style="background:#fff4d6;color:#5a4300;font:14px/1.6 system-ui,sans-serif;padding:10px 16px;text-align:center;border-bottom:1px solid #e8d79a">試做樣本：AI 草稿，尚未經傳道人審閱，非台北靈糧堂官方發布；主持人為數位分身。　<a href="./">看主版本（文章版）</a></div>
+<div class="banner">AI 草稿，未經傳道人審閱・本頁為流程試做，所有引述可點角標查原文</div>
+<div class="wrap">
+<header>
+  <div class="kicker">每日靈糧・2026-11-25</div>
+  <h1>大蒙眷愛的但以理</h1>
+  <div class="passage">但以理書 9:20-23</div>
+</header>
+<nav>
+  <a href="#scripture">經文</a><a href="#video">影音</a><a href="#message">信息</a><a href="#meditate">默想</a><a href="#prayer">回應</a><a href="#context">脈絡</a><a href="#sources">出處</a><a href="#review">審閱備註</a>
+</nav>
+
+<section id="scripture"><h2>經文</h2><div class="card"><p class="verse"><sup>20</sup>我說話，禱告，承認我的罪和本國之民以色列的罪，為我神的聖山，在耶和華－我神面前懇求。</p>
+<p class="verse"><sup>21</sup>我正禱告的時候，先前在異象中所見的那位加百列，奉命迅速飛來，約在獻晚祭的時候，按手在我身上。</p>
+<p class="verse"><sup>22</sup>他指教我說：「但以理啊，現在我出來要使你有智慧，有聰明。</p>
+<p class="verse"><sup>23</sup>你初懇求的時候，就發出命令，我來告訴你，因你大蒙眷愛；所以你要思想明白這以下的事和異象。</p></div></section>
+
+
+<section id="video"><h2>影音</h2>
+  <div class="yt"><iframe src="https://www.youtube.com/embed/4DFZYHnmqZI?rel=0" title="每日靈糧試做｜大蒙眷愛的但以理" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p class="yt-note">主持人為晏信中牧師的數位分身，聲音為語音合成；古代場景為 AI 生成的情境重建。　<a href="https://youtu.be/4DFZYHnmqZI" target="_blank" rel="noopener">在 YouTube 開啟</a></p>
+  <div class="sub">延伸聆聽：吳智誠牧師分享的段落，與兩位老師的完整講解</div>
+  <div class="chips"><a class="chip" href="https://youtu.be/WSaqE1z7Bx0?t=34" target="_blank" rel="noopener">▶ 0:34　所羅門與耶底底亞</a><a class="chip" href="https://youtu.be/WSaqE1z7Bx0?t=167" target="_blank" rel="noopener">▶ 2:47　聖殿已毀，仍守晚祭時辰</a><a class="chip" href="https://youtu.be/WSaqE1z7Bx0?t=247" target="_blank" rel="noopener">▶ 4:07　沒有神我們不能，沒有我們神不做</a><a class="chip" href="https://youtu.be/WSaqE1z7Bx0?t=512" target="_blank" rel="noopener">▶ 8:32　給默默代禱的人</a><a class="chip alt" href="https://www.youtube.com/watch?v=g1JOm7_Xx_M" target="_blank" rel="noopener">▶ 吳顯昌老師：七十個七解碼（28 分鐘）</a><a class="chip alt" href="https://www.youtube.com/watch?v=8zrftCXUSAg" target="_blank" rel="noopener">▶ 莊育銘牧師：但以理書 9:20-27（22 分鐘）</a></div>
+</section>
+
+<section id="message"><h2>信息</h2><div class="para"><div class="badges"><span class="badge o-book">禱讀本</span><span class="badge o-pastor">牧師分享</span></div><p>前一天的經文裡，但以理引用了所羅門獻殿時的禱告。所羅門當年列出各種情況，求神垂聽並赦免<button class="cite" type="button" data-q="當年所羅門的禱告中，列舉了各種情況，都求主垂聽並赦免" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 1">1</button>：百姓若在被擄之地想起罪來，向這殿禱告，求你從天上垂聽。幾百年後，被擄到巴比倫的但以理，正是這樣禱告。吳智誠牧師點出一個有意思的對照：所羅門另一個名字叫耶底底亞，意思是「耶和華所愛的」<button class="cite" type="button" data-q="所羅門的另一個名字叫耶底底亞，意即耶和華所愛的" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=34" data-t="0:34" aria-label="出處 2">2</button>；而今天，神稱但以理「大蒙眷愛」。</p></div>
+<h3>一、在沒有祭壇的地方，守住祭壇的時辰</h3><div class="para"><div class="badges"><span class="badge o-book">禱讀本</span><span class="badge o-pastor">牧師分享</span></div><p>但以理禱告的時候是「約在獻晚祭的時候」，大約下午三點，應該就是他一日三次禱告的其中一次<button class="cite" type="button" data-q="現在這個禱告，應該就是一日三次之中，在獻晚祭時刻(約下午三點)時所作的禱告" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 3">3</button>。吳智誠牧師提醒我們，那時聖殿已經被毀<button class="cite" type="button" data-q="當時聖殿是被毀的狀態" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=167" data-t="2:47" aria-label="出處 4">4</button>；吳顯昌老師也說，這不表示獻祭已經恢復，而是他沒有忘記，即使被擄到外邦，仍然要獻祭<button class="cite" type="button" data-q="這並非表示獻祭已經恢復，因為他並沒有歸回；而是他沒有忘記，即使被擄到外邦，仍然要獻祭" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 5">5</button>。沒有祭壇，他守住祭壇的時辰。</p></div>
+<h3>二、抓住應許，也為悔改禱告</h3><div class="para"><div class="badges"><span class="badge o-pastor">牧師分享</span><span class="badge o-book">禱讀本</span></div><p>但以理為什麼在這時候這麼迫切？他讀到耶利米預言的七十年，莊育銘牧師算了一下：離七十年期滿只剩兩三年左右，所以他特別急切<button class="cite" type="button" data-q="從他自己屬於第一波被擄的，應該在兩三年左右，這個七十年的預言就要到了，因此他特別急切地來禱告" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 6">6</button>。吳顯昌老師說，但以理是抓住耶利米所說的話開始禱告<button class="cite" type="button" data-q="但以理抓住耶利米所說的話開始禱告" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 7">7</button>，抓住神的應許。但莊牧師多看了一層：百姓若歸回了，卻仍然過著得罪神的生活，那歸回跟沒有歸回又有什麼差別<button class="cite" type="button" data-q="可是如果仍然繼續過著犯罪、得罪神的生活，那這個有歸回跟沒有歸回又有什麼差別呢" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 8">8</button>？所以但以理迫切求的，是自己和百姓真實的悔改<button class="cite" type="button" data-q="因此但以理就非常迫切地來為自己跟百姓能夠真實地悔改、願意順服神來禱告" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 9">9</button>。結果他才開口，神就發出命令，差了使者前來<button class="cite" type="button" data-q="表示但以理一開始禱告，上帝就差了使者前來" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 10">10</button>。吳智誠牧師引了一句話：「沒有神，我們不能；但沒有我們，神不做。」<button class="cite" type="button" data-q="沒有神我們不能，但沒有我們神不做" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=247" data-t="4:07" aria-label="出處 11">11</button></p></div>
+<h3>三、大蒙眷愛</h3><div class="para"><div class="badges"><span class="badge o-book">禱讀本</span><span class="badge o-pastor">牧師分享</span></div><p>「大蒙眷愛」的意思，是在上帝眼中看為寶貴<button class="cite" type="button" data-q="意思是在上帝眼中看為寶貴的" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 12">12</button>。禱讀本指出三個原因：多年的禱告讓但以理為神所認識<button class="cite" type="button" data-q="多年來的禱告，讓但以理為上帝所認識" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 13">13</button>；他常常求問神對時代的心意<button class="cite" type="button" data-q="他常常求問上帝對時代的心意" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 14">14</button>；他的禱告往往切中神的心意<button class="cite" type="button" data-q="他的禱告往往切中上帝的心意" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 15">15</button>。吳顯昌老師從整卷書來看：第一章到第六章，但以理在職場上先建立了禱告的生命，之後才有第七章以後的服事；他的結論是，看不見的禱告生命，托住看得見的事工<button class="cite" type="button" data-q="看不見的禱告生命，托住看得見的事工" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 16">16</button>。</p></div>
+<div class="para"><div class="badges"><span class="badge o-pastor">牧師分享</span></div><p>吳智誠牧師也提醒，大蒙眷愛不是靠努力賺來的。他分享自己有好幾次只是單單坐在耶穌腳前安靜禱告<button class="cite" type="button" data-q="我就是只是單單地坐在耶穌的腳前，安靜禱告的時候" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=467" data-t="7:47" aria-label="出處 17">17</button>，就深深感受到主對他說：「孩子，你大蒙眷愛。」他也想到許多默默無聞的代禱者<button class="cite" type="button" data-q="可能默默無聞的代禱者" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=512" data-t="8:32" aria-label="出處 18">18</button>，為一件事禱告了許久，還沒看見應許成就；他說，神非常看重你們在人沒看見的時候，為神國度獻上的代禱<button class="cite" type="button" data-q="神非常看重你們在人沒有看見的時候，所為神的國度所獻上的代禱" data-s="每日靈糧影片 2026-11-25，吳智誠牧師" data-k="牧師分享" data-u="https://youtu.be/WSaqE1z7Bx0?t=537" data-t="8:57" aria-label="出處 19">19</button>。</p></div>
+<h3>四、加百列要他明白的事</h3><div class="para"><div class="badges"><span class="badge o-book">禱讀本</span><span class="badge o-pastor">牧師分享</span></div><p>加百列說，他來是要使但以理有智慧、有聰明，思想明白後面的異象，就是「七十個七」<button class="cite" type="button" data-q="這是但以理的第三個異象，也就是「七十個七」的異象" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 20">20</button>。這是但以理書最難的段落之一，莊育銘牧師整理出大約七種理論<button class="cite" type="button" data-q="這個有關於七十個七，我整理大概有七種理論" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 21">21</button>，他坦白說，有很多要到天上才能完全明白<button class="cite" type="button" data-q="有關七十個七，我認為我們當中還有很多現在是不能明白的，要到天上才可能完全明白" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 22">22</button>。他提醒，面對預言如果只是好奇<button class="cite" type="button" data-q="我們如果只是對預言有好奇" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 23">23</button>，懂得再多也改變不了生命；更要緊的是，我們要成為一個聖潔的器皿<button class="cite" type="button" data-q="我們要成為一個聖潔的器皿" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 24">24</button>。</p></div></section>
+
+<section id="meditate"><h2>默想</h2>
+  <div class="card">
+    
+    <div class="badges"><span class="badge o-new">新撰</span></div>
+    <ol class="q"><li>但以理在沒有聖殿、沒有祭壇的異地，仍守住禱告的時辰。我的一天裡，有沒有一段不被打斷、留給神的時間？</li><li>我禱告求神挽回、醫治的事情上，是不是也願意求神改變我自己？</li><li>如果今天主對我說「你大蒙眷愛」，我心裡的第一個反應是什麼？是覺得不配，還是覺得要再多做一點才配？</li></ol>
+    <div class="sub"><span class="badge o-book">禱讀本</span>原有默想</div>
+    <p>我是否日日禱告在主面前，以至為祂所認識？我是否常常求問主這個世代的事，以至成為主可以指示的人？我是否為世代禱告，能切中主的心意，以至成為蒙眷愛與蒙垂聽的人？<button class="cite" type="button" data-q="我是否日日禱告在主面前，以至為祂所認識" data-s="每日靈糧 2026-11-25 默想與回應（網頁）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 56">56</button></p>
+    
+  </div>
+</section>
+
+<section id="prayer"><h2>回應</h2>
+  <div class="card"><div class="badges"><span class="badge o-book">禱讀本</span></div><p>親愛的主：你是垂聽禱告的主，我們一切的禱告都不徒然。求主幫助我日日守住祭壇，好叫我被你認識、為你使用，讓我的禱告可以觸動你，動工在這個世代。阿們！<button class="cite" type="button" data-q="求主幫助我日日守住祭壇，好叫我被你認識、為你使用" data-s="每日靈糧 2026-11-25 默想與回應（網頁）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 57">57</button></p></div>
+  
+</section>
+
+<section id="context"><h2>脈絡</h2>
+  <div class="sub">歷史時間軸（點節點看說明與出處）</div>
+  <div class="frame"><iframe src="timeline.html" title="但以理禱告的歷史位置" loading="lazy"></iframe></div>
+  <div class="framebar"><a href="timeline.html" target="_blank" rel="noopener">全螢幕開啟時間軸 ↗</a></div>
+  <details class="tltext"><summary>文字版時間軸（含出處）</summary><ol class="tl"><li class="ev"><span class="yr">主前 605</span><div><b>但以理被擄到巴比倫</b><button class="cite" type="button" data-q="在以色列被擄第67年的時候( B.C.605-538)" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 25">25</button><p>到第九章禱告時，已是被擄第 67 年。</p></div></li><li class="ev"><span class="yr">主前 597</span><div><b>耶利米預言七十年</b><button class="cite" type="button" data-q="主前五九七年先知耶利米寫信給被擄的人" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 26">26</button><p>耶利米寫信給被擄的人，說被擄的時限是七十年（耶 29:10）。</p></div></li><li class="ev"><span class="yr">主前 586</span><div><b>耶路撒冷與聖殿被毀</b><button class="cite" type="button" data-q="耶路撒冷城於主前五八六年被巴比倫人摧毀" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 27">27</button><p>但以理禱告時，聖殿已荒涼約五十年。</p></div></li><li class="ev"><span class="yr">主前 539</span><div><b>古列：波斯取代巴比倫</b><button class="cite" type="button" data-q="考古挖出來的「古列圓柱」也記載，古列王確實讓當時世界各國的人通通回去" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 28">28</button><p>古列讓被擄各族回鄉，考古出土的「古列圓柱」有記載。</p></div></li><li class="ev today"><span class="yr">主前 539／538</span><div><b>但以理禱告，加百列飛來</b><button class="cite" type="button" data-q="此時約主前539年" data-s="每日靈糧 2026-11-22〈耶利米論耶路撒冷〉" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261122/" data-t="" aria-label="出處 29">29</button><button class="cite" type="button" data-q="元年”即主前538年，但以理從巴勒斯坦被擄去六十七年之後" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 30">30</button><p>今天的經文。官網寫約主前 539 年，多本註釋寫 538 年。</p></div></li><li class="ev"><span class="yr">主前 538–444</span><div><b>三批歸回</b><button class="cite" type="button" data-q="禱告完之後，有三批歸回：第一批是所羅巴伯" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 31">31</button><p>所羅巴伯重建聖殿、以斯拉、尼希米重建城牆。</p></div></li><li class="ev"><span class="yr">主前 538–444</span><div><b>七十個七從哪道命令算起</b><button class="cite" type="button" data-q="古列王在主前539或538年所發出的命令" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 32">32</button><button class="cite" type="button" data-q="大利烏王在主前519年也下詔確認古列王以前發過的那一道命令" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 33">33</button><button class="cite" type="button" data-q="亞達薛西王，在主前458年，他讓以斯拉帶領一些百姓歸回耶路撒冷" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 34">34</button><button class="cite" type="button" data-q="他在主前444年，讓尼希米帶一些人回去" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 35">35</button><p>波斯王四次下令：古列（539／538）、大利烏一世（519）、亞達薛西給以斯拉（458）、給尼希米（444）。</p></div></li><li class="ev"><span class="yr">主前 167</span><div><b>安提阿哥四世污穢聖殿</b><button class="cite" type="button" data-q="安提阿古四世除掉聖殿常獻的燔祭" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 36">36</button><p>他除掉聖殿常獻的燔祭，引發馬加比革命。</p></div></li><li class="ev"><span class="yr">主前 164</span><div><b>馬加比潔淨聖殿</b><button class="cite" type="button" data-q="馬加比革命確實在主前一百六十四年潔淨聖殿" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 37">37</button><button class="cite" type="button" data-q="這就是約翰福音第十章所說「修殿節」的由來" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 38">38</button><p>就是約翰福音第十章「修殿節」的由來。</p></div></li><li class="ev"><span class="yr">約主後 30</span><div><b>耶穌被釘十字架</b><button class="cite" type="button" data-q="在主後三十年左右被釘十字架" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 39">39</button><p>多數彌賽亞解讀認為「受膏者被剪除」（9:26）指這件事。</p></div></li><li class="ev"><span class="yr">主後 70</span><div><b>提多攻陷耶路撒冷</b><button class="cite" type="button" data-q="派了提多，就把聖殿在主後七十年毀了" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 40">40</button><p>聖殿被毀；吳顯昌老師認為這應驗「必有一王的民來毀滅這城和聖所」（9:26）。</p></div></li></ol></details>
+  <div class="sub">讀經小注</div>
+  <div class="notes"><div class="note"><h4>這個禱告在獅子坑之前還是之後？</h4><p>說法不同。吳顯昌老師講成但以理從獅子坑出來以後，才抓住神的應許禱告<button class="cite" type="button" data-q="他從獅子坑走出來以後，就抓住上帝的應許禱告" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 51">51</button>；唐佑之的註釋則說，第九章記載的事比第六章更早發生<button class="cite" type="button" data-q="本章所記載的比第六章的敘述更早發生" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 52">52</button>。兩者都同意時間是大利烏元年。</p></div><div class="note"><h4>加百列是誰</h4><p>第八章的異象裡，加百列已經向但以理顯現並解說過異象，他是傳信息的使者<button class="cite" type="button" data-q="在第八章的異象中，加百列曾向他顯現並解說異象，我們也曾說明加百列是傳信息的使者" data-s="每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20261125/" data-t="" aria-label="出處 53">53</button>，所以經文說「先前在異象中所見的那位加百列」。但以理在 19 節求神「不要遲延」，神真的沒有遲延，正當他禱告的時候，就差加百列迅速飛來<button class="cite" type="button" data-q="祂並不遲延，正當但以理禱告的時候，神就差遣天使加百列「迅速飛來」" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 54">54</button>。</p></div><div class="note"><h4>「封住異象和預言」是什麼意思</h4><p>明天的經文會讀到這句。莊育銘牧師說，「封住」不是隱藏，而是蓋上印章，保證一定會實現<button class="cite" type="button" data-q="「封住」是說封印、蓋上印章，保證它一定會實現、一定會成就" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 55">55</button>。</p></div></div>
+  <div class="sub">延伸：「七十個七」的兩種讀法</div>
+  <div class="views"><p>加百列接下來說的「七十個七」（9:24-27）是明天的經文。兩位老師的讀法不同，先放在這裡給想多讀一點的人：</p><div class="tablewrap"><table><thead><tr><th></th><th>吳顯昌老師（華神）</th><th>莊育銘牧師（淡江教會）</th></tr></thead><tbody><tr><th scope="row">「七」是什麼單位</th><td>年。七十個七是 490 年，學者都同意<button class="cite" type="button" data-q="因此學者都同意，這邊所指的是年" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 41">41</button>。</td><td>原文沒有單位，但既然和七十年預言有關，應該是年，共 490 年<button class="cite" type="button" data-q="原文是沒有單位，但是因為既然是跟七十年預言有關的，那單位應該也是「七十個七年」，就是四百九十年" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 42">42</button>。</td></tr><tr><th scope="row">從哪一年算起</th><td>主前 538 年古列下詔<button class="cite" type="button" data-q="所指的起點是主前五三八年下詔讓以色列歸回的古列王" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 43">43</button>。</td><td>列出四道命令，不下定論；並指出華人傳統解經最喜歡從主前 458 年算到主後 26 年，因為最接近耶穌開始傳道<button class="cite" type="button" data-q="那第三個，主後26年這個答案，為華人世界許多傳統的解經者，在看但以理書的時候，最喜歡這個年份" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 44">44</button>。</td></tr><tr><th scope="row">受膏君、受膏者是誰</th><td>都指耶穌<button class="cite" type="button" data-q="所以受膏君就是指耶穌" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 45">45</button>。</td><td>25 節的受膏君和 26 節的受膏者不是同一位，原文是「有一個受膏者」<button class="cite" type="button" data-q="應該不是同一位，因為原文不是「那受膏者」，原文是「有一個受膏者」" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 46">46</button>；24 節應譯「膏至聖所」<button class="cite" type="button" data-q="其實應該是「至聖所」，因為這個字在舊約總共出現四十一次" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 47">47</button>。</td></tr><tr><th scope="row">最後一個七</th><td>落在耶穌第一次與第二次降臨之間，包括敵基督的出現<button class="cite" type="button" data-q="第三個階段是最後一個七，是耶穌第二次降臨跟第一次降臨這段時間所發生聖殿的事" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 48">48</button>。</td><td>把最後一個七延後兩千年的讀法有困難：前面用歷史解，最後一個七卻改用靈意解<button class="cite" type="button" data-q="你前面都是用歷史講解，可是最後一個七，你不用歷史講解，你用靈意解經來講解" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 49">49</button>。</td></tr></tbody></table></div><p class="fn">另外還有一種非彌賽亞的歷史解釋，認為七十個七和敘利亞王安提阿哥有關，最後一個七是主前 171 到 164 年<button class="cite" type="button" data-q="另有一個非彌賽亞的歷史解釋，認為“七十個七”和敘利亞王安提阿哥有關" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 50">50</button>。</p></div>
+</section>
+
+<section id="sources"><h2>出處</h2><ul class="srcs"><li><span class="badge o-book">禱讀本</span> <a href="https://www.breadoflife.taipei/type_devotional/20261125/" target="_blank" rel="noopener">每日靈糧 2026-11-25〈大蒙眷愛的但以理〉（摘錄《但以理書》禱讀本，喬美倫教師著）</a></li><li><span class="badge o-book">禱讀本</span> <a href="https://www.breadoflife.taipei/type_devotional/20261125/" target="_blank" rel="noopener">每日靈糧 2026-11-25 默想與回應（網頁）</a></li><li><span class="badge o-book">禱讀本</span> <a href="https://www.breadoflife.taipei/type_devotional/20141001/" target="_blank" rel="noopener">每日靈糧 2014-10-01〈大蒙眷愛的但以理〉</a></li><li><span class="badge o-book">禱讀本</span> <a href="https://www.breadoflife.taipei/type_devotional/20261122/" target="_blank" rel="noopener">每日靈糧 2026-11-22〈耶利米論耶路撒冷〉</a></li><li><span class="badge o-pastor">牧師分享</span> <a href="https://www.youtube.com/watch?v=WSaqE1z7Bx0" target="_blank" rel="noopener">每日靈糧影片 2026-11-25，吳智誠牧師</a></li><li><span class="badge o-pastor">牧師分享</span> <a href="https://www.youtube.com/watch?v=g1JOm7_Xx_M" target="_blank" rel="noopener">GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015</a></li><li><span class="badge o-pastor">牧師分享</span> <a href="https://www.youtube.com/watch?v=8zrftCXUSAg" target="_blank" rel="noopener">淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17</a></li><li><span class="badge o-note">外部註釋</span> <a href="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" target="_blank" rel="noopener">華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）</a></li></ul></section>
+
+<section id="review"><h2>審閱備註</h2>
+  <details><summary>給審閱者：取捨與未採用的說法</summary><ul><li>「按手在我身上」：唐佑之註釋認為應譯作「來到我面前」。信息未採用，經文照和合本。<button class="cite" type="button" data-q="「按手在我身上」：應作「來到我面前」" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 58">58</button></li><li>「迅速飛來」：《舊約聖經背景注釋》指出不少注釋家認為原文是「疲勞」而非「飛行」。信息未展開。<button class="cite" type="button" data-q="認為本段聖經所說的是疲勞" data-s="華人基督徒查經資料網〈但以理書第9章拾穗〉（彙編多本註釋）" data-k="外部註釋" data-u="https://www.ccbiblestudy.org/Old%20Testament/27Dan/27GT09.htm" data-t="" aria-label="出處 59">59</button></li><li>吳顯昌老師說耶利米在但以理十幾歲時教導過他，是講者的推論，經文沒有記載。信息未採用。<button class="cite" type="button" data-q="他的老牧師、老先知耶利米，在他十幾歲尚未被擄到巴比倫以前教導過他" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 60">60</button></li><li>吳顯昌老師提到「主前四年」耶穌降生等年代，時間軸只採用「約主後 30 年」十字架。<button class="cite" type="button" data-q="主前四年，這位耶穌是彌賽亞" data-s="GOOD TV 空中聖經學院〈但以理書(13) 七十個七解碼〉，吳顯昌（中華福音神學院），2015" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=g1JOm7_Xx_M" data-t="" aria-label="出處 61">61</button></li><li>莊育銘牧師稱加百列為「天使長」，經文本身沒有這個稱呼。信息照經文寫「加百列」。<button class="cite" type="button" data-q="先前在異象中所見的那位天使長加百列" data-s="淡江教會每日研經釋義〈但以理書 9:20-27〉，莊育銘牧師，2022-07-17" data-k="牧師分享" data-u="https://www.youtube.com/watch?v=8zrftCXUSAg" data-t="" aria-label="出處 62">62</button></li><li>禱告時間點（獅子坑之前或之後）與 539／538 年代，兩說並列，未下判斷。</li><li>吳智誠牧師的第一人稱見證在信息中標明是他的分享；影片腳本不讓主持人轉述成自己的經歷。</li><li>吳顯昌、莊育銘兩份是整理過的逐字稿，沒有字幕時間碼，出處只連到整支影片。</li><li>這段經文在官網只出現在 1993、2014、2026 三年，2014 與 2026 的禱讀本文字相同。<button class="cite" type="button" data-q="上帝正在等候能有一位來為猶大的歸回禱告呢" data-s="每日靈糧 2014-10-01〈大蒙眷愛的但以理〉" data-k="禱讀本" data-u="https://www.breadoflife.taipei/type_devotional/20141001/" data-t="" aria-label="出處 63">63</button></li></ul></details>
+</section>
+
+<footer>流程試做・產生於 2026-11-26・共 63 處引述，均經程式比對原文<br>內容版權屬原作者與台北靈糧堂，本頁僅供內部評估</footer>
+</div>
+<div id="pop" role="dialog"></div>
+<script>
+(function(){
+  var pop=document.getElementById('pop'), cur=null;
+  function close(){pop.style.display='none'; if(cur){cur.setAttribute('aria-expanded','false');} cur=null;}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('.cite');
+    if(!b){ if(!e.target.closest('#pop')) close(); return; }
+    if(cur===b){close();return;}
+    close(); cur=b; b.setAttribute('aria-expanded','true');
+    pop.textContent='';
+    var k=document.createElement('div'); k.style.color='var(--muted)'; k.textContent=b.dataset.k+(b.dataset.t?'・'+b.dataset.t:'');
+    var q=document.createElement('q'); q.textContent=b.dataset.q;
+    var a=document.createElement('a'); a.href=b.dataset.u; a.target='_blank'; a.rel='noopener'; a.textContent=(b.dataset.t?'▶ 從這裡聽：':'')+b.dataset.s;
+    pop.append(k,q,a); pop.style.display='block';
+    var r=b.getBoundingClientRect(), w=pop.offsetWidth;
+    var left=Math.min(Math.max(16,r.left+window.scrollX-w/2),document.documentElement.clientWidth-w-16+window.scrollX);
+    pop.style.left=left+'px'; pop.style.top=(r.bottom+window.scrollY+8)+'px';
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+<script>
+(function(){
+  var a=document.getElementById('bgm-audio'); if(!a) return;
+  var b=document.createElement('button'); b.id='bgm'; document.body.appendChild(b);
+  a.loop=true; a.volume=0.35;
+  function sync(){b.style.display='block'; b.textContent=a.paused?'♪ 播放默想配樂':'♪ 配樂播放中（點此暫停）';}
+  b.onclick=function(){a.paused?a.play():a.pause();};
+  a.addEventListener('play',sync); a.addEventListener('pause',sync);
+  var evs=['pointerdown','keydown','touchstart'];
+  function kick(){evs.forEach(function(e){removeEventListener(e,kick,true)}); if(a.paused&&!a.dataset.user) a.play().catch(sync);}
+  a.addEventListener('pause',function(){a.dataset.user=1});
+  addEventListener('blur',function(){var f=document.activeElement; if(f&&f.tagName==='IFRAME'&&f.closest('.yt')&&!a.paused){a.dataset.user=1;a.pause();}});
+  a.play().then(sync).catch(function(){sync(); evs.forEach(function(e){addEventListener(e,kick,true)});});
+})();
+</script>
+</body>
+</html>
